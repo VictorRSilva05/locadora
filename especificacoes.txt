@@ -68,5 +68,5 @@ Aluguel
 	- Data de retorno prevista
 
 Combustíveis
-	- Tipo
+	- Nome
 	- Preço
