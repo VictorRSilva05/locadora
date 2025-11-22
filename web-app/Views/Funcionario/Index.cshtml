@@ -1,0 +1,16 @@
+﻿@model VisualizarFuncionarioViewModel;
+
+@foreach (var registro in Model.Registros)
+{
+    <div>
+        <span>@registro.Nome</span>
+        <a asp-controller="Funcionario" asp-action="Editar" asp-route-id="@registro.Id">Editar</a>
+        <a asp-controller="Funcionario" asp-action="Excluir" asp-route-id="@registro.Id">Excluir</a>
+        <a asp-controller="Funcionario" asp-action="Detalhes" asp-route-id="@registro.Id">Detalhes</a>
+    </div>
+}
+
+<br />
+
+<a asp-controller="Funcionario" asp-action="Cadastrar">Cadastrar</a>
+<a asp-controller="Home" asp-action="Index">Voltar</a>

@@ -1,0 +1,14 @@
+﻿@model ExcluirFuncionarioViewModel;
+
+@{
+    ViewBag.Titulo = "Exclusão de Funcionário";
+}
+ 
+<a asp-controller="Funcionario" asp-action="Index">Voltar</a>
+<form asp-controller="Funcionario" asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <p>Tem certeza que deseja excluir o funcionário <strong>@Model.Nome</strong>?</p>
+    </div>
+    <button type="submit">Excluir</button>
+</form>

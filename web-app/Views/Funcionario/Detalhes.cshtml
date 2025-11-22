@@ -1,0 +1,16 @@
+﻿@model DetalhesFuncionarioViewModel;
+
+@{
+    ViewBag.Titulo = "Detalhes do Funcionário";
+}
+
+<div>
+    <label asp-for="Nome"></label>
+    <input asp-for="Nome" readonly disabled />
+
+    <label asp-for="DataAdmissao"></label>
+    <input asp-for="DataAdmissao" type="date"  readonly disabled />
+
+    <label asp-for="Salario"></label>
+    <input asp-for="Salario" readonly disabled />
+</div>
