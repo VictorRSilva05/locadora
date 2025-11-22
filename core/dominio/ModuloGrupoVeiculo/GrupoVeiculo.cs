@@ -7,6 +7,7 @@ public class GrupoVeiculo : EntidadeBase<GrupoVeiculo>
 
     public GrupoVeiculo(string nome)
     {
+        Id = Guid.NewGuid();
         Nome = nome;
     }
     public override void AtualizarRegistro(GrupoVeiculo registroEditado)

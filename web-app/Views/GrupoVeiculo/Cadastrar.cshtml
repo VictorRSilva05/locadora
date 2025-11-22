@@ -1,0 +1,17 @@
+﻿@model CadastrarGrupoVeiculoViewModel;
+
+@{
+        ViewBag.Titulo = "Cadastrar Grupo de Veículo";
+
+}
+
+<a asp-controller="GrupoVeiculo" asp-action="Index">Voltar</a>
+<form asp-controller="GrupoVeiculo" asp-action="Cadastrar" method="post">
+    <div>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+        <span asp-validation-for="Nome"></span>
+    </div>
+    <button type="submit">Cadastrar</button>
+</form>
+ 

@@ -13,61 +13,62 @@ public abstract class FormularioGrupoVeiculoViewModel
         return new GrupoVeiculo(vm.Nome);
     }
 
-    public class CadastrarGrupoVeiculoViewModel : FormularioGrupoVeiculoViewModel
+}
+
+public class CadastrarGrupoVeiculoViewModel : FormularioGrupoVeiculoViewModel
+{
+    public CadastrarGrupoVeiculoViewModel() { }
+}
+
+public class EditarGrupoVeiculoViewModel : FormularioGrupoVeiculoViewModel
+{
+    public Guid Id { get; set; }
+    public EditarGrupoVeiculoViewModel() { }
+
+    public EditarGrupoVeiculoViewModel(Guid id, string nome)
     {
-        public CadastrarGrupoVeiculoViewModel() { }
+        Id = id;
+        Nome = nome;
+    }
+}
+
+public class ExcluirGrupoVeiculoViewModel
+{
+    public Guid Id { get; set; }
+    public string Nome { get; set; }
+    public ExcluirGrupoVeiculoViewModel() { }
+    public ExcluirGrupoVeiculoViewModel(Guid id, string nome)
+    {
+        Id = id;
+        Nome = nome;
+    }
+}
+
+public class VisualizarGrupoVeiculoViewModel
+{
+    public List<DetalhesGrupoVeiculoViewModel> Registros { get; set; }
+
+    public VisualizarGrupoVeiculoViewModel(List<GrupoVeiculo> registros)
+    {
+        Registros = registros
+            .Select(DetalhesGrupoVeiculoViewModel.ParaDetalhesVm)
+            .ToList();
+    }
+}
+
+public class DetalhesGrupoVeiculoViewModel
+{
+    public Guid Id { get; set; }
+    public string Nome { get; set; }
+
+    public DetalhesGrupoVeiculoViewModel(Guid id, string nome)
+    {
+        Id = id;
+        Nome = nome;
     }
 
-    public class EditarGrupoVeiculoViewModel : FormularioGrupoVeiculoViewModel
+    public static DetalhesGrupoVeiculoViewModel ParaDetalhesVm(GrupoVeiculo grupoVeiculo)
     {
-        public Guid Id { get; set; }
-        public EditarGrupoVeiculoViewModel() { }
-
-        public EditarGrupoVeiculoViewModel(Guid id, string nome)
-        {
-            Id = id;
-            Nome = nome;
-        }
-    }
-
-    public class ExcluirGrupoVeiculoViewModel
-    {
-        public Guid Id { get; set; }
-        public string Nome { get; set; }
-        public ExcluirGrupoVeiculoViewModel() { }
-        public ExcluirGrupoVeiculoViewModel(Guid id, string nome)
-        {
-            Id = id;
-            Nome = nome;
-        }
-    }
-
-    public class VisualizarGrupoVeiculoViewModel
-    {
-        public List<DetalhesGrupoVeiculoViewModel> Registros { get; set; }
-
-        public VisualizarGrupoVeiculoViewModel(List<GrupoVeiculo> registros)
-        {
-            Registros = registros
-                .Select(DetalhesGrupoVeiculoViewModel.ParaDetalhesVm)
-                .ToList();
-        }
-    }
-
-    public class DetalhesGrupoVeiculoViewModel
-    {
-        public Guid Id { get; set; }
-        public string Nome { get; set; }
-
-        public DetalhesGrupoVeiculoViewModel(Guid id, string nome)
-        {
-            Id = id;
-            Nome = nome;
-        }
-
-        public static DetalhesGrupoVeiculoViewModel ParaDetalhesVm(GrupoVeiculo grupoVeiculo)
-        {
-            return new DetalhesGrupoVeiculoViewModel(grupoVeiculo.Id, grupoVeiculo.Nome);
-        }
+        return new DetalhesGrupoVeiculoViewModel(grupoVeiculo.Id, grupoVeiculo.Nome);
     }
 }

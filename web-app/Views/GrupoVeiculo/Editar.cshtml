@@ -1,0 +1,16 @@
+﻿@model EditarGrupoVeiculoViewModel;
+
+@{
+    ViewBag.Titulo = "Editar Grupo de Veículo";
+}
+
+<a asp-controller="GrupoVeiculo" asp-action="Index">Voltar</a>
+<form asp-controller="GrupoVeiculo" asp-action="Editar" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+        <span asp-validation-for="Nome"></span>
+    </div>
+    <button type="submit">Salvar</button>
+</form>

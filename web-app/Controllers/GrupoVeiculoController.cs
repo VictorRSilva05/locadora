@@ -20,18 +20,26 @@ public class GrupoVeiculoController : Controller
 
 
     [HttpGet("listar")]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var gruposVeiculos = grupoVeiculoAppService.SelecionarTodos();
-        return View(gruposVeiculos);
+        var resultado = await grupoVeiculoAppService.SelecionarTodos();
+
+        if (resultado.IsFailed)
+            return this.RedirecionarParaNotificacaoHome(resultado.ToResult());
+
+        var visualizarVM = new VisualizarGrupoVeiculoViewModel(resultado.Value);
+
+        this.ObterNotificacaoPendente();
+
+        return View(visualizarVM);
     }
 
     [HttpGet("cadastrar")]
-    public IActionResult Cadastrar()
+    public async Task<IActionResult> Cadastrar()
     {
         var cadastrarVm = new CadastrarGrupoVeiculoViewModel();
 
-        return View();
+        return View(cadastrarVm);
     }
 
     [HttpPost("cadastrar")]
@@ -74,6 +82,23 @@ public class GrupoVeiculoController : Controller
             return this.PreencherErrosModelState(resultado, editarVm);
 
         return RedirectToAction(nameof(Index));
+    }
+
+    [HttpGet("excluir/{id:guid}")]
+    public async Task<IActionResult> Excluir(Guid id)
+    {
+        var resultado = await grupoVeiculoAppService.SelecionarPorId(id);
+
+        if (resultado.IsFailed)
+            return this.RedirecionarParaNotificacao(resultado.ToResult());
+
+        var excluirVm = new ExcluirGrupoVeiculoViewModel
+        {
+            Id = resultado.Value.Id,
+            Nome = resultado.Value.Nome
+        };
+
+        return View(excluirVm);
     }
 
     [HttpPost("excluir/{id:guid}")]
