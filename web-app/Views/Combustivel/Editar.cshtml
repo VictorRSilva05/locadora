@@ -1,0 +1,19 @@
+﻿@model EditarCombustivelViewModel;
+
+@{
+    ViewBag.Titulo = "Editar combustível";
+}
+
+<a asp-controller="Combustivel" asp-action="Index">Voltar</a>
+<form asp-controller="Combustivel" asp-action="Editar" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+        <span asp-validation-for="Nome"></span>
+        <label asp-for="Preco"></label>
+        <input asp-for="Preco" />
+        <span asp-validation-for="Preco"></span>
+    </div>
+    <button type="submit">Salvar</button>
+</form>

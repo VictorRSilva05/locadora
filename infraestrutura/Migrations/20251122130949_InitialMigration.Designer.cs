@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Infraestrutura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251121190701_InitialMigration")]
+    [Migration("20251122130949_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,26 @@ namespace Locadora.Infraestrutura.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloCombustivel.Combustivel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("combustivels");
+                });
 
             modelBuilder.Entity("Locadora.Dominio.ModuloGrupoVeiculo.GrupoVeiculo", b =>
                 {
@@ -39,7 +59,7 @@ namespace Locadora.Infraestrutura.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupoVeiculo");
+                    b.ToTable("grupoVeiculos");
                 });
 #pragma warning restore 612, 618
         }

@@ -12,7 +12,21 @@ namespace Locadora.Infraestrutura.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "GrupoVeiculo",
+                name: "combustivels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Nome = table.Column<string>(type: "text", nullable: false),
+                    Preco = table.Column<decimal>(type: "numeric", nullable: false),
+                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_combustivels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "grupoVeiculos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -21,7 +35,7 @@ namespace Locadora.Infraestrutura.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GrupoVeiculo", x => x.Id);
+                    table.PrimaryKey("PK_grupoVeiculos", x => x.Id);
                 });
         }
 
@@ -29,7 +43,10 @@ namespace Locadora.Infraestrutura.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GrupoVeiculo");
+                name: "combustivels");
+
+            migrationBuilder.DropTable(
+                name: "grupoVeiculos");
         }
     }
 }

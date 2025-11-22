@@ -1,0 +1,22 @@
+﻿@model VisualizarCombustivelViewModel;
+
+@{
+    ViewBag.Titulo = "Combustíveis";
+
+    var notificacao = ViewData[nameof(NotificacaoViewModel)] as NotificacaoViewModel;
+}
+
+@foreach (var registro in Model.Registros)
+{
+    <div>
+        <span>@registro.Nome</span>
+        <span>@registro.Preco.ToString("C2")</span>
+        <a asp-controller="Combustivel" asp-action="Editar" asp-route-id="@registro.Id">Editar</a>
+        <a asp-controller="Combustivel" asp-action="Excluir" asp-route-id="@registro.Id">Excluir</a>
+    </div>
+}
+
+<br />
+
+<a asp-controller="Combustivel" asp-action="Cadastrar">Cadastrar</a>
+<a asp-controller="Home" asp-action="Index">Voltar</a>

@@ -22,6 +22,26 @@ namespace Locadora.Infraestrutura.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Locadora.Dominio.ModuloCombustivel.Combustivel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("combustivels");
+                });
+
             modelBuilder.Entity("Locadora.Dominio.ModuloGrupoVeiculo.GrupoVeiculo", b =>
                 {
                     b.Property<Guid>("Id")
@@ -36,7 +56,7 @@ namespace Locadora.Infraestrutura.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("GrupoVeiculo");
+                    b.ToTable("grupoVeiculos");
                 });
 #pragma warning restore 612, 618
         }

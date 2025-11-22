@@ -37,7 +37,7 @@ public class ExcluirGrupoVeiculoViewModel
     public Guid Id { get; set; }
     public string Nome { get; set; }
     public ExcluirGrupoVeiculoViewModel() { }
-    public ExcluirGrupoVeiculoViewModel(Guid id, string nome)
+    public ExcluirGrupoVeiculoViewModel(Guid id, string nome) : this()
     {
         Id = id;
         Nome = nome;

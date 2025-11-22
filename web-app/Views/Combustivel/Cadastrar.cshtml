@@ -1,0 +1,21 @@
+﻿@model CadastrarCombustivelViewModel;
+
+@{
+    ViewBag.Titulo = "Cadastrar combustível";
+
+}
+
+<a asp-controller="Combustivel" asp-action="Index">Voltar</a>
+<form asp-controller="Combustivel" asp-action="Cadastrar" method="post">
+    <div>
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" />
+        <span asp-validation-for="Nome"></span>
+
+        <label asp-for="Preco"></label>
+        <input asp-for="Preco" />
+        <span asp-validation-for="Preco"></span>
+    </div>
+    <button type="submit">Cadastrar</button>
+</form>
+

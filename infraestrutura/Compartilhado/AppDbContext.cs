@@ -1,10 +1,13 @@
 ﻿using Locadora.Dominio.Compartilhado;
+using Locadora.Dominio.ModuloCombustivel;
+using Locadora.Dominio.ModuloGrupoVeiculo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Infraestrutura.Compartilhado;
 public class AppDbContext : DbContext, IUnitOfWork
 {
-
+    public DbSet<GrupoVeiculo> grupoVeiculos { get; set; }
+    public DbSet<Combustivel> combustivels { get; set; }
     public AppDbContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
