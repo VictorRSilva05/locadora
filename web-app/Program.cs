@@ -1,10 +1,13 @@
 using Locadora.Aplicacao.ModuloCombustivel;
+using Locadora.Aplicacao.ModuloCondutor;
 using Locadora.Aplicacao.ModuloFuncionario;
 using Locadora.Aplicacao.ModuloGrupoVeiculo;
 using Locadora.Dominio.ModuloCombustivel;
+using Locadora.Dominio.ModuloCondutor;
 using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.Infraestrutura.ModuloCombustivel;
+using Locadora.Infraestrutura.ModuloCondutor;
 using Locadora.Infraestrutura.ModuloFuncionario;
 using Locadora.Infraestrutura.ModuloGrupoVeiculo;
 using Locadora.WebApp.ActionFilters;
@@ -25,6 +28,8 @@ namespace Locadora.WebApp
             builder.Services.AddScoped<IRepositorioCombustivel, RepositorioCombustivelEmOrm>();
             builder.Services.AddScoped<FuncionarioAppService>();
             builder.Services.AddScoped<IRepositorioFuncionario, RepositorioFuncionarioEmOrm>();
+            builder.Services.AddScoped<CondutorAppService>();
+            builder.Services.AddScoped<IRepositorioCondutor, RepositorioCondutorEmOrm>();
 
             builder.Services.AddEntityFrameworkConfig(builder.Configuration);
             builder.Services.AddSerilogConfig(builder.Logging, builder.Configuration);

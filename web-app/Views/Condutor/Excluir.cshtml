@@ -1,0 +1,14 @@
+﻿@model ExcluirCondutorViewModel;
+
+@{
+    ViewBag.Titulo = "Exclusão de Condutor";
+}
+
+<a asp-controller="Condutor" asp-action="Index">Voltar</a>
+<form asp-controller="Condutor" asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <p>Tem certeza que deseja excluir o condutor <strong>@Model.Nome</strong>?</p>
+    </div>
+    <button type="submit">Excluir</button>
+</form>

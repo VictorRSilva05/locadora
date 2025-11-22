@@ -42,6 +42,42 @@ namespace Locadora.Infraestrutura.Migrations
                     b.ToTable("combustivels");
                 });
 
+            modelBuilder.Entity("Locadora.Dominio.ModuloCondutor.Condutor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Cnh")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Cpf")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Validade")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("condutores");
+                });
+
             modelBuilder.Entity("Locadora.Dominio.ModuloFuncionario.Funcionario", b =>
                 {
                     b.Property<Guid>("Id")
