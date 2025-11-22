@@ -1,0 +1,15 @@
+﻿@model ExcluirVeiculoViewModel;
+
+@{
+    ViewBag.Titulo = "Excluir Veículo";
+}
+
+<a asp-controller="Veiculo" asp-action="Index">Voltar</a>
+<form asp-controller="Veiculo" asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label asp-for="Modelo"></label>
+        <input asp-for="Modelo" disabled />
+    </div>
+    <button type="submit">Excluir</button>
+</form>

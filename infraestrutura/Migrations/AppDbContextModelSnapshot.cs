@@ -117,6 +117,70 @@ namespace Locadora.Infraestrutura.Migrations
 
                     b.ToTable("grupoVeiculos");
                 });
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloVeiculo.Veiculo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Ano")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CapacidadeCombustivel")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("CombustivelId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Cor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<byte[]>("Foto")
+                        .HasColumnType("bytea");
+
+                    b.Property<Guid>("GrupoVeiculoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Marca")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Modelo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CombustivelId");
+
+                    b.HasIndex("GrupoVeiculoId");
+
+                    b.ToTable("veiculos");
+                });
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloVeiculo.Veiculo", b =>
+                {
+                    b.HasOne("Locadora.Dominio.ModuloCombustivel.Combustivel", "Combustivel")
+                        .WithMany()
+                        .HasForeignKey("CombustivelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Locadora.Dominio.ModuloGrupoVeiculo.GrupoVeiculo", "GrupoVeiculo")
+                        .WithMany()
+                        .HasForeignKey("GrupoVeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Combustivel");
+
+                    b.Navigation("GrupoVeiculo");
+                });
 #pragma warning restore 612, 618
         }
     }

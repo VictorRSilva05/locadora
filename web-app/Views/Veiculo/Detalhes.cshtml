@@ -1,0 +1,22 @@
+﻿@model DetalhesVeiculoViewModel;
+
+@{
+        ViewBag.Titulo = "Detalhes do Veículo";
+
+}
+
+<div>
+    <img asp-for="Foto" style="max-width:300px; max-height:300px;" />
+    <label asp-for="Marca"></label>
+    <input asp-for="Marca" readonly disabled />
+    <label asp-for="Modelo"></label>
+    <input asp-for="Modelo" readonly disabled />
+    <label asp-for="Cor"></label>
+    <input asp-for="Cor" readonly disabled />
+    <label asp-for="Combustivel"></label>
+    <input asp-for="Combustivel" readonly disabled />
+    <label asp-for="CapacidadeCombustivel"></label>
+    <input asp-for="CapacidadeCombustivel" readonly disabled />
+    <label asp-for="Ano"></label>
+    <input asp-for="Ano" readonly disabled />
+</div>

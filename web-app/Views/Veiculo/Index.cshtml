@@ -1,0 +1,23 @@
+﻿@model VisualizarVeiculoViewModel;
+
+@{
+    ViewBag.Titulo = "Veículos";
+
+    var notificacao = ViewData[nameof(NotificacaoViewModel)] as NotificacaoViewModel;
+}
+
+@foreach (var registro in Model.Registros)
+{
+    <div>
+        <span>@registro.Marca</span>
+        <span>@registro.Modelo</span>
+        <a asp-controller="Veiculo" asp-action="Editar" asp-route-id="@registro.Id">Editar</a>
+        <a asp-controller="Veiculo" asp-action="Excluir" asp-route-id="@registro.Id">Excluir</a>
+        <a asp-controller="Veiculo" asp-action="Detalhes" asp-route-id="@registro.Id">Detalhes</a>
+    </div>
+}
+
+<br />
+
+<a asp-controller="Veiculo" asp-action="Cadastrar">Cadastrar</a>
+<a asp-controller="Home" asp-action="Index">Voltar</a>

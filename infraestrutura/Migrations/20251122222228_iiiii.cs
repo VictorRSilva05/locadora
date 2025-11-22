@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class asdasd : Migration
+    public partial class iiiii : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -70,19 +70,64 @@ namespace Locadora.Infraestrutura.Migrations
                 {
                     table.PrimaryKey("PK_grupoVeiculos", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "veiculos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Foto = table.Column<byte[]>(type: "bytea", nullable: true),
+                    GrupoVeiculoId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Marca = table.Column<string>(type: "text", nullable: false),
+                    Cor = table.Column<string>(type: "text", nullable: false),
+                    Modelo = table.Column<string>(type: "text", nullable: false),
+                    CombustivelId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CapacidadeCombustivel = table.Column<int>(type: "integer", nullable: false),
+                    Ano = table.Column<int>(type: "integer", nullable: false),
+                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_veiculos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_veiculos_combustivels_CombustivelId",
+                        column: x => x.CombustivelId,
+                        principalTable: "combustivels",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_veiculos_grupoVeiculos_GrupoVeiculoId",
+                        column: x => x.GrupoVeiculoId,
+                        principalTable: "grupoVeiculos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_veiculos_CombustivelId",
+                table: "veiculos",
+                column: "CombustivelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_veiculos_GrupoVeiculoId",
+                table: "veiculos",
+                column: "GrupoVeiculoId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "combustivels");
-
-            migrationBuilder.DropTable(
                 name: "condutores");
 
             migrationBuilder.DropTable(
                 name: "funcionarios");
+
+            migrationBuilder.DropTable(
+                name: "veiculos");
+
+            migrationBuilder.DropTable(
+                name: "combustivels");
 
             migrationBuilder.DropTable(
                 name: "grupoVeiculos");

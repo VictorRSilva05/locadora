@@ -3,6 +3,7 @@ using Locadora.Dominio.ModuloCombustivel;
 using Locadora.Dominio.ModuloCondutor;
 using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloGrupoVeiculo;
+using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Infraestrutura.Compartilhado;
@@ -12,6 +13,7 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Combustivel> combustivels { get; set; }
     public DbSet<Funcionario> funcionarios { get; set; }
     public DbSet<Condutor> condutores { get; set; }
+    public DbSet<Veiculo> veiculos { get; set; }
     public AppDbContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
