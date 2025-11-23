@@ -22,6 +22,70 @@ namespace Locadora.Infraestrutura.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Locadora.Dominio.ModuloCliente.Cliente", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Bairro")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("CNPJ")
+                        .HasMaxLength(18)
+                        .HasColumnType("character varying(18)");
+
+                    b.Property<string>("CPF")
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)");
+
+                    b.Property<string>("Cidade")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
+                    b.Property<string>("Rua")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
+
+                    b.Property<int>("TipoCliente")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("clientes");
+                });
+
             modelBuilder.Entity("Locadora.Dominio.ModuloCombustivel.Combustivel", b =>
                 {
                     b.Property<Guid>("Id")

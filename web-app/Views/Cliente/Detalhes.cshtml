@@ -1,0 +1,28 @@
+﻿@model DetalhesClienteViewModel
+
+@{
+    ViewBag.Titulo = "Detalhes Cliente";
+}
+
+<p><strong>Nome:</strong> @Model.Nome</p>
+<p><strong>Email:</strong> @Model.Email</p>
+<p><strong>Telefone:</strong> @Model.Telefone</p>
+<p><strong>Tipo de Cliente:</strong> @Model.TipoCliente</p>
+
+@if (Model.CPF != null)
+{
+    <p><strong>CPF:</strong> @Model.CPF</p>
+}
+
+@if (Model.CNPJ != null)
+{
+    <p><strong>CNPJ:</strong> @Model.CNPJ</p>
+}
+
+<p><strong>Estado:</strong> @Model.Estado</p>
+<p><strong>Cidade:</strong> @Model.Cidade</p>
+<p><strong>Bairro:</strong> @Model.Bairro</p>
+<p><strong>Rua:</strong> @Model.Rua</p>
+<p><strong>Número:</strong> @Model.Numero</p>
+
+<a asp-action="Index">Voltar</a>

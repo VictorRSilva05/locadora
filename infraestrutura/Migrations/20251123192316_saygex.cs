@@ -6,11 +6,34 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class iiiii : Migration
+    public partial class saygex : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "clientes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Nome = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Telefone = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
+                    TipoCliente = table.Column<int>(type: "integer", nullable: false),
+                    CPF = table.Column<string>(type: "character varying(14)", maxLength: 14, nullable: true),
+                    CNPJ = table.Column<string>(type: "character varying(18)", maxLength: 18, nullable: true),
+                    Estado = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    Cidade = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Bairro = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Rua = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
+                    Numero = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_clientes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "combustivels",
                 columns: table => new
@@ -117,6 +140,9 @@ namespace Locadora.Infraestrutura.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "clientes");
+
             migrationBuilder.DropTable(
                 name: "condutores");
 

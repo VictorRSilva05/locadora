@@ -1,0 +1,65 @@
+﻿@model CadastrarClienteViewModel
+
+@{
+    ViewBag.Titulo = "Cadastrar Cliente";
+}
+
+<form asp-action="Cadastrar" method="post">
+
+    <label asp-for="Nome"></label>
+    <input asp-for="Nome" />
+    <span asp-validation-for="Nome"></span>
+    <br />
+
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <span asp-validation-for="Email"></span>
+    <br />
+
+    <label asp-for="Telefone"></label>
+    <input asp-for="Telefone" />
+    <span asp-validation-for="Telefone"></span>
+    <br />
+
+    <label asp-for="TipoCliente"></label>
+    <select asp-for="TipoCliente" asp-items="Model.TiposClienteDisponiveis"></select>
+    <span asp-validation-for="TipoCliente"></span>
+    <br />
+
+    <label asp-for="CPF"></label>
+    <input asp-for="CPF" />
+    <span asp-validation-for="CPF"></span>
+    <br />
+
+    <label asp-for="CNPJ"></label>
+    <input asp-for="CNPJ" />
+    <span asp-validation-for="CNPJ"></span>
+    <br />
+
+    <label asp-for="Estado"></label>
+    <input asp-for="Estado" />
+    <span asp-validation-for="Estado"></span>
+    <br />
+
+    <label asp-for="Cidade"></label>
+    <input asp-for="Cidade" />
+    <span asp-validation-for="Cidade"></span>
+    <br />
+
+    <label asp-for="Bairro"></label>
+    <input asp-for="Bairro" />
+    <span asp-validation-for="Bairro"></span>
+    <br />
+
+    <label asp-for="Rua"></label>
+    <input asp-for="Rua" />
+    <span asp-validation-for="Rua"></span>
+    <br />
+
+    <label asp-for="Numero"></label>
+    <input asp-for="Numero" />
+    <span asp-validation-for="Numero"></span>
+    <br />
+
+    <button type="submit">Salvar</button>
+</form>

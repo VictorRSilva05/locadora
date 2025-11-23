@@ -1,0 +1,57 @@
+﻿@model EditarClienteViewModel
+
+@{
+    ViewBag.Titulo = "Editar Cliente";
+}
+
+
+<form asp-action="Editar" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <label asp-for="Nome"></label>
+    <input asp-for="Nome" />
+    <br />
+
+    <label asp-for="Email"></label>
+    <input asp-for="Email" />
+    <br />
+
+    <label asp-for="Telefone"></label>
+    <input asp-for="Telefone" />
+    <br />
+
+    <label asp-for="TipoCliente"></label>
+    <select asp-for="TipoCliente" asp-items="Model.TiposClienteDisponiveis"></select>
+    <br />
+
+    <label asp-for="CPF"></label>
+    <input asp-for="CPF" />
+    <br />
+
+    <label asp-for="CNPJ"></label>
+    <input asp-for="CNPJ" />
+    <br />
+
+    <label asp-for="Estado"></label>
+    <input asp-for="Estado" />
+    <br />
+
+    <label asp-for="Cidade"></label>
+    <input asp-for="Cidade" />
+    <br />
+
+    <label asp-for="Bairro"></label>
+    <input asp-for="Bairro" />
+    <br />
+
+    <label asp-for="Rua"></label>
+    <input asp-for="Rua" />
+    <br />
+
+    <label asp-for="Numero"></label>
+    <input asp-for="Numero" />
+    <br />
+
+    <button type="submit">Salvar Alterações</button>
+</form>

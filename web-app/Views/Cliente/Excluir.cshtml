@@ -1,0 +1,16 @@
+﻿@model ExcluirClienteViewModel
+
+@{
+    ViewBag.Titulo = "Excluir Cliente";
+}
+
+<p>Tem certeza que deseja excluir o cliente abaixo?</p>
+
+<p><strong>@Model.Nome</strong></p>
+
+<form asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit">Excluir</button>
+    <a asp-action="Index">Cancelar</a>
+</form>
