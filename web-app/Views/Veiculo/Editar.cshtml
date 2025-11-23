@@ -1,11 +1,12 @@
-﻿@model CadastrarVeiculoViewModel;
+﻿@model EditarVeiculoViewModel;
 
 @{
-    ViewBag.Titulo = "Cadastrar Veículo";
+    ViewBag.Titulo = "Editar Veículo";
 }
 
 <a asp-controller="Veiculo" asp-action="Index">Voltar</a>
-<form asp-controller="Veiculo" asp-action="Cadastrar" method="post" enctype="multipart/form-data">
+<form asp-controller="Veiculo" asp-action="Editar" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
     <div>
         <label asp-for="FotoUpload"></label>
         <input asp-for="FotoUpload" type="file" accept="image/*" />
@@ -23,7 +24,7 @@
         <label asp-for="Modelo"></label>
         <input asp-for="Modelo" />
         <span asp-validation-for="Modelo"></span>
-         <br />
+        <br />
         <label asp-for="Cor"></label>
         <input asp-for="Cor" />
         <span asp-validation-for="Cor"></span>
@@ -42,5 +43,5 @@
         <span asp-validation-for="Ano"></span>
 
     </div>
-    <button type="submit">Cadastrar</button>
+    <button type="submit">Salvar</button>
 </form>

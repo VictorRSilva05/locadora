@@ -6,7 +6,16 @@
 }
 
 <div>
-    <img asp-for="Foto" style="max-width:300px; max-height:300px;" />
+    @if (Model.FotoBase64 != null)
+    {
+        <img src="data:image/png;base64,@Model.FotoBase64"
+             style="max-width:200px;" />
+    }
+    else
+    {
+        <p>Sem imagem</p>
+    }
+
     <label asp-for="Marca"></label>
     <input asp-for="Marca" readonly disabled />
     <label asp-for="Modelo"></label>

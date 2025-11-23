@@ -73,31 +73,24 @@ public class VeiculoController : Controller
     [HttpGet("editar/{id:guid}")]
     public async Task<IActionResult> Editar(Guid id)
     {
-        var resultado =  await veiculoAppService.SelecionarPorId(id);   
+        var resultado = await veiculoAppService.SelecionarPorId(id);
 
         if (resultado.IsFailed)
             return this.RedirecionarParaNotificacaoHome(resultado.ToResult());
 
         var grupoVeiculosResultado = await grupoVeiculoAppService.SelecionarTodos();
-
         var combustiveisResultado = await combustivelAppService.SelecionarTodos();
 
         var veiculo = resultado.Value;
         var editarVm = new EditarVeiculoViewModel(
-            veiculo.Id,
-            veiculo.Foto,
-            veiculo.GrupoVeiculo.Id,
-            veiculo.Marca,
-            veiculo.Cor,
-            veiculo.Modelo,
-            veiculo.Combustivel.Id,
-            veiculo.CapacidadeCombustivel,
-            veiculo.Ano,
+            veiculo,
             grupoVeiculosResultado.ValueOrDefault,
             combustiveisResultado.ValueOrDefault
         );
+
         return View(editarVm);
     }
+
 
     [HttpPost("editar/{id:guid}")]
     public async Task<IActionResult> Editar(Guid id, EditarVeiculoViewModel editarVm)

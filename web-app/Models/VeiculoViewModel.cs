@@ -8,41 +8,54 @@ namespace Locadora.WebApp.Models;
 
 public abstract class FormularioVeiculoViewModel
 {
-    [Required(ErrorMessage = "O campo Foto é obrigatório.")]
-    public byte[]? Foto { get; set; }
+    public IFormFile? FotoUpload { get; set; }
+
     [Required(ErrorMessage = "O campo Grupo de Veículo é obrigatório.")]
     public Guid GrupoVeiculo { get; set; }
+
     [Required(ErrorMessage = "O campo Marca é obrigatório.")]
     public string Marca { get; set; }
 
     [Required(ErrorMessage = "O campo Modelo é obrigatório.")]
     public string Modelo { get; set; }
+
     [Required(ErrorMessage = "O campo Cor é obrigatório.")]
     public string Cor { get; set; }
+
     [Required(ErrorMessage = "O campo Combustível é obrigatório.")]
     public Guid Combustivel { get; set; }
+
     [Required(ErrorMessage = "O campo Capacidade do Tanque é obrigatório.")]
     public int CapacidadeCombustivel { get; set; }
+
     [Required(ErrorMessage = "O campo Ano é obrigatório.")]
+    public int Ano { get; set; }
 
     public List<SelectListItem>? GrupoVeiculosDisponiveis { get; set; }
     public List<SelectListItem>? CombustiveisDisponiveis { get; set; }
-    public int Ano { get; set; }
 
-    public static Veiculo ParaEntidade(FormularioVeiculoViewModel viewModel, List<GrupoVeiculo> grupoVeiculo, List<Combustivel> combustivel)
+    public static Veiculo ParaEntidade(
+        FormularioVeiculoViewModel viewModel,
+        List<GrupoVeiculo> grupoVeiculo,
+        List<Combustivel> combustivel)
     {
-        var grupoVeiculosSelecionado = grupoVeiculo.Find(gv => gv.Id == viewModel.GrupoVeiculo);
+        var grupoVeiculosSelecionado = grupoVeiculo.Find(gv => gv.Id == viewModel.GrupoVeiculo)
+            ?? throw new ArgumentException("Grupo de Veículo inválido.");
 
-        if(grupoVeiculosSelecionado == null)
-            throw new ArgumentException("Grupo de Veículo inválido.");
+        var combustivelSelecionado = combustivel.Find(c => c.Id == viewModel.Combustivel)
+            ?? throw new ArgumentException("Combustível inválido.");
 
-        var combustivelSelecionado = combustivel.Find(c => c.Id == viewModel.Combustivel);
+        byte[]? fotoBytes = null;
 
-        if(combustivelSelecionado == null)
-            throw new ArgumentException("Combustível inválido.");
+        if (viewModel.FotoUpload != null)
+        {
+            using var ms = new MemoryStream();
+            viewModel.FotoUpload.CopyTo(ms);
+            fotoBytes = ms.ToArray();
+        }
 
         return new Veiculo(
-            viewModel.Foto,
+            fotoBytes,
             grupoVeiculosSelecionado,
             viewModel.Marca,
             viewModel.Modelo,
@@ -54,11 +67,12 @@ public abstract class FormularioVeiculoViewModel
     }
 }
 
+
 public class CadastrarVeiculoViewModel : FormularioVeiculoViewModel
 {
     public CadastrarVeiculoViewModel() { }
 
-    public CadastrarVeiculoViewModel(List<GrupoVeiculo> grupoVeiculos, List<Combustivel> combustiveis) : this()
+    public CadastrarVeiculoViewModel(List<GrupoVeiculo> grupoVeiculos, List<Combustivel> combustiveis)
     {
         GrupoVeiculosDisponiveis = grupoVeiculos
             .Select(gv => new SelectListItem(gv.Nome, gv.Id.ToString()))
@@ -69,57 +83,64 @@ public class CadastrarVeiculoViewModel : FormularioVeiculoViewModel
             .ToList();
     }
 }
+
 
 public class EditarVeiculoViewModel : FormularioVeiculoViewModel
 {
     public Guid Id { get; set; }
+
+    public string? FotoAtualBase64 { get; set; } // para exibir a foto existente
+
     public EditarVeiculoViewModel() { }
+
     public EditarVeiculoViewModel(
-        Guid id,
-        byte[]? foto,
-        Guid grupoVeiculo,
-        string marca,
-        string cor,
-        string modelo,
-        Guid combustivel,
-        int capacidadeCombustivel,
-        int ano,
-        List<GrupoVeiculo> grupoVeiculos,
-        List<Combustivel> combustiveis) : this()
+        Veiculo veiculo,
+        List<GrupoVeiculo> grupos,
+        List<Combustivel> combustiveis)
     {
-        Id = id;
-        Foto = foto;
-        GrupoVeiculo = grupoVeiculo;
-        Marca = marca;  
-        Modelo = modelo;
-        Cor = cor;
-        Combustivel = combustivel;
-        CapacidadeCombustivel = capacidadeCombustivel;
-        Ano = ano;
-        GrupoVeiculosDisponiveis = grupoVeiculos
+        Id = veiculo.Id;
+        Marca = veiculo.Marca;
+        Modelo = veiculo.Modelo;
+        Cor = veiculo.Cor;
+        Ano = veiculo.Ano;
+        GrupoVeiculo = veiculo.GrupoVeiculo.Id;
+        Combustivel = veiculo.Combustivel.Id;
+        CapacidadeCombustivel = veiculo.CapacidadeCombustivel;
+
+        FotoAtualBase64 = veiculo.Foto != null
+            ? Convert.ToBase64String(veiculo.Foto)
+            : null;
+
+        GrupoVeiculosDisponiveis = grupos
             .Select(gv => new SelectListItem(gv.Nome, gv.Id.ToString()))
             .ToList();
+
         CombustiveisDisponiveis = combustiveis
             .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
             .ToList();
     }
 }
+
 
 public class ExcluirVeiculoViewModel
 {
     public Guid Id { get; set; }
     public string Modelo { get; set; }
+
     public ExcluirVeiculoViewModel() { }
-    public ExcluirVeiculoViewModel(Guid id, string modelo) : this()
+
+    public ExcluirVeiculoViewModel(Guid id, string modelo)
     {
         Id = id;
         Modelo = modelo;
     }
 }
 
+
 public class VisualizarVeiculoViewModel
 {
     public List<DetalhesVeiculoViewModel> Registros { get; set; }
+
     public VisualizarVeiculoViewModel(List<Veiculo> registros)
     {
         Registros = registros
@@ -128,10 +149,11 @@ public class VisualizarVeiculoViewModel
     }
 }
 
+
 public class DetalhesVeiculoViewModel
 {
     public Guid Id { get; set; }
-    public byte[]? Foto { get; set; }
+    public string? FotoBase64 { get; set; }
     public string GrupoVeiculo { get; set; }
     public string Marca { get; set; }
     public string Modelo { get; set; }
@@ -139,12 +161,17 @@ public class DetalhesVeiculoViewModel
     public string Combustivel { get; set; }
     public int CapacidadeCombustivel { get; set; }
     public int Ano { get; set; }
+
     public static DetalhesVeiculoViewModel ParaDetalhesVm(Veiculo veiculo)
     {
         return new DetalhesVeiculoViewModel
         {
             Id = veiculo.Id,
-            Foto = veiculo.Foto,
+
+            FotoBase64 = veiculo.Foto != null
+                ? Convert.ToBase64String(veiculo.Foto)
+                : null,
+
             GrupoVeiculo = veiculo.GrupoVeiculo.Nome,
             Marca = veiculo.Marca,
             Modelo = veiculo.Modelo,
@@ -155,4 +182,5 @@ public class DetalhesVeiculoViewModel
         };
     }
 }
+
 
