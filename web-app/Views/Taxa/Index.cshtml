@@ -1,0 +1,23 @@
+﻿@model VisualizarTaxaViewModel;
+
+@{
+    ViewBag.Titulo = "Taxas e serviços";
+
+    var notificacao = ViewData[nameof(NotificacaoViewModel)] as NotificacaoViewModel;
+}
+
+@foreach (var registro in Model.Registros)
+{
+    <div>
+        <span>@registro.Descricao</span>
+        <span>@registro.Valor</span>
+        <a asp-controller="Taxa" asp-action="Editar" asp-route-id="@registro.Id">Editar</a>
+        <a asp-controller="Taxa" asp-action="Excluir" asp-route-id="@registro.Id">Excluir</a>
+        <a asp-controller="Taxa" asp-action="Detalhes" asp-route-id="@registro.Id">Detalhes</a>
+    </div>
+}
+
+<br />
+
+<a asp-controller="Taxa" asp-action="Cadastrar">Cadastrar</a>
+<a asp-controller="Home" asp-action="Index">Voltar</a>

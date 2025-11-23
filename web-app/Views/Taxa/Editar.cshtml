@@ -1,0 +1,26 @@
+﻿@model EditarTaxaViewModel
+
+@{
+    ViewBag.Titulo = "Editar taxas e serviços";
+}
+
+<form asp-action="Editar" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <label asp-for="Descricao"></label>
+    <input asp-for="Descricao" />
+    <span asp-validation-for="Descricao"></span>
+    <br />
+
+    <label asp-for="Valor"></label>
+    <input asp-for="Valor" />
+    <span asp-validation-for="Valor"></span>
+    <br />
+
+    <label asp-for="PlanoCobranca"></label>
+    <select asp-for="PlanoCobranca" asp-items="Model.PlanosCobrancaDisponiveis"></select>
+    <span asp-validation-for="PlanoCobranca"></span>
+    <br />
+
+    <button type="submit">Salvar</button>
+</form>

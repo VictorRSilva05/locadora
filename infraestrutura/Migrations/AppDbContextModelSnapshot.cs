@@ -182,6 +182,29 @@ namespace Locadora.Infraestrutura.Migrations
                     b.ToTable("grupoVeiculos");
                 });
 
+            modelBuilder.Entity("Locadora.Dominio.ModuloTaxa.Taxa", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("PlanoCobranca")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("taxas");
+                });
+
             modelBuilder.Entity("Locadora.Dominio.ModuloVeiculo.Veiculo", b =>
                 {
                     b.Property<Guid>("Id")

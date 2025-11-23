@@ -72,7 +72,10 @@ public abstract class FormularioClienteViewModel
 
 public class CadastrarClienteViewModel : FormularioClienteViewModel
 {
-    public CadastrarClienteViewModel() { }
+    public CadastrarClienteViewModel()
+    {
+        CarregarTiposCliente();
+    }
 
 }
 

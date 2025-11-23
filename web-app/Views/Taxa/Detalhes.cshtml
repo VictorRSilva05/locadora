@@ -1,0 +1,11 @@
+﻿@model DetalhesTaxaViewModel
+
+@{
+    ViewBag.Titulo = "Detalhes Cliente";
+}
+
+<p><strong>Descrição:</strong> @Model.Descricao</p>
+<p><strong>Valor:</strong> @Model.Valor</p>
+<p><strong>Plano de cobrança:</strong> @Model.PlanoCobranca</p>
+
+<a asp-action="Index">Voltar</a>

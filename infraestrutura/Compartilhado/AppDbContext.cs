@@ -4,6 +4,7 @@ using Locadora.Dominio.ModuloCombustivel;
 using Locadora.Dominio.ModuloCondutor;
 using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloGrupoVeiculo;
+using Locadora.Dominio.ModuloTaxa;
 using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Condutor> condutores { get; set; }
     public DbSet<Veiculo> veiculos { get; set; }
     public DbSet<Cliente> clientes { get; set; }
+    public DbSet<Taxa> taxas { get; set; }
     public AppDbContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

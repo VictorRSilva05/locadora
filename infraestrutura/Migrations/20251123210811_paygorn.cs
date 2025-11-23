@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class saygex : Migration
+    public partial class paygorn : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -95,6 +95,21 @@ namespace Locadora.Infraestrutura.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "taxas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: false),
+                    Valor = table.Column<decimal>(type: "numeric", nullable: false),
+                    PlanoCobranca = table.Column<int>(type: "integer", nullable: false),
+                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_taxas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "veiculos",
                 columns: table => new
                 {
@@ -148,6 +163,9 @@ namespace Locadora.Infraestrutura.Migrations
 
             migrationBuilder.DropTable(
                 name: "funcionarios");
+
+            migrationBuilder.DropTable(
+                name: "taxas");
 
             migrationBuilder.DropTable(
                 name: "veiculos");

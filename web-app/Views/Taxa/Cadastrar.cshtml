@@ -1,0 +1,25 @@
+﻿@model CadastrarTaxaViewModel
+
+@{
+    ViewBag.Titulo = "Cadastrar taxas e serviços";
+}
+
+<form asp-action="Cadastrar" method="post">
+
+    <label asp-for="Descricao"></label>
+    <input asp-for="Descricao" />
+    <span asp-validation-for="Descricao"></span>
+    <br />
+
+    <label asp-for="Valor"></label>
+    <input asp-for="Valor" />
+    <span asp-validation-for="Valor"></span>
+    <br />
+
+    <label asp-for="PlanoCobranca"></label>
+    <select asp-for="PlanoCobranca" asp-items="Model.PlanosCobrancaDisponiveis"></select>
+    <span asp-validation-for="PlanoCobranca"></span>
+    <br />
+
+    <button type="submit">Cadastrar</button>
+</form>
