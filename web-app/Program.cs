@@ -1,3 +1,4 @@
+using Locadora.Aplicacao.ModuloAluguel;
 using Locadora.Aplicacao.ModuloCliente;
 using Locadora.Aplicacao.ModuloCobranca;
 using Locadora.Aplicacao.ModuloCombustivel;
@@ -6,6 +7,7 @@ using Locadora.Aplicacao.ModuloFuncionario;
 using Locadora.Aplicacao.ModuloGrupoVeiculo;
 using Locadora.Aplicacao.ModuloTaxa;
 using Locadora.Aplicacao.ModuloVeiculo;
+using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCliente;
 using Locadora.Dominio.ModuloCobranca;
 using Locadora.Dominio.ModuloCombustivel;
@@ -14,6 +16,7 @@ using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.Dominio.ModuloTaxa;
 using Locadora.Dominio.ModuloVeiculo;
+using Locadora.Infraestrutura.ModuloAluguel;
 using Locadora.Infraestrutura.ModuloCliente;
 using Locadora.Infraestrutura.ModuloCobranca;
 using Locadora.Infraestrutura.ModuloCombustivel;
@@ -50,6 +53,8 @@ namespace Locadora.WebApp
             builder.Services.AddScoped<IRepositorioTaxa, RepositorioTaxaEmOrm>();
             builder.Services.AddScoped<CobrancaAppService>();
             builder.Services.AddScoped<IRepositorioCobranca, RepositorioCobrancaEmOrm>();
+            builder.Services.AddScoped<AluguelAppService>();
+            builder.Services.AddScoped<IRepositorioAluguel, RepositorioAluguelEmOrm>();
 
             builder.Services.AddEntityFrameworkConfig(builder.Configuration);
             builder.Services.AddSerilogConfig(builder.Logging, builder.Configuration);

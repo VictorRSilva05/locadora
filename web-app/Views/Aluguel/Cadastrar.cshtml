@@ -1,0 +1,45 @@
+﻿@model CadastrarAluguelViewModel
+
+@{
+    ViewBag.Titulo = "Cadastrar Aluguel";
+}
+
+<a asp-controller="Aluguel" asp-action="Index">Voltar</a>
+<form asp-controller="Aluguel" asp-action="Cadastrar" method="post" enctype="multipart/form-data">
+    <div>
+        <select asp-for="Condutor" asp-items="Model.CondutoresDisponiveis" class="form-control">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="Condutor"></span>
+
+        <select asp-for="Cliente" asp-items="Model.ClientesDisponivies" class="form-control">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="Cliente"></span>
+
+        <select asp-for="Cobranca" asp-items="Model.CobrancasDisponivies" class="form-control">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="Cobranca"></span>
+
+        <select asp-for="Veiculo" asp-items="Model.VeiculosDisponiveis" class="form-control">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="Veiculo"></span>
+
+        <label asp-for="DataSaida"></label>
+        <input asp-for="DataSaida" type="date" />
+        <span asp-validation-for="DataSaida"></span>
+
+        <label asp-for="DataRetornoPrevista"></label>
+        <input asp-for="DataRetornoPrevista" type="date" />
+        <span asp-validation-for="DataRetornoPrevista"></span>
+
+        <select asp-for="Taxas" asp-items="Model.TaxasDisponiveis" class="form-control">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="Taxas"></span>
+
+    </div>
+    <button type="submit">Cadastrar</button>
+</form>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class ddasdasd : Migration
+    public partial class oisfadhuiofd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -95,21 +95,6 @@ namespace Locadora.Infraestrutura.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "taxas",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Descricao = table.Column<string>(type: "text", nullable: false),
-                    Valor = table.Column<decimal>(type: "numeric", nullable: false),
-                    PlanoCobranca = table.Column<int>(type: "integer", nullable: false),
-                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_taxas", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "cobrancas",
                 columns: table => new
                 {
@@ -166,10 +151,103 @@ namespace Locadora.Infraestrutura.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "aluguel",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CondutorId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ClienteId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CobrancaId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Caucao = table.Column<decimal>(type: "numeric", nullable: false),
+                    VeiculoId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DataSaida = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataRetornoPrevista = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DataDevolucao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    KmInicial = table.Column<float>(type: "real", nullable: false),
+                    KmDevolucao = table.Column<float>(type: "real", nullable: true),
+                    TanqueCheio = table.Column<bool>(type: "boolean", nullable: true),
+                    Status = table.Column<bool>(type: "boolean", nullable: false),
+                    Total = table.Column<decimal>(type: "numeric", nullable: false),
+                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_aluguel", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_aluguel_clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "clientes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_aluguel_cobrancas_CobrancaId",
+                        column: x => x.CobrancaId,
+                        principalTable: "cobrancas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_aluguel_condutores_CondutorId",
+                        column: x => x.CondutorId,
+                        principalTable: "condutores",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_aluguel_veiculos_VeiculoId",
+                        column: x => x.VeiculoId,
+                        principalTable: "veiculos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "taxas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Descricao = table.Column<string>(type: "text", nullable: false),
+                    Valor = table.Column<decimal>(type: "numeric", nullable: false),
+                    PlanoCobranca = table.Column<int>(type: "integer", nullable: false),
+                    AluguelId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_taxas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_taxas_aluguel_AluguelId",
+                        column: x => x.AluguelId,
+                        principalTable: "aluguel",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_aluguel_ClienteId",
+                table: "aluguel",
+                column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_aluguel_CobrancaId",
+                table: "aluguel",
+                column: "CobrancaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_aluguel_CondutorId",
+                table: "aluguel",
+                column: "CondutorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_aluguel_VeiculoId",
+                table: "aluguel",
+                column: "VeiculoId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_cobrancas_GrupoVeiculoId",
                 table: "cobrancas",
                 column: "GrupoVeiculoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_taxas_AluguelId",
+                table: "taxas",
+                column: "AluguelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_veiculos_CombustivelId",
@@ -186,6 +264,15 @@ namespace Locadora.Infraestrutura.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "funcionarios");
+
+            migrationBuilder.DropTable(
+                name: "taxas");
+
+            migrationBuilder.DropTable(
+                name: "aluguel");
+
+            migrationBuilder.DropTable(
                 name: "clientes");
 
             migrationBuilder.DropTable(
@@ -193,12 +280,6 @@ namespace Locadora.Infraestrutura.Migrations
 
             migrationBuilder.DropTable(
                 name: "condutores");
-
-            migrationBuilder.DropTable(
-                name: "funcionarios");
-
-            migrationBuilder.DropTable(
-                name: "taxas");
 
             migrationBuilder.DropTable(
                 name: "veiculos");

@@ -22,6 +22,66 @@ namespace Locadora.Infraestrutura.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Locadora.Dominio.ModuloAluguel.Aluguel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("Caucao")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid?>("ClienteId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CobrancaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("CondutorId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataDevolucao")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DataRetornoPrevista")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DataSaida")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<float?>("KmDevolucao")
+                        .HasColumnType("real");
+
+                    b.Property<float>("KmInicial")
+                        .HasColumnType("real");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool?>("TanqueCheio")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("VeiculoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("CobrancaId");
+
+                    b.HasIndex("CondutorId");
+
+                    b.HasIndex("VeiculoId");
+
+                    b.ToTable("aluguel");
+                });
+
             modelBuilder.Entity("Locadora.Dominio.ModuloCliente.Cliente", b =>
                 {
                     b.Property<Guid>("Id")
@@ -223,6 +283,9 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("AluguelId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasColumnType("text");
@@ -237,6 +300,8 @@ namespace Locadora.Infraestrutura.Migrations
                         .HasColumnType("numeric");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AluguelId");
 
                     b.ToTable("taxas");
                 });
@@ -286,6 +351,37 @@ namespace Locadora.Infraestrutura.Migrations
                     b.ToTable("veiculos");
                 });
 
+            modelBuilder.Entity("Locadora.Dominio.ModuloAluguel.Aluguel", b =>
+                {
+                    b.HasOne("Locadora.Dominio.ModuloCliente.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId");
+
+                    b.HasOne("Locadora.Dominio.ModuloCobranca.Cobranca", "Cobranca")
+                        .WithMany()
+                        .HasForeignKey("CobrancaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Locadora.Dominio.ModuloCondutor.Condutor", "Condutor")
+                        .WithMany()
+                        .HasForeignKey("CondutorId");
+
+                    b.HasOne("Locadora.Dominio.ModuloVeiculo.Veiculo", "Veiculo")
+                        .WithMany()
+                        .HasForeignKey("VeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+
+                    b.Navigation("Cobranca");
+
+                    b.Navigation("Condutor");
+
+                    b.Navigation("Veiculo");
+                });
+
             modelBuilder.Entity("Locadora.Dominio.ModuloCobranca.Cobranca", b =>
                 {
                     b.HasOne("Locadora.Dominio.ModuloGrupoVeiculo.GrupoVeiculo", "GrupoVeiculo")
@@ -295,6 +391,13 @@ namespace Locadora.Infraestrutura.Migrations
                         .IsRequired();
 
                     b.Navigation("GrupoVeiculo");
+                });
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloTaxa.Taxa", b =>
+                {
+                    b.HasOne("Locadora.Dominio.ModuloAluguel.Aluguel", null)
+                        .WithMany("Taxas")
+                        .HasForeignKey("AluguelId");
                 });
 
             modelBuilder.Entity("Locadora.Dominio.ModuloVeiculo.Veiculo", b =>
@@ -314,6 +417,11 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Navigation("Combustivel");
 
                     b.Navigation("GrupoVeiculo");
+                });
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloAluguel.Aluguel", b =>
+                {
+                    b.Navigation("Taxas");
                 });
 #pragma warning restore 612, 618
         }

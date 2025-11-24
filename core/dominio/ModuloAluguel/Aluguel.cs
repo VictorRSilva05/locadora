@@ -7,7 +7,7 @@ using Locadora.Dominio.ModuloVeiculo;
 namespace Locadora.Dominio.ModuloAluguel;
 public class Aluguel : EntidadeBase<Aluguel>
 {
-    public Condutor Condutor { get; set; }
+    public Condutor? Condutor { get; set; }
     public Cliente? Cliente { get; set; }
     public Cobranca Cobranca { get; set; }
     public decimal Caucao { get; set; } = 1000;
@@ -20,13 +20,27 @@ public class Aluguel : EntidadeBase<Aluguel>
     public float? KmDevolucao { get; set; }
     public bool? TanqueCheio { get; set; }
     public bool Status {  get; set; }
+    public decimal Total { get; set; }
 
     public Aluguel()
     {
         Taxas = new List<Taxa>();
     }
 
-    public Aluguel(Condutor condutor, Cliente? cliente, Cobranca cobranca, decimal caucao, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, DateTime? dataDevolucao, List<Taxa>? taxas, float kmInicial, float? kmDevolucao, bool? tanqueCheio, bool status) : this()
+    public Aluguel(Condutor? condutor, Cliente? cliente, Cobranca cobranca, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, List<Taxa>? taxas, float kmInicial) : this()
+    {
+        Id = Guid.NewGuid();
+        Condutor = condutor;
+        Cliente = cliente;
+        Cobranca = cobranca;
+        Veiculo = veiculo;
+        DataSaida = dataSaida;
+        DataRetornoPrevista = dataRetornoPrevista;
+        Taxas = taxas;
+        KmInicial = kmInicial;
+    }
+
+    public Aluguel(Condutor? condutor, Cliente? cliente, Cobranca cobranca, decimal caucao, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, DateTime? dataDevolucao, List<Taxa>? taxas, float kmInicial, float? kmDevolucao, bool? tanqueCheio, bool status, decimal total) : this()
     {
         Id = Guid.NewGuid();
         Condutor = condutor;
@@ -42,6 +56,7 @@ public class Aluguel : EntidadeBase<Aluguel>
         KmDevolucao = kmDevolucao;
         TanqueCheio = tanqueCheio;
         Status = status;
+        Total = total;
     }
 
     public override void AtualizarRegistro(Aluguel registroEditado)
@@ -58,5 +73,6 @@ public class Aluguel : EntidadeBase<Aluguel>
         KmInicial = registroEditado.KmInicial;
         KmDevolucao = registroEditado.KmDevolucao;
         TanqueCheio = registroEditado.TanqueCheio;
+        Total = registroEditado.Total;
     }
 }

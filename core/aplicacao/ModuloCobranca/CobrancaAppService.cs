@@ -23,17 +23,17 @@ public class CobrancaAppService
 
     public async Task<Result> Cadastrar(Cobranca cobranca)
     {
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Diaria && cobranca.PrecoDiaria == null || cobranca.PrecoKm == null)
+        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Diaria && (cobranca.PrecoDiaria == null || cobranca.PrecoKm == null))
             return Result.Fail(
                 ResultadosErro.RequisicaoInvalidaErro("Os campos preço diária e preço por Km são necessários no plano diário.")
                 );
 
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Controlado && cobranca.KmDisponiveis == null || cobranca.PrecoDiaria == null || cobranca.PrecoPorKmExtrapolado == null)
+        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Controlado && (cobranca.KmDisponiveis == null || cobranca.PrecoDiaria == null || cobranca.PrecoPorKmExtrapolado == null))
             return Result.Fail(
                 ResultadosErro.RequisicaoInvalidaErro("Os campos Km disponíveis, preço diária e preço por Km extrapolados são necessários no plano controlado.")
                 );
 
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Livre && cobranca.Taxa == null)
+        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Livre && (cobranca.Taxa == null))
             return Result.Fail(
                 ResultadosErro.RequisicaoInvalidaErro("O campo taxa é necessário no plano livre.")
                 );
