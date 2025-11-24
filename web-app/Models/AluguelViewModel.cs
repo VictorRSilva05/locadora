@@ -41,10 +41,10 @@ public class FormularioAluguelViewModel
         List<Taxa> taxas
         )
     {
-        var condutorSelecionado = condutores.Find(c => c.Id == viewModel.Condutor) ?? throw new ArgumentException("Condutor inválido.");
-        var clienteSelecionado = clientes.Find(c => c.Id == viewModel.Cliente) ?? throw new ArgumentException("Cliente inválido.");
-        var cobrancaSelecionada = cobrancas.Find(c => c.Id == viewModel.Cobranca) ?? throw new ArgumentException("Cobrança inválida.");
-        var veiculoSelecionado = veiculos.Find(v => v.Id == viewModel.Veiculo) ?? throw new ArgumentException("Veículo inválido.");
+        var condutorSelecionado = condutores.Find(c => c.Id == viewModel.Condutor);
+        var clienteSelecionado = clientes.Find(c => c.Id == viewModel.Cliente);
+        var cobrancaSelecionada = cobrancas.Find(c => c.Id == viewModel.Cobranca);
+        var veiculoSelecionado = veiculos.Find(v => v.Id == viewModel.Veiculo);
         var taxasSelecionadas = taxas
             .Where(t => viewModel.Taxas != null && viewModel.Taxas.Contains(t.Id))
             .ToList();

@@ -9,7 +9,7 @@
 @foreach (var registro in Model.Alugueis)
 {
     <div>
-        <span>@registro.Condutor</span>
+        <span>@registro.Condutor!.Nome</span>
         <a asp-controller="Aluguel" asp-action="Editar" asp-route-id="@registro.Id">Editar</a>
         <a asp-controller="Aluguel" asp-action="Excluir" asp-route-id="@registro.Id">Excluir</a>
         <a asp-controller="Aluguel" asp-action="Detalhes" asp-route-id="@registro.Id">Detalhes</a>
