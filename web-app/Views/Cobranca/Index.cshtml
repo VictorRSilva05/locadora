@@ -1,0 +1,22 @@
+﻿@model VisualizarCobrancaViewModel;
+
+@{
+    ViewBag.Titulo = "Cobrancas";
+
+    var notificacao = ViewData[nameof(NotificacaoViewModel)] as NotificacaoViewModel;
+}
+
+@foreach (var registro in Model.Cobrancas)
+{
+    <div>
+        <span>@registro.PlanoCobranca</span>
+        <a asp-controller="Cobranca" asp-action="Editar" asp-route-id="@registro.Id">Editar</a>
+        <a asp-controller="Cobranca" asp-action="Excluir" asp-route-id="@registro.Id">Excluir</a>
+        <a asp-controller="Cobranca" asp-action="Detalhes" asp-route-id="@registro.Id">Detalhes</a>
+    </div>
+}
+
+<br />
+
+<a asp-controller="Cobranca" asp-action="Cadastrar">Cadastrar</a>
+<a asp-controller="Home" asp-action="Index">Voltar</a>

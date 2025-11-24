@@ -1,0 +1,26 @@
+﻿@model DetalhesCobrancaViewModel
+
+@{
+    ViewBag.Titulo = "Detalhes Cobrança";
+}
+
+    <div>
+        <label asp-for="GrupoVeiculo"></label>
+
+        <label asp-for="PlanoCobranca"></label>
+
+        <label asp-for="PrecoDiaria"></label>
+        <input asp-for="PrecoDiaria" />
+
+        <label asp-for="PrecoKm"></label>
+        <input asp-for="PrecoKm" />
+
+        <label asp-for="KmDisponiveis"></label>
+        <input asp-for="KmDisponiveis" />
+
+        <label asp-for="PrecoPorKmExtrapolado"></label>
+        <input asp-for="PrecoPorKmExtrapolado" />
+
+        <label asp-for="Taxa"></label>
+        <input asp-for="Taxa" />
+    </div>

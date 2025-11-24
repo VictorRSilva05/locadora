@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Infraestrutura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251123210811_paygorn")]
-    partial class paygorn
+    [Migration("20251123235519_ddasdasd")]
+    partial class ddasdasd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,6 +87,42 @@ namespace Locadora.Infraestrutura.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("clientes");
+                });
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloCobranca.Cobranca", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("EmpresaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("GrupoVeiculoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int?>("KmDisponiveis")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PlanoCobranca")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal?>("PrecoDiaria")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("PrecoKm")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("PrecoPorKmExtrapolado")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal?>("Taxa")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GrupoVeiculoId");
+
+                    b.ToTable("cobrancas");
                 });
 
             modelBuilder.Entity("Locadora.Dominio.ModuloCombustivel.Combustivel", b =>
@@ -251,6 +287,17 @@ namespace Locadora.Infraestrutura.Migrations
                     b.HasIndex("GrupoVeiculoId");
 
                     b.ToTable("veiculos");
+                });
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloCobranca.Cobranca", b =>
+                {
+                    b.HasOne("Locadora.Dominio.ModuloGrupoVeiculo.GrupoVeiculo", "GrupoVeiculo")
+                        .WithMany()
+                        .HasForeignKey("GrupoVeiculoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("GrupoVeiculo");
                 });
 
             modelBuilder.Entity("Locadora.Dominio.ModuloVeiculo.Veiculo", b =>

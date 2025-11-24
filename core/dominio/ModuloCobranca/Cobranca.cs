@@ -1,0 +1,40 @@
+﻿using Locadora.Dominio.ModuloGrupoVeiculo;
+
+namespace Locadora.Dominio.ModuloCobranca;
+public class Cobranca : EntidadeBase<Cobranca>
+{
+    public GrupoVeiculo GrupoVeiculo { get; set; }
+    public PlanoCobrancaEnum PlanoCobranca { get; set; }
+    public decimal? PrecoDiaria { get; set; }
+    public decimal? PrecoKm { get; set; }
+    public int? KmDisponiveis { get; set; }
+    public decimal? PrecoPorKmExtrapolado { get; set; }
+    public decimal? Taxa { get; set; }
+
+    public Cobranca()
+    {
+    }
+
+    public Cobranca(GrupoVeiculo grupoVeiculo, PlanoCobrancaEnum planoCobranca, decimal? precoDiaria, decimal? precoKm, int? kmDisponiveis, decimal? precoPorKmExtrapolado, decimal? taxa) : this()
+    {
+        Id = Guid.NewGuid();
+        GrupoVeiculo = grupoVeiculo;
+        PlanoCobranca = planoCobranca;
+        PrecoDiaria = precoDiaria;
+        PrecoKm = precoKm;
+        KmDisponiveis = kmDisponiveis;
+        PrecoPorKmExtrapolado = precoPorKmExtrapolado;
+        Taxa = taxa;
+    }
+
+    public override void AtualizarRegistro(Cobranca registroEditado)
+    {
+        GrupoVeiculo = registroEditado.GrupoVeiculo;
+        PlanoCobranca = registroEditado.PlanoCobranca;
+        PrecoDiaria = registroEditado.PrecoDiaria;
+        PrecoKm = registroEditado.PrecoKm;
+        KmDisponiveis = registroEditado.KmDisponiveis;
+        PrecoPorKmExtrapolado = registroEditado.PrecoPorKmExtrapolado;
+        Taxa = registroEditado.Taxa;
+    }
+}

@@ -89,7 +89,7 @@ public class EditarVeiculoViewModel : FormularioVeiculoViewModel
 {
     public Guid Id { get; set; }
 
-    public string? FotoAtualBase64 { get; set; } // para exibir a foto existente
+    public string? FotoAtualBase64 { get; set; } 
 
     public EditarVeiculoViewModel() { }
 

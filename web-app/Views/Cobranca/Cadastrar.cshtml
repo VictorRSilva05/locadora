@@ -1,0 +1,41 @@
+﻿@model CadastrarCobrancaViewModel
+
+@{
+    ViewBag.Titulo = "Cadastrar Cobrança";
+}
+
+<a asp-controller="Cobranca" asp-action="Index">Voltar</a>
+<form asp-controller="Cobranca" asp-action="Cadastrar" method="post" enctype="multipart/form-data">
+    <div>
+        <select asp-for="GrupoVeiculo" asp-items="Model.GrupoVeiculosDisponiveis" class="form-control">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="GrupoVeiculo"></span>
+        
+        <select asp-for="PlanoCobranca" asp-items="Model.PlanosCobrancaDisponiveis" class="form-control">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="PlanoCobranca"></span>
+
+        <label asp-for="PrecoDiaria"></label>
+        <input asp-for="PrecoDiaria" />
+        <span asp-validation-for="PrecoDiaria"></span>
+
+        <label asp-for="PrecoKm"></label>
+        <input asp-for="PrecoKm" />
+        <span asp-validation-for="PrecoKm"></span>
+
+        <label asp-for="KmDisponiveis"></label>
+        <input asp-for="KmDisponiveis" />
+        <span asp-validation-for="KmDisponiveis"></span>
+
+        <label asp-for="PrecoPorKmExtrapolado"></label>
+        <input asp-for="PrecoPorKmExtrapolado" />
+        <span asp-validation-for="PrecoPorKmExtrapolado"></span>
+
+        <label asp-for="Taxa"></label>
+        <input asp-for="Taxa" />
+        <span asp-validation-for="Taxa"></span>
+    </div>
+    <button type="submit">Cadastrar</button>
+    </form>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class paygorn : Migration
+    public partial class ddasdasd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -110,6 +110,31 @@ namespace Locadora.Infraestrutura.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "cobrancas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    GrupoVeiculoId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PlanoCobranca = table.Column<int>(type: "integer", nullable: false),
+                    PrecoDiaria = table.Column<decimal>(type: "numeric", nullable: true),
+                    PrecoKm = table.Column<decimal>(type: "numeric", nullable: true),
+                    KmDisponiveis = table.Column<int>(type: "integer", nullable: true),
+                    PrecoPorKmExtrapolado = table.Column<decimal>(type: "numeric", nullable: true),
+                    Taxa = table.Column<decimal>(type: "numeric", nullable: true),
+                    EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_cobrancas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_cobrancas_grupoVeiculos_GrupoVeiculoId",
+                        column: x => x.GrupoVeiculoId,
+                        principalTable: "grupoVeiculos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "veiculos",
                 columns: table => new
                 {
@@ -142,6 +167,11 @@ namespace Locadora.Infraestrutura.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_cobrancas_GrupoVeiculoId",
+                table: "cobrancas",
+                column: "GrupoVeiculoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_veiculos_CombustivelId",
                 table: "veiculos",
                 column: "CombustivelId");
@@ -157,6 +187,9 @@ namespace Locadora.Infraestrutura.Migrations
         {
             migrationBuilder.DropTable(
                 name: "clientes");
+
+            migrationBuilder.DropTable(
+                name: "cobrancas");
 
             migrationBuilder.DropTable(
                 name: "condutores");

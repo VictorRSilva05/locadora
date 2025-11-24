@@ -1,5 +1,6 @@
 ﻿using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCliente;
+using Locadora.Dominio.ModuloCobranca;
 using Locadora.Dominio.ModuloCombustivel;
 using Locadora.Dominio.ModuloCondutor;
 using Locadora.Dominio.ModuloFuncionario;
@@ -18,6 +19,7 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Veiculo> veiculos { get; set; }
     public DbSet<Cliente> clientes { get; set; }
     public DbSet<Taxa> taxas { get; set; }
+    public DbSet<Cobranca> cobrancas { get; set; }
     public AppDbContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
