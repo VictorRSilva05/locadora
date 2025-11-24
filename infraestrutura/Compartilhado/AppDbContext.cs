@@ -1,4 +1,5 @@
 ﻿using Locadora.Dominio.Compartilhado;
+using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCliente;
 using Locadora.Dominio.ModuloCobranca;
 using Locadora.Dominio.ModuloCombustivel;
@@ -20,6 +21,7 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Cliente> clientes { get; set; }
     public DbSet<Taxa> taxas { get; set; }
     public DbSet<Cobranca> cobrancas { get; set; }
+    public DbSet<Aluguel> aluguel { get; set; }
     public AppDbContext(DbContextOptions options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
