@@ -17,14 +17,21 @@ public class FormularioAluguelViewModel
     [Required(ErrorMessage = "O campo cobrança é obrigatório")]
     public Guid Cobranca { get; set; }
     [Required(ErrorMessage = "O campo veículo é obrigatório.")]
+    public decimal Caucao { get; set; }
     public Guid Veiculo { get; set; }
     [Required(ErrorMessage = "O campo de data de saída é obrigatório")]
     public DateTime DataSaida { get; set; }
     [Required(ErrorMessage = "O campo de data de retorno prevista é obrigatório.")]
     public DateTime DataRetornoPrevista { get; set; }
+    public DateTime DataDevolucao { get; set; }
     public List<Guid>? Taxas { get; set; }
     [Required(ErrorMessage = "O campo Km inicial é obrigatório")]
     public float KmInicial { get; set; }
+    public float KmDevolucao { get; set; }
+    public bool TanqueCheio { get; set; }
+    public bool Status { get; set; }
+    public bool SeguroAcionado { get; set; }
+    public decimal Total { get; set; }
 
     public List<SelectListItem>? CondutoresDisponiveis { get; set; }
     public List<SelectListItem>? ClientesDisponivies { get; set; }
@@ -53,11 +60,18 @@ public class FormularioAluguelViewModel
             condutorSelecionado,
             clienteSelecionado,
             cobrancaSelecionada,
+            viewModel.Caucao,
             veiculoSelecionado,
             viewModel.DataSaida,
             viewModel.DataRetornoPrevista,
+            viewModel.DataDevolucao,
             taxasSelecionadas,
-            viewModel.KmInicial
+            viewModel.KmInicial,
+            viewModel.KmDevolucao,
+            viewModel.TanqueCheio,
+            viewModel.Status,
+            viewModel.SeguroAcionado,
+            viewModel.Total
             );
     }
 }
@@ -110,6 +124,74 @@ public class CadastrarAluguelViewModel : FormularioAluguelViewModel
     }
 }
 
+public class EditarAluguelViewModel : FormularioAluguelViewModel
+{
+    public Guid Id { get; set; }
+
+    public EditarAluguelViewModel() { }
+
+    public EditarAluguelViewModel(
+        Aluguel aluguel,
+        List<Condutor> condutores,
+        List<Cliente> clientes,
+        List<Veiculo> veiculos,
+        List<Cobranca> cobrancas,
+        List<Taxa> taxas)
+    {
+        Id = aluguel.Id;
+        Condutor = aluguel.Condutor?.Id;
+        Cliente = aluguel.Cliente?.Id ?? Guid.Empty;
+        Cobranca = aluguel.Cobranca?.Id ?? Guid.Empty;
+        Caucao = aluguel.Caucao;
+        Veiculo = aluguel.Veiculo?.Id ?? Guid.Empty;
+        DataSaida = aluguel.DataSaida;
+        DataRetornoPrevista = aluguel.DataRetornoPrevista;
+        DataDevolucao = aluguel.DataDevolucao ?? default;
+        Taxas = aluguel.Taxas?.Select(t => t.Id).ToList() ?? new List<Guid>();
+        KmInicial = aluguel.KmInicial;
+        KmDevolucao = aluguel.KmDevolucao ?? default;
+        TanqueCheio = aluguel.TanqueCheio ?? default;
+        Status = aluguel.Status;
+        SeguroAcionado = aluguel.SeguroAcionado;
+        Total = aluguel.Total;
+
+        CondutoresDisponiveis = condutores
+           .Select(c => new SelectListItem
+           {
+               Value = c.Id.ToString(),
+               Text = c.Nome
+           }).ToList();
+
+        ClientesDisponivies = clientes
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.Nome
+            }).ToList();
+
+        VeiculosDisponiveis = veiculos
+            .Select(v => new SelectListItem
+            {
+                Value = v.Id.ToString(),
+                Text = v.Modelo
+            }).ToList();
+
+        CobrancasDisponivies = cobrancas
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.PlanoCobranca.ToString()
+            }).ToList();
+
+        TaxasDisponiveis = taxas
+            .Select(t => new SelectListItem
+            {
+                Value = t.Id.ToString(),
+                Text = t.Descricao
+            }).ToList();
+    }
+}
+
 public class DevolucaoAluguelViewModel
 {
     public Guid Id { get; set; }
@@ -118,12 +200,12 @@ public class DevolucaoAluguelViewModel
     public float KmDevolucao { get; set; }
     public bool TanqueCheio { get; set; }
     public bool SeguroAcionado { get; set; }
-    public decimal Total {  get; set; }
+    public decimal Total { get; set; }
 
     public DevolucaoAluguelViewModel() { }
 
 
-    public DevolucaoAluguelViewModel(Guid id, DateTime dataDevolucao,float kmDevolucao, bool tanqueCheio, bool seguroAcionado, decimal total)
+    public DevolucaoAluguelViewModel(Guid id, DateTime dataDevolucao, float kmDevolucao, bool tanqueCheio, bool seguroAcionado, decimal total)
     {
         Id = id;
         DataDevolucao = dataDevolucao;
@@ -134,76 +216,12 @@ public class DevolucaoAluguelViewModel
     }
 }
 
-public class EditarAluguelViewModel : FormularioAluguelViewModel
-{
-    //public Guid Id { get; set; }
-
-    //public EditarAluguelViewModel() { }
-
-    //public EditarAluguelViewModel(
-    //    Aluguel aluguel,
-    //    List<Condutor> condutores,
-    //    List<Cliente> clientes,
-    //    List<Veiculo> veiculos,
-    //    List<Cobranca> cobrancas,
-    //    List<Taxa> taxas
-    //    )
-    //{
-    //    Id = aluguel.Id;
-    //    Cliente = aluguel.Cliente.Id;
-    //    Cobranca = aluguel.Cobranca.Id;
-    //    Caucao = aluguel.Caucao;
-    //    Veiculo = aluguel.Veiculo.Id;
-    //    DataSaida = aluguel.DataSaida;
-    //    DataRetornoPrevista = aluguel.DataRetornoPrevista;
-    //    DataDevolucao = aluguel.DataDevolucao;
-    //    Taxas = aluguel.Taxas?.Select(t => t.Id).ToList();
-    //    KmInicial = aluguel.KmInicial;
-    //    KmDevolucao = aluguel?.KmDevolucao;
-    //    TanqueCheio = aluguel?.TanqueCheio;
-    //    Status = aluguel.Status;
-    //    Total = aluguel.Total;
-
-    //    CondutoresDisponiveis = condutores
-    //    .Select(c => new SelectListItem
-    //    {
-    //        Value = c.Id.ToString(),
-    //        Text = c.Nome
-    //    }).ToList();
-
-    //    ClientesDisponivies = clientes
-    //        .Select(c => new SelectListItem
-    //        {
-    //            Value = c.Id.ToString(),
-    //            Text = c.Nome
-    //        }).ToList();
-
-    //    VeiculosDisponiveis = veiculos
-    //        .Select(v => new SelectListItem
-    //        {
-    //            Value = v.Id.ToString(),
-    //            Text = v.Modelo
-    //        }).ToList();
-
-    //    CobrancasDisponivies = cobrancas
-    //        .Select(c => new SelectListItem
-    //        {
-    //            Value = c.Id.ToString(),
-    //            Text = c.PlanoCobranca.ToString()
-    //        }).ToList();
-
-    //    TaxasDisponiveis = taxas
-    //        .Select(t => new SelectListItem
-    //        {
-    //            Value = t.Id.ToString(),
-    //            Text = t.Descricao
-    //        }).ToList();
-    //}
-}
 public class ExcluirAluguelViewModel
 {
     public Guid Id { get; set; }
     public Condutor Condutor { get; set; }
+
+    public ExcluirAluguelViewModel() { }
 
     public ExcluirAluguelViewModel(Aluguel aluguel)
     {

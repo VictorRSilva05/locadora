@@ -144,59 +144,59 @@ public class AluguelController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    //[HttpGet("editar/{id:guid}")]
-    //public async Task<IActionResult> Editar(Guid id)
-    //{
-    //    var condutores = await condutorAppService.SelecionarTodos();
-    //    var clientes = await clienteAppService.SelecionarTodos();
-    //    var veiculos = await veiculoAppService.SelecionarTodos();
-    //    var cobranca = await cobrancaAppService.SelecionarTodos();
-    //    var taxas = await taxaAppService.SelecionarTodos();
+    [HttpGet("editar/{id:guid}")]
+    public async Task<IActionResult> Editar(Guid id)
+    {
+        var condutores = await condutorAppService.SelecionarTodos();
+        var clientes = await clienteAppService.SelecionarTodos();
+        var veiculos = await veiculoAppService.SelecionarTodos();
+        var cobranca = await cobrancaAppService.SelecionarTodos();
+        var taxas = await taxaAppService.SelecionarTodos();
 
-    //    var aluguelResultado = await aluguelAppService.SelecionarPorId(id);
+        var aluguelResultado = await aluguelAppService.SelecionarPorId(id);
 
-    //    if (aluguelResultado.IsFailed)
-    //        return this.RedirecionarParaNotificacaoHome(aluguelResultado.ToResult());
+        if (aluguelResultado.IsFailed)
+            return this.RedirecionarParaNotificacaoHome(aluguelResultado.ToResult());
 
-    //    var editarVM = new EditarAluguelViewModel(
-    //        aluguelResultado.Value,
-    //        condutores.ValueOrDefault,
-    //        clientes.ValueOrDefault,
-    //        veiculos.ValueOrDefault,
-    //        cobranca.ValueOrDefault,
-    //        taxas.ValueOrDefault
-    //        );
+        var editarVM = new EditarAluguelViewModel(
+            aluguelResultado.Value,
+            condutores.ValueOrDefault,
+            clientes.ValueOrDefault,
+            veiculos.ValueOrDefault,
+            cobranca.ValueOrDefault,
+            taxas.ValueOrDefault
+            );
 
-    //    return View( editarVM );
-    //}
+        return View(editarVM);
+    }
 
-    //[HttpPost("editar/{id:guid}")]
-    //public async Task<IActionResult> Editar(Guid id, EditarAluguelViewModel editarVM)
-    //{
-    //    var condutores = await condutorAppService.SelecionarTodos();
-    //    var clientes = await clienteAppService.SelecionarTodos();
-    //    var veiculos = await veiculoAppService.SelecionarTodos();
-    //    var cobranca = await cobrancaAppService.SelecionarTodos();
-    //    var taxas = await taxaAppService.SelecionarTodos();
+    [HttpPost("editar/{id:guid}")]
+    public async Task<IActionResult> Editar(Guid id, EditarAluguelViewModel editarVM)
+    {
+        var condutores = await condutorAppService.SelecionarTodos();
+        var clientes = await clienteAppService.SelecionarTodos();
+        var veiculos = await veiculoAppService.SelecionarTodos();
+        var cobranca = await cobrancaAppService.SelecionarTodos();
+        var taxas = await taxaAppService.SelecionarTodos();
 
-    //    var entidade = FormularioAluguelViewModel.ParaEntidade(
-    //        editarVM,
-    //        condutores.ValueOrDefault,
-    //        clientes.ValueOrDefault,
-    //        veiculos.ValueOrDefault,
-    //        cobranca.ValueOrDefault,
-    //        taxas.ValueOrDefault
-    //        );
+        var entidade = FormularioAluguelViewModel.ParaEntidade(
+            editarVM,
+            condutores.ValueOrDefault,
+            clientes.ValueOrDefault,
+            veiculos.ValueOrDefault,
+            cobranca.ValueOrDefault,
+            taxas.ValueOrDefault
+            );
 
-    //    entidade.Id = editarVM.Id;
+        entidade.Id = editarVM.Id;
 
-    //    var resultado = await aluguelAppService.Editar(id, entidade);
+        var resultado = await aluguelAppService.Editar(id, entidade);
 
-    //    if (resultado.IsFailed)
-    //        return this.PreencherErrosModelState(resultado, editarVM);
+        if (resultado.IsFailed)
+            return this.PreencherErrosModelState(resultado, editarVM);
 
-    //    return RedirectToAction(nameof(Index));
-    //}
+        return RedirectToAction(nameof(Index));
+    }
 
     [HttpGet("excluir/{id:guid}")]
     public async Task<IActionResult> Excluir(Guid id)

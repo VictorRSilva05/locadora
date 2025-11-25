@@ -7,6 +7,12 @@ using Locadora.Dominio.ModuloVeiculo;
 namespace Locadora.Dominio.ModuloAluguel;
 public class Aluguel : EntidadeBase<Aluguel>
 {
+    private Condutor? condutorSelecionado;
+    private Cliente? clienteSelecionado;
+    private Cobranca? cobrancaSelecionada;
+    private Veiculo? veiculoSelecionado;
+    private List<Taxa> taxasSelecionadas;
+
     public Condutor? Condutor { get; set; }
     public Cliente? Cliente { get; set; }
     public Cobranca Cobranca { get; set; }
@@ -57,6 +63,25 @@ public class Aluguel : EntidadeBase<Aluguel>
         KmDevolucao = kmDevolucao;
         TanqueCheio = tanqueCheio;
         Status = status;
+        Total = total;
+    }
+
+    public Aluguel(Condutor? condutor, Cliente? cliente, Cobranca cobranca, decimal caucao, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, DateTime? dataDevolucao, List<Taxa>? taxas, float kmInicial, float? kmDevolucao, bool? tanqueCheio, bool status, bool seguroAcionado, decimal total)
+    {
+        Condutor = condutor;
+        Cliente = cliente;
+        Cobranca = cobranca;
+        Caucao = caucao;
+        Veiculo = veiculo;
+        DataSaida = dataSaida;
+        DataRetornoPrevista = dataRetornoPrevista;
+        DataDevolucao = dataDevolucao;
+        Taxas = taxas;
+        KmInicial = kmInicial;
+        KmDevolucao = kmDevolucao;
+        TanqueCheio = tanqueCheio;
+        Status = status;
+        SeguroAcionado = seguroAcionado;
         Total = total;
     }
 

@@ -118,10 +118,9 @@ public class AluguelAppService
                 DateTimeKind.Utc
                 );
 
-            aluguel.DataDevolucao = DateTime.SpecifyKind(
-                (DateTime)aluguel.DataDevolucao!,
-                DateTimeKind.Utc
-                );
+            aluguel.DataDevolucao = aluguel.DataDevolucao is DateTime dt
+                 ? DateTime.SpecifyKind(dt, DateTimeKind.Utc)
+                 : null;
 
             await unitOfWork.CommitAsync();
             return Result.Ok();

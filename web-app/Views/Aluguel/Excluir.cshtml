@@ -1,0 +1,18 @@
+﻿@model ExcluirAluguelViewModel;
+
+@{
+    ViewBag.Titulo = "Excluir Aluguel";
+}
+
+<a asp-controller="Aluguel" asp-action="Index">Voltar</a>
+<form asp-controller="Aluguel" asp-action="Excluir" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label asp-for="Condutor"></label>
+        <input asp-for="Condutor" disabled />
+
+        <label asp-for="Id"></label>
+        <input asp-for="Id" disabled />
+    </div>
+    <button type="submit">Excluir</button>
+</form>
