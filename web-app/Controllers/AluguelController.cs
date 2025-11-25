@@ -97,6 +97,53 @@ public class AluguelController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpGet("devolver/{id:guid}")]
+    public async Task<IActionResult> Devolver(Guid id)
+    {
+        var resultado = await aluguelAppService.SelecionarPorId(id);
+
+        if (resultado.IsFailed)
+            return this.RedirecionarParaNotificacaoHome(resultado.ToResult());
+
+        var aluguel = resultado.Value;
+
+        var devolverVM = new DevolucaoAluguelViewModel
+        {
+            Id = aluguel.Id,
+            DataDevolucao = DateTime.Now,
+            KmDevolucao = aluguel.KmInicial,
+            TanqueCheio = false,
+            SeguroAcionado = false,
+            Total = 0
+        };
+
+        return View(devolverVM);
+    }
+
+    [HttpPost("devolver/{id:guid}")]
+    public async Task<IActionResult> Devolver(Guid id, DevolucaoAluguelViewModel devolverVM)
+    {
+        var resultadoSelecao = await aluguelAppService.SelecionarPorId(id);
+
+        if (resultadoSelecao.IsFailed)
+            return this.RedirecionarParaNotificacaoHome(resultadoSelecao.ToResult());
+
+        var aluguel = resultadoSelecao.Value;
+
+        aluguel.DataDevolucao = devolverVM.DataDevolucao;
+        aluguel.KmDevolucao = devolverVM.KmDevolucao;
+        aluguel.TanqueCheio = devolverVM.TanqueCheio;
+        aluguel.SeguroAcionado = devolverVM.SeguroAcionado;
+        aluguel.Total = devolverVM.Total;
+
+        var resultado = await aluguelAppService.Editar(id, aluguel);
+
+        if (resultado.IsFailed)
+            return this.PreencherErrosModelState(resultado, devolverVM);
+
+        return RedirectToAction(nameof(Index));
+    }
+
     //[HttpGet("editar/{id:guid}")]
     //public async Task<IActionResult> Editar(Guid id)
     //{

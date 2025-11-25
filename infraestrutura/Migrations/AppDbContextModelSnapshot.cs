@@ -57,6 +57,9 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Property<float>("KmInicial")
                         .HasColumnType("real");
 
+                    b.Property<bool>("SeguroAcionado")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("Status")
                         .HasColumnType("boolean");
 

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class oisfadhuiofd : Migration
+    public partial class asdasd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -168,6 +168,7 @@ namespace Locadora.Infraestrutura.Migrations
                     KmDevolucao = table.Column<float>(type: "real", nullable: true),
                     TanqueCheio = table.Column<bool>(type: "boolean", nullable: true),
                     Status = table.Column<bool>(type: "boolean", nullable: false),
+                    SeguroAcionado = table.Column<bool>(type: "boolean", nullable: false),
                     Total = table.Column<decimal>(type: "numeric", nullable: false),
                     EmpresaId = table.Column<Guid>(type: "uuid", nullable: false)
                 },

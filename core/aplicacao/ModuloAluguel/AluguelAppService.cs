@@ -57,6 +57,50 @@ public class AluguelAppService
         }
     }
 
+    public async Task<Result> RegistrarDevolucao(
+           Guid id,
+           DateTime dataDevolucao,
+           float kmDevolucao,
+           bool tanqueCheio,
+           bool seguroAcionado,
+           decimal total)
+    {
+        try
+        {
+            var aluguel = await repositorioAluguel.SelecionarRegistroPorIdAsync(id);
+
+            if (aluguel is null)
+                return Result.Fail(ResultadosErro.RegistroNaoEncontradoErro(id));
+
+            // Aplica as alterações de devolução na entidade
+            aluguel.DataDevolucao = DateTime.SpecifyKind(dataDevolucao, DateTimeKind.Utc);
+            aluguel.KmDevolucao = kmDevolucao;
+            aluguel.TanqueCheio = tanqueCheio;
+            aluguel.SeguroAcionado = seguroAcionado;
+            aluguel.Total = total;
+
+            // Atualiza o registro
+            await repositorioAluguel.EditarAsync(id, aluguel);
+
+            await unitOfWork.CommitAsync();
+            return Result.Ok();
+        }
+        catch (Exception ex)
+        {
+            await unitOfWork.RollbackAsync();
+
+            logger.LogError(
+                ex,
+                "Erro ao registrar devolução para o aluguel {@Id}.",
+                id
+            );
+
+            return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
+        }
+    }
+
+
+
     public async Task<Result> Editar(Guid id, Aluguel aluguel)
     {
         try

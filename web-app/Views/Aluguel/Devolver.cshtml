@@ -1,0 +1,30 @@
+﻿@model DevolucaoAluguelViewModel
+
+@{
+    ViewBag.Titulo = "Devolução Aluguel";
+}
+
+<a asp-controller="Aluguel" asp-action="Index">Voltar</a>
+<form asp-controller="Aluguel" asp-action="Devolver" method="post" enctype="multipart/form-data">
+    <div>
+        <label asp-for="DataDevolucao"></label>
+        <input asp-for="DataDevolucao" type="date" />
+        <span asp-validation-for="DataDevolucao"></span>
+
+        <label asp-for="KmDevolucao"></label>
+        <input asp-for="KmDevolucao" />
+        <span asp-validation-for="KmDevolucao"></span>
+
+        <label asp-for="TanqueCheio"></label>
+        <input asp-for="TanqueCheio" type="checkbox" class="form-check-input" />
+
+        <label asp-for="SeguroAcionado"></label>
+        <input asp-for="SeguroAcionado" type="checkbox" class="form-check-input" />
+
+        <label asp-for="Total"></label>
+        <input asp-for="Total" />
+        <span asp-validation-for="Total"></span>
+
+    </div>
+    <button type="submit">Cadastrar</button>
+</form>

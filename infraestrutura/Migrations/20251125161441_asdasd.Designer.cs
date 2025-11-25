@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Infraestrutura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251124182017_oisfadhuiofd")]
-    partial class oisfadhuiofd
+    [Migration("20251125161441_asdasd")]
+    partial class asdasd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,9 @@ namespace Locadora.Infraestrutura.Migrations
 
                     b.Property<float>("KmInicial")
                         .HasColumnType("real");
+
+                    b.Property<bool>("SeguroAcionado")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Status")
                         .HasColumnType("boolean");

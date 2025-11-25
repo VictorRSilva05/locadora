@@ -37,4 +37,36 @@ public class Cobranca : EntidadeBase<Cobranca>
         PrecoPorKmExtrapolado = registroEditado.PrecoPorKmExtrapolado;
         Taxa = registroEditado.Taxa;
     }
+
+    public decimal CalcularPlanoDiaria(int dias, int kms)
+    {
+        decimal total = 0;
+
+        decimal precoDiaria = dias * (decimal)PrecoDiaria!;
+
+        decimal precoPorKm = kms * (decimal)PrecoKm!;
+
+        total = precoDiaria + precoPorKm;
+
+        return total;
+    }
+
+    public decimal CalcularPlanoControlado(int dias,int kms)
+    {
+        decimal total = 0;
+
+        decimal precoDiaria = dias * (decimal)PrecoDiaria!;
+
+        decimal precoKmRodado = 0;
+
+        int kmsExtrapolados = (int)KmDisponiveis! - kms;
+
+        if(kmsExtrapolados > 0)
+            precoKmRodado = kmsExtrapolados * (decimal)PrecoPorKmExtrapolado!;
+
+        total =  precoDiaria + precoKmRodado;
+
+        return total;
+    }
+
 }

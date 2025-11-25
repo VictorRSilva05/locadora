@@ -110,6 +110,30 @@ public class CadastrarAluguelViewModel : FormularioAluguelViewModel
     }
 }
 
+public class DevolucaoAluguelViewModel
+{
+    public Guid Id { get; set; }
+
+    public DateTime DataDevolucao { get; set; }
+    public float KmDevolucao { get; set; }
+    public bool TanqueCheio { get; set; }
+    public bool SeguroAcionado { get; set; }
+    public decimal Total {  get; set; }
+
+    public DevolucaoAluguelViewModel() { }
+
+
+    public DevolucaoAluguelViewModel(Guid id, DateTime dataDevolucao,float kmDevolucao, bool tanqueCheio, bool seguroAcionado, decimal total)
+    {
+        Id = id;
+        DataDevolucao = dataDevolucao;
+        KmDevolucao = kmDevolucao;
+        TanqueCheio = tanqueCheio;
+        SeguroAcionado = seguroAcionado;
+        Total = total;
+    }
+}
+
 public class EditarAluguelViewModel : FormularioAluguelViewModel
 {
     //public Guid Id { get; set; }

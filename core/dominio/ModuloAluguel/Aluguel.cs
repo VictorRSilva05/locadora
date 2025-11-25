@@ -20,6 +20,7 @@ public class Aluguel : EntidadeBase<Aluguel>
     public float? KmDevolucao { get; set; }
     public bool? TanqueCheio { get; set; }
     public bool Status {  get; set; }
+    public bool SeguroAcionado { get; set; }
     public decimal Total { get; set; }
 
     public Aluguel()
@@ -74,5 +75,24 @@ public class Aluguel : EntidadeBase<Aluguel>
         KmDevolucao = registroEditado.KmDevolucao;
         TanqueCheio = registroEditado.TanqueCheio;
         Total = registroEditado.Total;
+    }
+
+    public int CalcularDiarias()
+    {
+        if (DataDevolucao == null)
+            throw new InvalidOperationException("DataDevolucao must have a value to calculate diarias.");
+
+        TimeSpan duracao = DataSaida - DataDevolucao.Value;
+        int diarias = (int)Math.Ceiling(duracao.TotalDays);
+
+        return diarias;
+    }
+
+    public int CalcularKms()
+    {
+        var distanciaPercorrida = KmDevolucao - KmInicial;
+        Math.Ceiling((decimal)distanciaPercorrida!);
+
+        return (int)distanciaPercorrida;
     }
 }
