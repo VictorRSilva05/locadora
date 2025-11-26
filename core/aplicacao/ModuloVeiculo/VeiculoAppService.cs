@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.Extensions.Logging;
@@ -7,15 +8,18 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloVeiculo;
 public class VeiculoAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioVeiculo repositorioVeiculo;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<VeiculoAppService> logger;
 
     public VeiculoAppService(
+        ITenantProvider tenantProvider,
         IRepositorioVeiculo repositorioVeiculo,
         IUnitOfWork unitOfWork,
         ILogger<VeiculoAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioVeiculo = repositorioVeiculo;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -25,6 +29,8 @@ public class VeiculoAppService
     {
         try
         {
+            veiculo.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioVeiculo.CadastrarAsync(veiculo);
 
             await unitOfWork.CommitAsync();

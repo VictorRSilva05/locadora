@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCliente;
 using Microsoft.Extensions.Logging;
@@ -7,14 +8,17 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloCliente;
 public class ClienteAppService
 {
+    ITenantProvider tenantProvider;
     private readonly IRepositorioCliente repositorioCliente;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<ClienteAppService> logger;
     public ClienteAppService(
+        ITenantProvider tenantProvider,
         IRepositorioCliente repositorioCliente,
         IUnitOfWork unitOfWork,
         ILogger<ClienteAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioCliente = repositorioCliente;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -44,6 +48,8 @@ public class ClienteAppService
 
         try
         {
+            cliente.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioCliente.CadastrarAsync(cliente);
             await unitOfWork.CommitAsync();
             return Result.Ok();

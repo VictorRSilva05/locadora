@@ -1,4 +1,6 @@
-﻿using Locadora.Dominio.Compartilhado;
+﻿using FluentResults;
+using Locadora.Dominio.Autenticacao;
+using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCliente;
 using Locadora.Dominio.ModuloCobranca;
@@ -24,8 +26,36 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Aluguel> aluguel { get; set; }
     public AppDbContext(DbContextOptions options) : base(options) { }
 
+    private readonly ITenantProvider? tenantProvider;
+
+    public AppDbContext(DbContextOptions options, ITenantProvider? tenantProvider = null) : base(options)
+    {
+        this.tenantProvider = tenantProvider;
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        if (tenantProvider is not null)
+        {
+            modelBuilder.Entity<Funcionario>()
+                 .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Combustivel>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<GrupoVeiculo>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Condutor>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Veiculo>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Cliente>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Taxa>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Cobranca>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Aluguel>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+        }
         var assembly = typeof(AppDbContext).Assembly;
 
         modelBuilder.ApplyConfigurationsFromAssembly(assembly);

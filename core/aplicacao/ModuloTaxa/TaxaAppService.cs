@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloTaxa;
 using Microsoft.Extensions.Logging;
@@ -7,15 +8,18 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloTaxa;
 public class TaxaAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioTaxa repositorioTaxa;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<TaxaAppService> logger;
 
     public TaxaAppService(
+        ITenantProvider tenantProvider,
         IRepositorioTaxa repositorioTaxa,
         IUnitOfWork unitOfWork,
         ILogger<TaxaAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioTaxa = repositorioTaxa;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -25,6 +29,8 @@ public class TaxaAppService
     {
         try
         {
+            taxa.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioTaxa.CadastrarAsync(taxa);
             await unitOfWork.CommitAsync();
             return Result.Ok();

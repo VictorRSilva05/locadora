@@ -20,5 +20,17 @@ public class MapeadorFuncionarioEmOrm : IEntityTypeConfiguration<Funcionario>
 
         builder.Property(x => x.Salario)
             .IsRequired();
+
+        builder.HasOne(t => t.Tenant)
+          .WithMany()
+          .HasForeignKey(t => t.EmpresaId)
+          .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(u => u.User)
+               .WithOne()
+               .HasForeignKey<Funcionario>(e => e.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasIndex(f => new { f.UserId, f.EstaAtivo });
     }
 }

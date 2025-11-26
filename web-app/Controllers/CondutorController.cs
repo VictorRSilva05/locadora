@@ -1,11 +1,13 @@
 ﻿using Locadora.Aplicacao.ModuloCondutor;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Locadora.WebApp.Controllers;
 
 [Route("condutores")]
+[Authorize(Roles = "Admin, Employee")]
 public class CondutorController : Controller
 {
     private readonly CondutorAppService condutorAppService;

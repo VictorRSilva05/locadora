@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloFuncionario;
 using Microsoft.Extensions.Logging;
@@ -7,15 +8,18 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloFuncionario;
 public class FuncionarioAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioFuncionario repositorioFuncionario;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<FuncionarioAppService> logger;
 
     public FuncionarioAppService(
+        ITenantProvider tenantProvider,
         IRepositorioFuncionario repositorioFuncionario,
         IUnitOfWork unitOfWork,
         ILogger<FuncionarioAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioFuncionario = repositorioFuncionario;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -25,6 +29,8 @@ public class FuncionarioAppService
     {
         try
         {
+            funcionario.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioFuncionario.CadastrarAsync(funcionario);
 
             funcionario.DataAdmissao = DateTime.SpecifyKind(

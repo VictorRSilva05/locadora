@@ -6,11 +6,13 @@ using Locadora.Aplicacao.ModuloTaxa;
 using Locadora.Aplicacao.ModuloVeiculo;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Locadora.WebApp.Controllers;
 
 [Route("alugueis")]
+[Authorize(Roles = "Admin, Employee")]
 public class AluguelController : Controller
 {
     private readonly AluguelAppService aluguelAppService;

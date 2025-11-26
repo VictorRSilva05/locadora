@@ -2,11 +2,13 @@
 using Locadora.Aplicacao.ModuloGrupoVeiculo;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Locadora.WebApp.Controllers;
 
 [Route("cobrancas")]
+[Authorize(Roles = "Admin, Employee")]
 public class CobrancaController : Controller
 {
     private readonly CobrancaAppService cobrancaAppService;

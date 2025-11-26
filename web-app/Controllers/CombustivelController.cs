@@ -1,11 +1,13 @@
 ﻿using Locadora.Aplicacao.ModuloCombustivel;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Locadora.WebApp.Controllers;
 
 [Route("combustivel")]
+[Authorize(Roles = "Admin, Employee")]
 public class CombustivelController : Controller
 {
     private readonly CombustivelAppService combustivelAppService;

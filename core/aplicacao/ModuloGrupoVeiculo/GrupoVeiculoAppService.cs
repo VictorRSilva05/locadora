@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Microsoft.Extensions.Logging;
@@ -7,36 +8,41 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloGrupoVeiculo;
 public class GrupoVeiculoAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioGrupoVeiculo repositorioGrupoVeiculo;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<GrupoVeiculoAppService> logger;
 
     public GrupoVeiculoAppService(
+        ITenantProvider tenantProvider,
         IRepositorioGrupoVeiculo repositorioGrupoVeiculo,
         IUnitOfWork unitOfWork,
         ILogger<GrupoVeiculoAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioGrupoVeiculo = repositorioGrupoVeiculo;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
-    }   
+    }
 
     public async Task<Result> Cadastrar(GrupoVeiculo grupoVeiculo)
     {
         var registros = await repositorioGrupoVeiculo.SelecionarRegistrosAsync();
 
-        if(registros.Any(i => i.Nome.Equals(grupoVeiculo.Nome)))
+        if (registros.Any(i => i.Nome.Equals(grupoVeiculo.Nome)))
             return Result.Fail(ResultadosErro.RegistroDuplicadoErro("Já existe um grupo de veículo com este nome."));
 
         try
         {
+            grupoVeiculo.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioGrupoVeiculo.CadastrarAsync(grupoVeiculo);
 
             await unitOfWork.CommitAsync();
 
             return Result.Ok();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
 
@@ -54,7 +60,7 @@ public class GrupoVeiculoAppService
     {
         var registros = await repositorioGrupoVeiculo.SelecionarRegistrosAsync();
 
-        if(registros.Any(i => i.Nome.Equals(grupoVeiculo.Nome)))
+        if (registros.Any(i => i.Nome.Equals(grupoVeiculo.Nome)))
             return Result.Fail(ResultadosErro.RegistroDuplicadoErro("Já existe um grupo de veículo com este nome."));
 
         try
@@ -63,7 +69,7 @@ public class GrupoVeiculoAppService
             await unitOfWork.CommitAsync();
             return Result.Ok();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
             logger.LogError(
@@ -83,7 +89,7 @@ public class GrupoVeiculoAppService
             await unitOfWork.CommitAsync();
             return Result.Ok();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
             logger.LogError(
@@ -106,7 +112,7 @@ public class GrupoVeiculoAppService
 
             return Result.Ok(grupoVeiculo);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             logger.LogError(
                 ex,
@@ -125,7 +131,7 @@ public class GrupoVeiculoAppService
 
             return Result.Ok(registros);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             logger.LogError(
                 ex,

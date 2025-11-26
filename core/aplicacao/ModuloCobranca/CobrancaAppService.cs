@@ -1,21 +1,26 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCobranca;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace Locadora.Aplicacao.ModuloCobranca;
 public class CobrancaAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCobranca repositorioCobranca;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CobrancaAppService> logger;
 
     public CobrancaAppService(
+        ITenantProvider tenantProvider,
         IRepositorioCobranca repositorioCobranca,
         IUnitOfWork unitOfWork,
         ILogger<CobrancaAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioCobranca = repositorioCobranca;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -39,6 +44,8 @@ public class CobrancaAppService
                 );
         try
         {
+            cobranca.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioCobranca.CadastrarAsync(cobranca);
             await unitOfWork.CommitAsync();
             return Result.Ok();

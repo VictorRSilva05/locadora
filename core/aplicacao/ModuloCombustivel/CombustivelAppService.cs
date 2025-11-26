@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCombustivel;
 using Microsoft.Extensions.Logging;
@@ -7,15 +8,18 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloCombustivel;
 public class CombustivelAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCombustivel repositorioCombustivel;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CombustivelAppService> logger;
 
     public CombustivelAppService(
+        ITenantProvider tenantProvider,
         IRepositorioCombustivel repositorioCombustivel,
         IUnitOfWork unitOfWork,
         ILogger<CombustivelAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioCombustivel = repositorioCombustivel;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -30,6 +34,8 @@ public class CombustivelAppService
 
         try
         {
+            combustivel.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioCombustivel.CadastrarAsync(combustivel);
             await unitOfWork.CommitAsync();
             return Result.Ok();

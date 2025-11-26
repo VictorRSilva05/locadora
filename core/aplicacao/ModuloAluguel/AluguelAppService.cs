@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCobranca;
@@ -8,15 +9,18 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloAluguel;
 public class AluguelAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioAluguel repositorioAluguel;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<AluguelAppService> logger;
 
     public AluguelAppService(
+        ITenantProvider tenantProvider,
         IRepositorioAluguel repositorioAluguel,
         IUnitOfWork unitOfWork,
         ILogger<AluguelAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioAluguel = repositorioAluguel;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -26,6 +30,8 @@ public class AluguelAppService
     {
         try
         {
+            aluguel.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioAluguel.CadastrarAsync(aluguel);
 
             aluguel.DataSaida = DateTime.SpecifyKind(

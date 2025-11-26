@@ -7,4 +7,5 @@ public class RepositorioFuncionarioEmOrm : RepositorioBaseEmOrm<Funcionario>, IR
     public RepositorioFuncionarioEmOrm(AppDbContext contexto) : base(contexto)
     {
     }
+
 }

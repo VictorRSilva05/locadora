@@ -1,9 +1,11 @@
 ﻿using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 namespace Locadora.WebApp.Controllers;
 
+[Authorize(Roles = "Admin, Employee")]
 public class HomeController : Controller
 {
     public IActionResult Index()

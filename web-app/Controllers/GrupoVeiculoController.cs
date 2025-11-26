@@ -2,6 +2,7 @@
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using static Locadora.WebApp.Models.FormularioGrupoVeiculoViewModel;
@@ -9,6 +10,7 @@ using static Locadora.WebApp.Models.FormularioGrupoVeiculoViewModel;
 namespace Locadora.WebApp.Controllers;
 
 [Route("grupo-veiculo")]
+[Authorize(Roles = "Admin, Employee")]
 public class GrupoVeiculoController : Controller
 {
     private readonly GrupoVeiculoAppService grupoVeiculoAppService;

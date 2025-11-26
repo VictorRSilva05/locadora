@@ -2,11 +2,13 @@
 using Locadora.Dominio.ModuloFuncionario;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Locadora.WebApp.Controllers;
 
 [Route("funcionarios")]
+[Authorize(Roles = "Admin")]
 public class FuncionarioController : Controller
 {
     private readonly FuncionarioAppService funcionarioAppService;

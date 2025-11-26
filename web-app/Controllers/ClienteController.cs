@@ -2,11 +2,13 @@
 using Locadora.Dominio.ModuloCliente;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Locadora.WebApp.Controllers;
 
 [Route("clientes")]
+[Authorize(Roles = "Admin, Employee")]
 public class ClienteController : Controller
 {
     private readonly ClienteAppService clienteAppService;

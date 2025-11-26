@@ -1,5 +1,6 @@
 ﻿using FluentResults;
 using Locadora.Aplicacao.Compartilhado;
+using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCondutor;
 using Microsoft.Extensions.Logging;
@@ -7,15 +8,18 @@ using Microsoft.Extensions.Logging;
 namespace Locadora.Aplicacao.ModuloCondutor;
 public class CondutorAppService
 {
+    private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCondutor repositorioCondutor;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CondutorAppService> logger;
 
     public CondutorAppService(
+        ITenantProvider tenantProvider,
         IRepositorioCondutor repositorioCondutor,
         IUnitOfWork unitOfWork,
         ILogger<CondutorAppService> logger)
     {
+        this.tenantProvider = tenantProvider;
         this.repositorioCondutor = repositorioCondutor;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
@@ -42,6 +46,8 @@ public class CondutorAppService
 
         try
         {
+            condutor.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
             await repositorioCondutor.CadastrarAsync(condutor);
 
             condutor.Validade = DateTime.SpecifyKind(condutor.Validade, DateTimeKind.Utc);
