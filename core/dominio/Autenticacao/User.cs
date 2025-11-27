@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Locadora.Dominio.ModuloFuncionario;
+using Microsoft.AspNetCore.Identity;
 
 namespace Locadora.Dominio.Autenticacao;
 public class User : IdentityUser<Guid>

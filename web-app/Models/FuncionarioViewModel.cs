@@ -9,15 +9,22 @@ public abstract class FormularioFuncionarioViewModel
     public string Nome { get; set; }
     [Required(ErrorMessage = "O campo Data de Admissão é obrigatório.")]
     public DateTime DataAdmissao { get; set; }
+
+    [EmailAddress(ErrorMessage = "O formato do campo está inválido")]
+    [Required(ErrorMessage ="O campo email é obrigatório.")]
+    public string Email { get; set; }
     [Required(ErrorMessage = "O campo Salário é obrigatório.")]
+
     public decimal Salario { get; set; }
 
-    public static Funcionario ParaEntidade(FormularioFuncionarioViewModel viewModel)
+    public static Funcionario ParaEntidade(FormularioFuncionarioViewModel viewModel, Guid userId)
     {
         return new Funcionario(
             viewModel.Nome,
             viewModel.DataAdmissao,
-            viewModel.Salario
+            viewModel.Email,
+            viewModel.Salario,
+            userId
         );
     }
 }

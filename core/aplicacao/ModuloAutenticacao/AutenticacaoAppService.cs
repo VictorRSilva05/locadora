@@ -18,47 +18,11 @@ public class AutenticacaoAppService(
         var usuarioResult = await userManager.CreateAsync(usuario, senha);
 
         if (!usuarioResult.Succeeded)
-        {
-            var erros = usuarioResult.Errors.Select(err =>
-            {
-                return err.Code switch
-                {
-                    "DuplicateUserName" => "Já existe um usuário com esse nome.",
-                    "DuplicateEmail" => "Já existe um usuário com esse e-mail.",
-                    "PasswordTooShort" => "A senha é muito curta.",
-                    "PasswordRequiresNonAlphanumeric" => "A senha deve conter pelo menos um caractere especial.",
-                    "PasswordRequiresDigit" => "A senha deve conter pelo menos um número.",
-                    "PasswordRequiresUpper" => "A senha deve conter pelo menos uma letra maiúscula.",
-                    "PasswordRequiresLower" => "A senha deve conter pelo menos uma letra minúscula.",
-                    _ => err.Description
-                };
-            }).ToList();
+            return Result.Fail("Erro ao criar usuário.");
 
-            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(erros));
-        }
+        await userManager.AddToRoleAsync(usuario, tipo.ToString());
 
-        var tipoString = tipo.ToString();
-
-        var resultadoBuscaCargo = await roleManager.FindByNameAsync(tipoString);
-
-        if (resultadoBuscaCargo is null)
-        {
-            var cargo = new Role
-            {
-                Name = tipoString,
-                NormalizedName = tipoString.ToUpper(),
-                ConcurrencyStamp = Guid.NewGuid().ToString()
-            };
-
-            await roleManager.CreateAsync(cargo);
-        }
-
-        await userManager.AddToRoleAsync(usuario, tipoString);
-
-        return await LoginAsync(
-            usuario.Email ?? string.Empty,
-            senha
-        );
+        return Result.Ok();
     }
 
     public async Task<Result> LoginAsync(string email, string senha)

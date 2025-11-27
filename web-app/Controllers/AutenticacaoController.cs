@@ -3,89 +3,62 @@ using Locadora.Dominio.Autenticacao;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
+using System.Security.Claims;
 using System.Security.Policy;
 
 namespace Locadora.WebApp.Controllers;
 
-    [Route("autenticacao")]
-    public class AutenticacaoController : Controller
+[Route("Autenticacao")]
+public class AutenticacaoController : Controller
+{
+    private readonly SignInManager<User> _signInManager;
+    private readonly UserManager<User> _userManager;
+
+    public AutenticacaoController(SignInManager<User> signInManager, UserManager<User> userManager)
     {
-        private readonly AutenticacaoAppService autenticacaoAppService;
-
-        public AutenticacaoController(AutenticacaoAppService autenticacaoAppService)
-        {
-            this.autenticacaoAppService = autenticacaoAppService;
-        }
-
-        [HttpGet("registro")]
-        public IActionResult Registro()
-        {
-            if (User.Identity?.IsAuthenticated ?? false)
-                return RedirectToAction("Index", "Home");
-
-            var registroVm = new RegistroViewModel();
-
-            return View(registroVm);
-        }
-
-        [HttpPost("registro")]
-        public async Task<IActionResult> Registro(RegistroViewModel registroVm)
-        {
-            var usuario = new User()
-            {
-                UserName = registroVm.Email,
-                Email = registroVm.Email,
-            };
-
-            var resultado = await autenticacaoAppService.RegistrarAsync(
-                usuario,
-                registroVm.Senha ?? string.Empty,
-                registroVm.Tipo
-            );
-
-            if (resultado.IsFailed)
-                return this.PreencherErrosModelState(resultado, registroVm);
-
-            return RedirectToAction(nameof(HomeController.Index), "Home");
-        }
-
-        [HttpGet("login")]
-        public IActionResult Login(string? returnUrl = null)
-        {
-            if (User.Identity?.IsAuthenticated ?? false)
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-
-            var loginVm = new LoginViewModel();
-
-            ViewData["ReturnUrl"] = returnUrl;
-
-            return View(loginVm);
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginViewModel loginVm, string? returnUrl = null)
-        {
-            var resultado = await autenticacaoAppService.LoginAsync(
-                loginVm.Email ?? string.Empty,
-                loginVm.Senha ?? string.Empty
-            );
-
-            if (resultado.IsFailed)
-                return this.PreencherErrosModelState(resultado, loginVm);
-
-            if (Url.IsLocalUrl(returnUrl))
-                return LocalRedirect(returnUrl);
-
-            return RedirectToAction(nameof(HomeController.Index), "Home");
-        }
-
-        [HttpPost("logout")]
-        [Authorize]
-        public async Task<IActionResult> Logout()
-        {
-            await autenticacaoAppService.LogoutAsync();
-
-            return RedirectToAction(nameof(Login));
-        }
+        _signInManager = signInManager;
+        _userManager = userManager;
     }
+
+    [HttpGet("Login")]
+    public IActionResult Login(string? returnUrl = null)
+    {
+        ViewBag.ReturnUrl = returnUrl;
+        return View(new LoginViewModel());
+    }
+
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var resultado = await _signInManager.PasswordSignInAsync(
+            model.Email,
+            model.Senha,
+            model.LembrarMe,
+            lockoutOnFailure: false
+        );
+
+        if (!resultado.Succeeded)
+        {
+            ModelState.AddModelError("", "Email ou senha incorretos.");
+            return View(model);
+        }
+
+        if (returnUrl != null)
+            return Redirect(returnUrl);
+
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost("Logout")]
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        return RedirectToAction("Login");
+    }
+}

@@ -9,33 +9,15 @@ public sealed class IdentityTenantProvider(IHttpContextAccessor contextAccessor)
     {
         get
         {
-            ClaimsPrincipal? claimsPrincipal = contextAccessor.HttpContext?.User;
-
-            if (claimsPrincipal?.Identity?.IsAuthenticated != true)
-            {
-                return null;
-            }
-
-            Claim? claimId = claimsPrincipal.FindFirst("sub");
+            var claimId = contextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier);
 
             if (claimId == null)
-            {
                 return null;
-            }
 
-            return TryParseGuid(claimId.Value);
+            return Guid.Parse(claimId.Value);
         }
     }
 
     public bool IsInRole(string roleName) => contextAccessor.HttpContext?.User?.IsInRole(roleName) ?? false;
 
-    private static Guid? TryParseGuid(string? value)
-    {
-        if (Guid.TryParse(value, out Guid guid))
-        {
-            return guid;
-        }
-
-        return null;
-    }
 }

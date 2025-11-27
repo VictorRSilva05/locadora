@@ -12,6 +12,8 @@ public class MapeadorFuncionarioEmOrm : IEntityTypeConfiguration<Funcionario>
             .ValueGeneratedNever()
             .IsRequired();
 
+        builder.Property(x => x.Email);
+
         builder.Property(x => x.Nome)
             .IsRequired();
 

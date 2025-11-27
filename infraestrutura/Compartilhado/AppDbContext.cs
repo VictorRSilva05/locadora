@@ -10,10 +10,11 @@ using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.Dominio.ModuloTaxa;
 using Locadora.Dominio.ModuloVeiculo;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Locadora.Infraestrutura.Compartilhado;
-public class AppDbContext : DbContext, IUnitOfWork
+public class AppDbContext : IdentityDbContext<User, Role, Guid>, IUnitOfWork
 {
     public DbSet<GrupoVeiculo> grupoVeiculos { get; set; }
     public DbSet<Combustivel> combustivels { get; set; }
@@ -24,11 +25,13 @@ public class AppDbContext : DbContext, IUnitOfWork
     public DbSet<Taxa> taxas { get; set; }
     public DbSet<Cobranca> cobrancas { get; set; }
     public DbSet<Aluguel> aluguel { get; set; }
-    public AppDbContext(DbContextOptions options) : base(options) { }
 
     private readonly ITenantProvider? tenantProvider;
 
-    public AppDbContext(DbContextOptions options, ITenantProvider? tenantProvider = null) : base(options)
+    public AppDbContext(
+        DbContextOptions<AppDbContext> options,
+        ITenantProvider? tenantProvider = null
+    ) : base(options)
     {
         this.tenantProvider = tenantProvider;
     }
@@ -38,7 +41,7 @@ public class AppDbContext : DbContext, IUnitOfWork
         if (tenantProvider is not null)
         {
             modelBuilder.Entity<Funcionario>()
-                 .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
             modelBuilder.Entity<Combustivel>()
                 .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
             modelBuilder.Entity<GrupoVeiculo>()
@@ -56,16 +59,19 @@ public class AppDbContext : DbContext, IUnitOfWork
             modelBuilder.Entity<Aluguel>()
                 .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
         }
-        var assembly = typeof(AppDbContext).Assembly;
 
-        modelBuilder.ApplyConfigurationsFromAssembly(assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Funcionario>()
+              .HasOne(f => f.User)
+              .WithOne()
+              .HasForeignKey<Funcionario>(f => f.UserId)
+              .OnDelete(DeleteBehavior.Restrict);
     }
-    public async Task CommitAsync()
-    {
-        await SaveChangesAsync();
-    }
+
+    public async Task CommitAsync() => await SaveChangesAsync();
 
     public async Task RollbackAsync()
     {
@@ -74,19 +80,12 @@ public class AppDbContext : DbContext, IUnitOfWork
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.State = EntityState.Unchanged;
-                    break;
-
                 case EntityState.Modified:
-                    entry.State = EntityState.Unchanged;
-                    break;
-
                 case EntityState.Deleted:
                     entry.State = EntityState.Unchanged;
                     break;
             }
         }
-
         await Task.CompletedTask;
     }
 }

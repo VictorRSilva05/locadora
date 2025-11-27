@@ -24,12 +24,13 @@ public class RegistroViewModel
 
 public class LoginViewModel
 {
-    [Required(ErrorMessage = "O campo \"Email\" é obrigatório.")]
-    [EmailAddress(ErrorMessage = "O campo \"Email\" precisa ser um endereço de email válido.")]
-    public string? Email { get; set; }
+    [Required(ErrorMessage = "O campo Email é obrigatório.")]
+    [EmailAddress(ErrorMessage = "Email inválido.")]
+    public string Email { get; set; }
 
-    [Required(ErrorMessage = "O campo \"Senha\" é obrigatório.")]
-    public string? Senha { get; set; }
+    [Required(ErrorMessage = "A senha é obrigatória.")]
+    [DataType(DataType.Password)]
+    public string Senha { get; set; }
 
-    public LoginViewModel() { }
+    public bool LembrarMe { get; set; }
 }
