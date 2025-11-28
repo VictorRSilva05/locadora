@@ -34,3 +34,21 @@ public class LoginViewModel
 
     public bool LembrarMe { get; set; }
 }
+
+public class RegistrarAdminViewModel
+{
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [Required]
+    [DataType(DataType.Password)]
+    public string Senha { get; set; }
+
+    [Required]
+    [DataType(DataType.Password)]
+    [Compare("Senha")]
+    public string ConfirmarSenha { get; set; }
+
+    public RegistrarAdminViewModel() { }
+}

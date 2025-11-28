@@ -1,10 +1,12 @@
 ﻿using Locadora.Aplicacao.ModuloAutenticacao;
+using Locadora.Aplicacao.ModuloFuncionario;
 using Locadora.Dominio.Autenticacao;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Win32;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Security.Policy;
@@ -16,11 +18,46 @@ public class AutenticacaoController : Controller
 {
     private readonly SignInManager<User> _signInManager;
     private readonly UserManager<User> _userManager;
+    private readonly AutenticacaoAppService autenticacaoAppService;
 
-    public AutenticacaoController(SignInManager<User> signInManager, UserManager<User> userManager)
+
+    public AutenticacaoController(SignInManager<User> signInManager, UserManager<User> userManager, AutenticacaoAppService autenticacaoAppService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        this.autenticacaoAppService = autenticacaoAppService;
+    }
+
+    [HttpGet("registrar")]
+    public async Task<IActionResult> Registrar()
+    {
+        var cadastrarVm = new RegistrarAdminViewModel();
+
+        return View(cadastrarVm);
+    }
+
+    [HttpPost("registrar")]
+    public async Task<IActionResult> Registrar(RegistrarAdminViewModel registrarVM)
+    {
+        var usuario = new User
+        {
+            UserName = registrarVM.Email,
+            Email = registrarVM.Email,
+            FullName = registrarVM.Email,
+        };
+
+        var resultIdentity = await autenticacaoAppService.RegistrarAsync(
+            usuario,
+            registrarVM.Senha,      
+            Roles.Admin     
+        );
+
+        if (resultIdentity.IsFailed)
+        {
+            return this.PreencherErrosModelState(resultIdentity, registrarVM);
+        }
+
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet("Login")]

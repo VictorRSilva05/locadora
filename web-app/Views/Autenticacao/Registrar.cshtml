@@ -1,12 +1,12 @@
-﻿@model LoginViewModel
+﻿@model RegistrarAdminViewModel
 
 @{
-    ViewData["Title"] = "Login";
+    ViewData["Title"] = "Registrar";
 }
 
 <h2 class="text-center mb-4">Acessar Sistema</h2>
 
-<form asp-action="Login" method="post">
+<form asp-action="Registrar" method="post">
     <div class="mb-3">
         <label asp-for="Email" class="form-label"></label>
         <input asp-for="Email" class="form-control" />
@@ -19,12 +19,5 @@
         <span asp-validation-for="Senha" class="text-danger"></span>
     </div>
 
-    <div class="form-check mb-3">
-        <input asp-for="LembrarMe" class="form-check-input" />
-        <label asp-for="LembrarMe" class="form-check-label"></label>
-    </div>
-
     <button type="submit" class="btn btn-primary w-100">Entrar</button>
 </form>
-
-<a asp-controller="Autenticacao" asp-action="Registrar">Cadastrar minha caceta</a>
