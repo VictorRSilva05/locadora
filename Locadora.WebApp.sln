@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locadora.Aplicacao", "core\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locadora.Infraestrutura", "infraestrutura\Locadora.Infraestrutura.csproj", "{2B9C7893-AC89-10AD-ACB6-D6218A7AA3EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Locadora.Testes.Integracao", "Locadora.Testes.Integracao\Locadora.Testes.Integracao.csproj", "{167A75C6-A45B-4E2F-BC82-613347019076}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2B9C7893-AC89-10AD-ACB6-D6218A7AA3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2B9C7893-AC89-10AD-ACB6-D6218A7AA3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2B9C7893-AC89-10AD-ACB6-D6218A7AA3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{167A75C6-A45B-4E2F-BC82-613347019076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{167A75C6-A45B-4E2F-BC82-613347019076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{167A75C6-A45B-4E2F-BC82-613347019076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{167A75C6-A45B-4E2F-BC82-613347019076}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{FA02D7B6-95DE-A870-0FA0-A7B8001E9F9A} = {77232FC7-2A23-4B57-AF3F-27A13D146FC6}
 		{B1035663-E783-C929-8D9D-47EC898999E1} = {77232FC7-2A23-4B57-AF3F-27A13D146FC6}
 		{2B9C7893-AC89-10AD-ACB6-D6218A7AA3EC} = {E15C1B2F-D1E8-4631-9F19-F027CDB2B5E5}
+		{167A75C6-A45B-4E2F-BC82-613347019076} = {E15C1B2F-D1E8-4631-9F19-F027CDB2B5E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5057EFFD-1354-42DF-BE8E-4EB613EC3EFB}
