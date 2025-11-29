@@ -7,6 +7,7 @@ using Locadora.Dominio.ModuloCombustivel;
 using Locadora.Dominio.ModuloCondutor;
 using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloGrupoVeiculo;
+using Locadora.Dominio.ModuloTaxa;
 using Locadora.Dominio.ModuloVeiculo;
 using Locadora.Infraestrutura.Compartilhado;
 using Locadora.Infraestrutura.ModuloAluguel;
@@ -73,6 +74,7 @@ public abstract class TestFixture
 
         repositorioGrupoVeiculoEmOrm = new RepositorioGrupoVeiculoEmOrm(appDbContext);
         repositorioCombustivelEmOrm = new RepositorioCombustivelEmOrm(appDbContext);
+        repositorioTaxaEmOrm = new RepositorioTaxaEmOrm(appDbContext);
         repositorioVeiculoEmOrm = new RepositorioVeiculoEmOrm(appDbContext);
         repositorioCondutorEmOrm = new RepositorioCondutorEmOrm(appDbContext);
         repositorioClienteEmOrm = new RepositorioClienteEmOrm(appDbContext);
@@ -85,6 +87,9 @@ public abstract class TestFixture
 
         BuilderSetup.SetCreatePersistenceMethod<Combustivel>(async combustivel => await repositorioCombustivelEmOrm.CadastrarAsync(combustivel));
         BuilderSetup.SetCreatePersistenceMethod<IList<Combustivel>>(async combustiveis => await repositorioCombustivelEmOrm.CadastrarEntidades(combustiveis));
+
+        BuilderSetup.SetCreatePersistenceMethod<Taxa>(async taxa => await repositorioTaxaEmOrm.CadastrarAsync(taxa));
+        BuilderSetup.SetCreatePersistenceMethod<IList<Taxa>>(async taxas => await repositorioTaxaEmOrm.CadastrarEntidades(taxas));
 
         BuilderSetup.SetCreatePersistenceMethod<Veiculo>(async veiculo => await repositorioVeiculoEmOrm.CadastrarAsync(veiculo));
         BuilderSetup.SetCreatePersistenceMethod<IList<Veiculo>>(async veiculos => await repositorioVeiculoEmOrm.CadastrarEntidades(veiculos));
@@ -115,6 +120,7 @@ public abstract class TestFixture
         dbContext.clientes.RemoveRange(dbContext.clientes);
         dbContext.condutores.RemoveRange(dbContext.condutores);
         dbContext.veiculos.RemoveRange(dbContext.veiculos);
+        dbContext.taxas.RemoveRange(dbContext.taxas);
         dbContext.combustivels.RemoveRange(dbContext.combustivels);
         dbContext.grupoVeiculos.RemoveRange(dbContext.grupoVeiculos);
 
