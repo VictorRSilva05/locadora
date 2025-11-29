@@ -1,4 +1,5 @@
-﻿using Locadora.Dominio.ModuloCombustivel;
+﻿using Locadora.Dominio.ModuloCliente;
+using Locadora.Dominio.ModuloCombustivel;
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -31,8 +32,31 @@ public abstract class FormularioVeiculoViewModel
     [Required(ErrorMessage = "O campo Ano é obrigatório.")]
     public int Ano { get; set; }
 
+    [Required(ErrorMessage = "O campo Placa é obrigatório.")]
+    public string Placa { get; set; }
+
+    [Required(ErrorMessage = "O campo Tipo câmbio é obrigatório.")]
+    public TipoCambioEnum TipoCambio { get; set; }
+
+    [Required(ErrorMessage = "O campo kilometragem é obrigatório.")]
+    public float Kilometragem { get; set; }
+
     public List<SelectListItem>? GrupoVeiculosDisponiveis { get; set; }
     public List<SelectListItem>? CombustiveisDisponiveis { get; set; }
+    public List<SelectListItem>? TiposCambiosDisponiveis { get; set; }
+
+    public void CarregarTiposCambios()
+    {
+        TiposCambiosDisponiveis = Enum.GetValues(typeof(TipoClienteEnum))
+            .Cast<TipoClienteEnum>()
+            .Select(tipo => new SelectListItem
+            {
+                Value = ((int)tipo).ToString(),
+                Text = tipo.ToString()
+            })
+            .ToList();
+    }
+
 
     public static Veiculo ParaEntidade(
         FormularioVeiculoViewModel viewModel,
@@ -62,7 +86,10 @@ public abstract class FormularioVeiculoViewModel
             viewModel.Cor,
             combustivelSelecionado,
             viewModel.CapacidadeCombustivel,
-            viewModel.Ano
+            viewModel.Ano,
+            viewModel.Placa,
+            viewModel.TipoCambio,
+            viewModel.Kilometragem
         );
     }
 }
@@ -70,7 +97,10 @@ public abstract class FormularioVeiculoViewModel
 
 public class CadastrarVeiculoViewModel : FormularioVeiculoViewModel
 {
-    public CadastrarVeiculoViewModel() { }
+    public CadastrarVeiculoViewModel()
+    {
+        CarregarTiposCambios();
+    }
 
     public CadastrarVeiculoViewModel(List<GrupoVeiculo> grupoVeiculos, List<Combustivel> combustiveis)
     {
@@ -89,9 +119,12 @@ public class EditarVeiculoViewModel : FormularioVeiculoViewModel
 {
     public Guid Id { get; set; }
 
-    public string? FotoAtualBase64 { get; set; } 
+    public string? FotoAtualBase64 { get; set; }
 
-    public EditarVeiculoViewModel() { }
+    public EditarVeiculoViewModel()
+    {
+        CarregarTiposCambios();
+    }
 
     public EditarVeiculoViewModel(
         Veiculo veiculo,

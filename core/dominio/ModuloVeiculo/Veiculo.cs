@@ -12,10 +12,13 @@ public class Veiculo : EntidadeBase<Veiculo>
     public Combustivel Combustivel { get; set; }
     public int CapacidadeCombustivel { get; set; }
     public int Ano { get; set; }
+    public string Placa { get; set; }
+    public TipoCambioEnum TipoCambio { get; set; }
+    public float Kilometragem { get; set; }
 
     public Veiculo() { }
 
-    public Veiculo(byte[]? foto, GrupoVeiculo grupoVeiculo, string marca, string cor, string modelo, Combustivel combustivel, int capacidadeCombustivel, int ano)
+    public Veiculo(byte[]? foto, GrupoVeiculo grupoVeiculo, string marca, string cor, string modelo, Combustivel combustivel, int capacidadeCombustivel, int ano, string placa, TipoCambioEnum tipoCambio, float kilometragem)
     {
         Id = Guid.NewGuid();
         Foto = foto;
@@ -26,6 +29,9 @@ public class Veiculo : EntidadeBase<Veiculo>
         Combustivel = combustivel;
         CapacidadeCombustivel = capacidadeCombustivel;
         Ano = ano;
+        Placa = placa;
+        TipoCambio = tipoCambio;
+        Kilometragem = kilometragem;
     }
 
     public override void AtualizarRegistro(Veiculo registroEditado)
@@ -38,5 +44,8 @@ public class Veiculo : EntidadeBase<Veiculo>
         Combustivel = registroEditado.Combustivel;
         CapacidadeCombustivel = CapacidadeCombustivel;
         Ano = registroEditado.Ano;
+        Placa = registroEditado.Placa;
+        TipoCambio = registroEditado.TipoCambio;
+        Kilometragem = registroEditado.Kilometragem;
     }
 }
