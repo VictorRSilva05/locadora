@@ -15,13 +15,7 @@ public sealed class RepositorioVeiculoEmOrmTests : TestFixture
         // Arrange
         var grupoVeiculo = new GrupoVeiculo("SUV");
 
-        await repositorioGrupoVeiculoEmOrm?.CadastrarAsync(grupoVeiculo)!;
-        appDbContext?.SaveChanges();
-
         var combustivel = new Combustivel("Diesel", 5);
-
-        await repositorioCombustivelEmOrm?.CadastrarAsync(combustivel)!;
-        appDbContext?.SaveChanges();
 
         // Act
         var veiculo = new Veiculo(null, grupoVeiculo, "Audi", "Q7", "Prata", combustivel, 70, 2007, "BRA3S14", TipoCambioEnum.Automatico, 200);
