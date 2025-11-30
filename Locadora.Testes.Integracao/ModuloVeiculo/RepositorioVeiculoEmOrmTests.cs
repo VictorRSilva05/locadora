@@ -200,4 +200,43 @@ public sealed class RepositorioVeiculoEmOrmTests : TestFixture
         // Assert
         Assert.AreEqual(veiculo, veiculoSelecionado);
     }
+
+    [TestMethod]
+    public async Task Deve_Filtrar_Por_GrupoVeiculo_Corretamente()
+    {
+        // Arrange
+        var grupoVeiculo = new GrupoVeiculo("SUV");
+
+        await repositorioGrupoVeiculoEmOrm?.CadastrarAsync(grupoVeiculo)!;
+        appDbContext?.SaveChanges();
+
+        var combustivel = new Combustivel("Diesel", 5);
+
+        await repositorioCombustivelEmOrm?.CadastrarAsync(combustivel)!;
+        appDbContext?.SaveChanges();
+
+        var grupoVeiculoEditado = new GrupoVeiculo("Sedan");
+
+        await repositorioGrupoVeiculoEmOrm?.CadastrarAsync(grupoVeiculoEditado)!;
+        appDbContext?.SaveChanges();
+
+        var combustivelEditado = new Combustivel("Gasolina", 5);
+
+        await repositorioCombustivelEmOrm?.CadastrarAsync(combustivelEditado)!;
+        appDbContext?.SaveChanges();
+
+        var veiculo = new Veiculo(null, grupoVeiculo, "Audi", "Q7", "Prata", combustivel, 70, 2007, "BRA3S14", TipoCambioEnum.Automatico, 200);
+
+        var veiculoEditado = new Veiculo(null, grupoVeiculoEditado, "Renault", "Twingo", "Q7", combustivelEditado, 40, 1995, "FRA3S69", TipoCambioEnum.Manual, 2200);
+
+        await repositorioVeiculoEmOrm?.CadastrarEntidades(new List<Veiculo> { veiculo, veiculoEditado })!;
+        appDbContext?.SaveChanges();
+
+        // Act
+        var veiculoSelecionado = await repositorioVeiculoEmOrm?.FiltrarPorGrupo(grupoVeiculo)!;
+
+        // Assert
+        Assert.AreEqual(1, veiculoSelecionado.Count);
+        CollectionAssert.Contains(veiculoSelecionado, veiculo);
+    }
 }

@@ -15,7 +15,7 @@ namespace Locadora.Testes.Unidade.ModuloTaxa;
 
 [TestClass]
 [TestCategory("Testes de unidade de taxas")]
-public sealed class ModuloTaxaAppServiceTests
+public sealed class TaxaAppServiceTests
 {
     private Mock<ITenantProvider>? tenantProviderMock;
     private Mock<IRepositorioTaxa>? repositorioTaxaMock;

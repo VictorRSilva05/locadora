@@ -1,4 +1,5 @@
-﻿using Locadora.Dominio.ModuloVeiculo;
+﻿using Locadora.Dominio.ModuloGrupoVeiculo;
+using Locadora.Dominio.ModuloVeiculo;
 using Locadora.Infraestrutura.Compartilhado;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,5 +22,19 @@ public class RepositorioVeiculoEmOrm : RepositorioBaseEmOrm<Veiculo>, IRepositor
             .Include(v => v.GrupoVeiculo)
             .Include(v => v.Combustivel)
             .ToListAsync();
+    }
+
+
+    public async Task<List<Veiculo>> FiltrarPorGrupo(GrupoVeiculo grupoVeiculo)
+    {
+        List<Veiculo> veiculos = new List<Veiculo>();
+
+        foreach (var veiculo in registros)
+        {
+            if (veiculo.GrupoVeiculo == grupoVeiculo)
+                veiculos.Add(veiculo);
+        }
+
+        return veiculos;
     }
 }

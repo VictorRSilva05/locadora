@@ -8,7 +8,7 @@ Regras e validações
 ✅Módulo combustíveis
 - Não deve ser possível excluir combustíveis sendo utilizado por automóveis.
 
-Módulo de Taxas
+✅Módulo de Taxas
 - Não deve ser possível editar uma taxa em um aluguel ainda não
 concluído.
 - Não deve ser possível excluir uma taxa relacionada a um aluguel ainda não
@@ -23,6 +23,10 @@ Módulo de veículos
 Módulo de condutor
 - Não deve ser possível excluir um condutor relacionado a um aluguel ainda não
 concluído.
+
+Módulo de cobrança
+- Não deve ser possível excluir grupos sendo utilizados em automóveis.
+- Não deve ser possível excluir grupos sendo utilizados em aluguel.
 
 Módulo de cliente
 Pessoas Físicas
@@ -39,10 +43,6 @@ Módulo de funcionário
 - Deve acessar o sistema com perfil de funcionário
 - Não deve permitir inserir, ou editar outros funcionários
 - Cada funcionário poderá editar apenas suas próprias informações
-
-Módulo de cobrança
-- Não deve ser possível excluir grupos sendo utilizados em automóveis.
-- Não deve ser possível excluir grupos sendo utilizados em aluguel.
 
 Módulo de aluguel
 - Se caso o cliente for PJ, deve possuir um condutor PF
