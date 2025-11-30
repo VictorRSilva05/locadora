@@ -91,8 +91,8 @@ public class GrupoVeiculoAppService
 
     public async Task<Result> Excluir(Guid id)
     {
-        var veiculos = await repositorioVeiculo.SelecionarRegistrosAsync();
-        var cobrancas = await repositorioCobranca.SelecionarRegistrosAsync();
+        var veiculos = (await repositorioVeiculo.SelecionarRegistrosAsync()) ?? new List<Veiculo>();
+        var cobrancas = (await repositorioCobranca.SelecionarRegistrosAsync()) ?? new List<Cobranca>();
 
         if (veiculos.Any(v => v.GrupoVeiculo.Id == id))
             return Result.Fail(ResultadosErro.ExclusaoBloqueadaErro("Há veículos cadastrados nesse grupo."));
