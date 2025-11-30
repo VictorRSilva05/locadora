@@ -3,6 +3,7 @@ using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCombustivel;
+using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.Extensions.Logging;
 
 namespace Locadora.Aplicacao.ModuloCombustivel;
@@ -10,6 +11,7 @@ public class CombustivelAppService
 {
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCombustivel repositorioCombustivel;
+    private readonly IRepositorioVeiculo repositorioVeiculo;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CombustivelAppService> logger;
 
@@ -17,19 +19,21 @@ public class CombustivelAppService
         ITenantProvider tenantProvider,
         IRepositorioCombustivel repositorioCombustivel,
         IUnitOfWork unitOfWork,
-        ILogger<CombustivelAppService> logger)
+        ILogger<CombustivelAppService> logger,
+        IRepositorioVeiculo repositorioVeiculo)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioCombustivel = repositorioCombustivel;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
+        this.repositorioVeiculo = repositorioVeiculo;
     }
 
     public async Task<Result> Cadastrar(Combustivel combustivel)
     {
         var registros = await repositorioCombustivel.SelecionarRegistrosAsync();
 
-        if(registros.Any(i => i.Nome.Equals(combustivel.Nome)))
+        if (registros.Any(i => i.Nome.Equals(combustivel.Nome)))
             return Result.Fail(ResultadosErro.RegistroDuplicadoErro("Já existe um combustível com este nome."));
 
         try
@@ -40,7 +44,7 @@ public class CombustivelAppService
             await unitOfWork.CommitAsync();
             return Result.Ok();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
             logger.LogError(
@@ -55,7 +59,8 @@ public class CombustivelAppService
     public async Task<Result> Editar(Guid id, Combustivel combustivel)
     {
         var registros = await repositorioCombustivel.SelecionarRegistrosAsync();
-        if(registros.Any(i => i.Nome.Equals(combustivel.Nome)))
+
+        if (registros.Any(i => i.Nome.Equals(combustivel.Nome)))
             return Result.Fail(ResultadosErro.RegistroDuplicadoErro("Já existe um combustível com este nome."));
         try
         {
@@ -63,7 +68,7 @@ public class CombustivelAppService
             await unitOfWork.CommitAsync();
             return Result.Ok();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
             logger.LogError(
@@ -77,13 +82,18 @@ public class CombustivelAppService
 
     public async Task<Result> Excluir(Guid id)
     {
+        var veiculos = (await repositorioVeiculo.SelecionarRegistrosAsync()) ?? new List<Veiculo>();
+
+        if (veiculos.Any(v => v.Combustivel.Id == id))
+            return Result.Fail(ResultadosErro.ExclusaoBloqueadaErro("Há veículos cadastrados com esse combustível."));
+
         try
         {
             await repositorioCombustivel.ExcluirAsync(id);
             await unitOfWork.CommitAsync();
             return Result.Ok();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             await unitOfWork.RollbackAsync();
             logger.LogError(
@@ -101,12 +111,12 @@ public class CombustivelAppService
         {
             var combustivel = await repositorioCombustivel.SelecionarRegistroPorIdAsync(id);
 
-            if(repositorioCombustivel == null)
+            if (repositorioCombustivel == null)
                 return Result.Fail(ResultadosErro.RegistroNaoEncontradoErro(id));
 
             return Result.Ok(combustivel);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             logger.LogError(
                 ex,
@@ -124,7 +134,7 @@ public class CombustivelAppService
             var combustiveis = await repositorioCombustivel.SelecionarRegistrosAsync();
             return Result.Ok(combustiveis);
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             logger.LogError(
                 ex,
