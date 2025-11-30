@@ -1,11 +1,11 @@
 Regras e validações
 
-Módulo grupo de veículos
+✅Módulo grupo de veículos
 - Não deve ser possível excluir grupos sendo utilizados em automóveis.
 - Não deve ser possível excluir grupos sendo utilizados em planos de cobrança.
 - Deve exibir: Id, nome e valores dos planos
 
-Módulo combustíveis
+✅Módulo combustíveis
 - Não deve ser possível excluir combustíveis sendo utilizado por automóveis.
 
 Módulo de Taxas

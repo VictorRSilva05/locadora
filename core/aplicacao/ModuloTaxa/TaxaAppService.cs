@@ -2,6 +2,7 @@
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
+using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloTaxa;
 using Microsoft.Extensions.Logging;
 
@@ -10,6 +11,7 @@ public class TaxaAppService
 {
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioTaxa repositorioTaxa;
+    private readonly IRepositorioAluguel repositorioAluguel;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<TaxaAppService> logger;
 
@@ -17,12 +19,14 @@ public class TaxaAppService
         ITenantProvider tenantProvider,
         IRepositorioTaxa repositorioTaxa,
         IUnitOfWork unitOfWork,
-        ILogger<TaxaAppService> logger)
+        ILogger<TaxaAppService> logger,
+        IRepositorioAluguel repositorioAluguel)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioTaxa = repositorioTaxa;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
+        this.repositorioAluguel = repositorioAluguel;
     }
 
     public async Task<Result> Cadastrar(Taxa taxa)
@@ -49,6 +53,11 @@ public class TaxaAppService
 
     public async Task<Result> Editar(Guid id, Taxa taxa)
     {
+        var alugueis = (await repositorioAluguel.SelecionarRegistrosAsync()) ?? new List<Aluguel>();
+
+        if (alugueis.Any(a => a.Status && a.Taxas!.Any(t => t.Id == id)))
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro("Esta taxa está sendo utilizada em um aluguel."));
+
         try
         {
             await repositorioTaxa.EditarAsync(id, taxa);
@@ -69,6 +78,11 @@ public class TaxaAppService
 
     public async Task<Result> Excluir(Guid id)
     {
+        var alugueis = (await repositorioAluguel.SelecionarRegistrosAsync()) ?? new List<Aluguel>();
+
+        if (alugueis.Any(a => a.Status && a.Taxas!.Any(t => t.Id == id)))
+            return Result.Fail(ResultadosErro.ExclusaoBloqueadaErro("Esta taxa está sendo utilizada em um aluguel."));
+
         try
         {
             await repositorioTaxa.ExcluirAsync(id);
