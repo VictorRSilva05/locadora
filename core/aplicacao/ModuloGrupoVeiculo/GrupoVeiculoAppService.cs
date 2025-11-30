@@ -2,7 +2,9 @@
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
+using Locadora.Dominio.ModuloCobranca;
 using Locadora.Dominio.ModuloGrupoVeiculo;
+using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.Extensions.Logging;
 
 namespace Locadora.Aplicacao.ModuloGrupoVeiculo;
@@ -10,6 +12,8 @@ public class GrupoVeiculoAppService
 {
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioGrupoVeiculo repositorioGrupoVeiculo;
+    private readonly IRepositorioVeiculo repositorioVeiculo;
+    private readonly IRepositorioCobranca repositorioCobranca;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<GrupoVeiculoAppService> logger;
 
@@ -17,12 +21,16 @@ public class GrupoVeiculoAppService
         ITenantProvider tenantProvider,
         IRepositorioGrupoVeiculo repositorioGrupoVeiculo,
         IUnitOfWork unitOfWork,
-        ILogger<GrupoVeiculoAppService> logger)
+        ILogger<GrupoVeiculoAppService> logger,
+        IRepositorioVeiculo repositorioVeiculo,
+        IRepositorioCobranca repositorioCobranca)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioGrupoVeiculo = repositorioGrupoVeiculo;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
+        this.repositorioVeiculo = repositorioVeiculo;
+        this.repositorioCobranca = repositorioCobranca;
     }
 
     public async Task<Result> Cadastrar(GrupoVeiculo grupoVeiculo)
@@ -83,6 +91,15 @@ public class GrupoVeiculoAppService
 
     public async Task<Result> Excluir(Guid id)
     {
+        var veiculos = await repositorioVeiculo.SelecionarRegistrosAsync();
+        var cobrancas = await repositorioCobranca.SelecionarRegistrosAsync();
+
+        if (veiculos.Any(v => v.GrupoVeiculo.Id == id))
+            return Result.Fail(ResultadosErro.ExclusaoBloqueadaErro("Há veículos cadastrados nesse grupo."));
+
+        if (cobrancas.Any(c => c.GrupoVeiculo.Id == id))
+            return Result.Fail(ResultadosErro.ExclusaoBloqueadaErro("Há planos de cobranças que utilizam este grupo"));
+
         try
         {
             await repositorioGrupoVeiculo.ExcluirAsync(id);

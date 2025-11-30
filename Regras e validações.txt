@@ -1,0 +1,54 @@
+Regras e validações
+
+Módulo grupo de veículos
+- Não deve ser possível excluir grupos sendo utilizados em automóveis.
+- Não deve ser possível excluir grupos sendo utilizados em planos de cobrança.
+- Deve exibir: Id, nome e valores dos planos
+
+Módulo combustíveis
+- Não deve ser possível excluir combustíveis sendo utilizado por automóveis.
+
+Módulo de Taxas
+- Não deve ser possível editar uma taxa em um aluguel ainda não
+concluído.
+- Não deve ser possível excluir uma taxa relacionada a um aluguel ainda não
+concluído.
+
+
+Módulo de veículos
+- Não deve ser possível editar um automóvel em um aluguel ainda não concluído.
+- Não deve ser possível excluir um automóvel em um aluguel ainda não concluído.
+- Deve ser possível filtrar/agrupar a visualização de automóveis pelo grupo.
+
+Módulo de condutor
+- Não deve ser possível excluir um condutor relacionado a um aluguel ainda não
+concluído.
+
+Módulo de cliente
+Pessoas Físicas
+	- Pessoas Físicas devem ter o nome, CPF, RG, CNH, telefone, endereço.
+	- Pessoas Físicas podem ser ligadas a uma pessoa jurídica
+Pessoas Jurídicas
+	- Devem ter o nome, CNPJ, telefone, endereço.
+	- Pessoas Jurídicas necessitam ter um condutor (CPF) relacionado para
+	poder realizar um aluguel.
+
+Módulo de funcionário
+- Não deve ser possível excluir funcionários relacionados a aluguéis em aberto.
+- Apenas o perfil administrador da empresa poderá excluir funcionários
+- Deve acessar o sistema com perfil de funcionário
+- Não deve permitir inserir, ou editar outros funcionários
+- Cada funcionário poderá editar apenas suas próprias informações
+
+Módulo de cobrança
+- Não deve ser possível excluir grupos sendo utilizados em automóveis.
+- Não deve ser possível excluir grupos sendo utilizados em aluguel.
+
+Módulo de aluguel
+- Se caso o cliente for PJ, deve possuir um condutor PF
+- Não deve ser possível editar um aluguel já concluído.
+- Obter as informações do seguro caso seja selecionado;
+	- Um seguro pode ser Seguro para o Cliente ou para Terceiros
+	- Seguro é calculado por dia
+- Se o veículo está disponível;
+- Se os documentos estão em dia.

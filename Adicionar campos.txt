@@ -1,0 +1,8 @@
+Adicionar campos
+
+Autenticação
+- Adicionar campo "usuário" a empresa, junto aos campos email e senha
+- Adicionar campo "usuário" ao funcionário junto aos campos de email e senha
+
+Aluguel
+- Adicionar funcionário que realizou o cadastro do aluguel
