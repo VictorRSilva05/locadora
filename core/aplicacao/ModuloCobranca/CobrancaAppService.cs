@@ -2,6 +2,7 @@
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
+using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCobranca;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -11,6 +12,7 @@ public class CobrancaAppService
 {
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCobranca repositorioCobranca;
+    private readonly IRepositorioAluguel repositorioAluguel;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CobrancaAppService> logger;
 
@@ -18,12 +20,14 @@ public class CobrancaAppService
         ITenantProvider tenantProvider,
         IRepositorioCobranca repositorioCobranca,
         IUnitOfWork unitOfWork,
-        ILogger<CobrancaAppService> logger)
+        ILogger<CobrancaAppService> logger,
+        IRepositorioAluguel repositorioAluguel)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioCobranca = repositorioCobranca;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
+        this.repositorioAluguel = repositorioAluguel;
     }
 
     public async Task<Result> Cadastrar(Cobranca cobranca)
@@ -98,6 +102,11 @@ public class CobrancaAppService
 
     public async Task<Result> Excluir (Guid id)
     {
+        var alugueis = (await repositorioAluguel.SelecionarRegistrosAsync()) ?? new List<Aluguel>();
+
+        if (alugueis.Any(a => a.Status && a.Cobranca.Id == id))
+            return Result.Fail(ResultadosErro.ExclusaoBloqueadaErro("Esta cobrança está presente em um aluguel."));
+
         try
         {
             await repositorioCobranca.ExcluirAsync(id);

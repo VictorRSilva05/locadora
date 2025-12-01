@@ -1,4 +1,5 @@
-﻿using Locadora.Dominio.ModuloCondutor;
+﻿using FluentValidation;
+using Locadora.Dominio.ModuloCondutor;
 using Locadora.Testes.Integracao.Compartilhado;
 
 namespace Locadora.Testes.Integracao.ModuloCondutor;

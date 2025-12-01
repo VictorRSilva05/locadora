@@ -1,8 +1,10 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCombustivel;
+using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.Extensions.Logging;
 
@@ -12,6 +14,7 @@ public class CombustivelAppService
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCombustivel repositorioCombustivel;
     private readonly IRepositorioVeiculo repositorioVeiculo;
+    private readonly IValidator<Combustivel> validator;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CombustivelAppService> logger;
 
@@ -20,17 +23,24 @@ public class CombustivelAppService
         IRepositorioCombustivel repositorioCombustivel,
         IUnitOfWork unitOfWork,
         ILogger<CombustivelAppService> logger,
-        IRepositorioVeiculo repositorioVeiculo)
+        IRepositorioVeiculo repositorioVeiculo,
+        IValidator<Combustivel> validator)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioCombustivel = repositorioCombustivel;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
         this.repositorioVeiculo = repositorioVeiculo;
+        this.validator = validator;
     }
 
     public async Task<Result> Cadastrar(Combustivel combustivel)
     {
+        var resultado = await validator.ValidateAsync(combustivel);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var registros = await repositorioCombustivel.SelecionarRegistrosAsync();
 
         if (registros.Any(i => i.Nome.Equals(combustivel.Nome)))
@@ -58,6 +68,11 @@ public class CombustivelAppService
 
     public async Task<Result> Editar(Guid id, Combustivel combustivel)
     {
+        var resultado = await validator.ValidateAsync(combustivel);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var registros = await repositorioCombustivel.SelecionarRegistrosAsync();
 
         if (registros.Any(i => i.Nome.Equals(combustivel.Nome)))
@@ -142,5 +157,19 @@ public class CombustivelAppService
             );
             return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
         }
+    }
+}
+
+public class CadastrarCombustivelValidator : AbstractValidator<Combustivel>
+{
+    public CadastrarCombustivelValidator()
+    {
+        RuleFor(c => c.Nome)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(c => c.Preco)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio.");
     }
 }

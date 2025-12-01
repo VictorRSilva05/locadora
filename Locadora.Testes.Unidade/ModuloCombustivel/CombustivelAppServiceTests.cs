@@ -1,4 +1,5 @@
 ﻿using Castle.Core.Logging;
+using FluentValidation;
 using Locadora.Aplicacao.ModuloCombustivel;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
@@ -19,6 +20,7 @@ public sealed class CombustivelAppServiceTests
     private Mock<IRepositorioVeiculo>? repositorioVeiculoMock;
     private Mock<IUnitOfWork>? unitOfWorkMock;
     private Mock<ILogger<CombustivelAppService>>? loggerMock;
+    private Mock<IValidator<Combustivel>>? validatorMock;
 
     private CombustivelAppService? combustivelAppService;
 
@@ -30,13 +32,15 @@ public sealed class CombustivelAppServiceTests
         repositorioVeiculoMock = new Mock<IRepositorioVeiculo>();
         unitOfWorkMock = new Mock<IUnitOfWork>();
         loggerMock = new Mock<ILogger<CombustivelAppService>>();
+        validatorMock = new Mock<IValidator<Combustivel>>();
 
         combustivelAppService = new CombustivelAppService(
             tenantProviderMock.Object,
             repositorioCombustivelMock.Object,
             unitOfWorkMock.Object,
             loggerMock.Object,
-            repositorioVeiculoMock.Object
+            repositorioVeiculoMock.Object,
+            validatorMock.Object
             );
     }
 
@@ -48,6 +52,9 @@ public sealed class CombustivelAppServiceTests
 
         repositorioCombustivelMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Combustivel>());
+
+        validatorMock?.Setup(v => v.ValidateAsync(combustivel, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await combustivelAppService!.Cadastrar(combustivel);
@@ -66,7 +73,10 @@ public sealed class CombustivelAppServiceTests
         var combustivelRepetido = new Combustivel("Gasolina", 5);
 
         repositorioCombustivelMock?.Setup(r => r.SelecionarRegistrosAsync())
-            .ReturnsAsync(new List<Combustivel>() { combustivel});
+            .ReturnsAsync(new List<Combustivel>() { combustivel });
+
+        validatorMock?.Setup(v => v.ValidateAsync(combustivelRepetido, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await combustivelAppService!.Cadastrar(combustivelRepetido);
@@ -87,6 +97,9 @@ public sealed class CombustivelAppServiceTests
         repositorioCombustivelMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Combustivel>() { combustivel });
 
+        validatorMock?.Setup(v => v.ValidateAsync(combustivelEditado, It.IsAny<CancellationToken>()))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
         // Act
         var resultado = await combustivelAppService!.Editar(combustivel.Id, combustivelEditado);
 
@@ -105,6 +118,10 @@ public sealed class CombustivelAppServiceTests
 
         repositorioCombustivelMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Combustivel>() { combustivel });
+
+
+        validatorMock?.Setup(v => v.ValidateAsync(combustivelEditado, It.IsAny<CancellationToken>()))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await combustivelAppService!.Editar(combustivel.Id, combustivelEditado);

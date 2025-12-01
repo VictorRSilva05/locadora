@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.ModuloVeiculo;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
@@ -22,6 +23,7 @@ public sealed class VeiculoAppServiceTests
     private Mock<IRepositorioAluguel>? repositorioAluguelMock;
     private Mock<IUnitOfWork>? unitOfWorkMock;
     private Mock<ILogger<VeiculoAppService>>? loggerMock;
+    private Mock<IValidator<Veiculo>>? validatorMock;
 
     public VeiculoAppService? veiculoAppService;
 
@@ -33,13 +35,15 @@ public sealed class VeiculoAppServiceTests
         repositorioAluguelMock = new Mock<IRepositorioAluguel>();
         unitOfWorkMock = new Mock<IUnitOfWork>();
         loggerMock = new Mock<ILogger<VeiculoAppService>>();
+        validatorMock = new Mock<IValidator<Veiculo>>();
 
         veiculoAppService = new VeiculoAppService(
             tenantProviderMock.Object,
             repositorioVeiculoMock.Object,
             unitOfWorkMock.Object,
             loggerMock.Object,
-            repositorioAluguelMock.Object
+            repositorioAluguelMock.Object,
+            validatorMock.Object
             );
     }
 
@@ -53,6 +57,10 @@ public sealed class VeiculoAppServiceTests
 
         repositorioVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Veiculo>() { veiculo });
+
+
+        validatorMock?.Setup(v => v.ValidateAsync(veiculo, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await veiculoAppService!.Cadastrar(veiculo);
@@ -75,6 +83,9 @@ public sealed class VeiculoAppServiceTests
 
         repositorioVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Veiculo>() { veiculo });
+
+        validatorMock?.Setup(v => v.ValidateAsync(veiculoEditado, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await veiculoAppService!.Editar(veiculo.Id, veiculoEditado);
@@ -104,6 +115,9 @@ public sealed class VeiculoAppServiceTests
 
         repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Aluguel> { aluguel });
+
+        validatorMock?.Setup(v => v.ValidateAsync(veiculoEditado, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await veiculoAppService!.Editar(veiculo.Id, veiculoEditado);

@@ -10,7 +10,7 @@ public abstract class ResultadosErro
             .WithMetadata("TipoErro", "RequisicaoInvalida");
     }
 
-    public static Error RequisicaoInvalidaErro(List<string> erros)
+    public static Error RequisicaoInvalidaErro(IEnumerable<string> erros)
     {
         return new Error("Requisição inválida")
             .CausedBy(erros)

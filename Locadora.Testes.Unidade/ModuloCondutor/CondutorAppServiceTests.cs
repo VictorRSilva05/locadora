@@ -1,4 +1,5 @@
-﻿using Locadora.Aplicacao.ModuloCondutor;
+﻿using FluentValidation;
+using Locadora.Aplicacao.ModuloCondutor;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloAluguel;
@@ -27,6 +28,7 @@ public sealed class CondutorAppServiceTests
     private Mock<IRepositorioAluguel>? repositorioAluguelMock;
     private Mock<IUnitOfWork>? unitOfWorkMock;
     private Mock<ILogger<CondutorAppService>>? loggerMock;
+    private Mock<IValidator<Condutor>>? validatorMock;
 
     private CondutorAppService? condutorAppService;
 
@@ -38,13 +40,15 @@ public sealed class CondutorAppServiceTests
         repositorioAluguelMock = new Mock<IRepositorioAluguel>();
         unitOfWorkMock = new Mock<IUnitOfWork>();
         loggerMock = new Mock<ILogger<CondutorAppService>>();
+        validatorMock = new Mock<IValidator<Condutor>>();
 
         condutorAppService = new CondutorAppService(
             tenantProviderMock.Object,
             repositorioCondutorMock.Object,
             unitOfWorkMock.Object,
             loggerMock.Object,
-            repositorioAluguelMock.Object
+            repositorioAluguelMock.Object,
+            validatorMock.Object
             );
     }
 
@@ -56,6 +60,9 @@ public sealed class CondutorAppServiceTests
 
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>());
+
+        validatorMock?.Setup(v => v.ValidateAsync(condutor, It.IsAny<CancellationToken>()))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await condutorAppService!.Cadastrar(condutor);
@@ -75,6 +82,9 @@ public sealed class CondutorAppServiceTests
 
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>() { condutor});
+
+        validatorMock?.Setup(v => v.ValidateAsync(condutor2, It.IsAny<CancellationToken>()))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await condutorAppService!.Cadastrar(condutor2);
@@ -96,6 +106,9 @@ public sealed class CondutorAppServiceTests
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>() { condutor });
 
+        validatorMock?.Setup(v => v.ValidateAsync(condutor2, It.IsAny<CancellationToken>()))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
         // Act
         var resultado = await condutorAppService!.Cadastrar(condutor2);
 
@@ -115,6 +128,9 @@ public sealed class CondutorAppServiceTests
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>() { condutor });
 
+        validatorMock?.Setup(v => v.ValidateAsync(condutor2, It.IsAny<CancellationToken>()))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
         // Act
         var resultado = await condutorAppService!.Cadastrar(condutor2);
 
@@ -133,6 +149,9 @@ public sealed class CondutorAppServiceTests
 
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>() { condutor });
+
+        validatorMock?.Setup(v => v.ValidateAsync(condutor2, It.IsAny<CancellationToken>()))
+    .ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await condutorAppService!.Editar(condutor.Id,condutor2);
@@ -154,6 +173,9 @@ public sealed class CondutorAppServiceTests
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>() { condutor, condutor3 });
 
+        validatorMock?.Setup(v => v.ValidateAsync(condutor2, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
         // Act
         var resultado = await condutorAppService!.Editar(condutor.Id, condutor2);
 
@@ -174,6 +196,9 @@ public sealed class CondutorAppServiceTests
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>() { condutor, condutor3 });
 
+        validatorMock?.Setup(v => v.ValidateAsync(condutor2, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
         // Act
         var resultado = await condutorAppService!.Editar(condutor.Id, condutor2);
 
@@ -186,7 +211,6 @@ public sealed class CondutorAppServiceTests
     [TestMethod]
     public async Task Deve_Falhar_Ao_Editar_Condutor_Com_Mesma_Cnh()
     {
-
         // Arrange 
         var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "99 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddYears(1));
         var condutor2 = new Condutor("Tio Guda", "xxx@gmail.com", "99 xxx-9999", "111.999.999-99", "987654321", DateTime.UtcNow.AddYears(1));
@@ -194,6 +218,9 @@ public sealed class CondutorAppServiceTests
 
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Condutor>() { condutor, condutor3 });
+
+        validatorMock?.Setup(v => v.ValidateAsync(condutor2, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await condutorAppService!.Editar(condutor.Id, condutor2);
@@ -211,7 +238,7 @@ public sealed class CondutorAppServiceTests
         var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "99 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddYears(1));
 
         repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
-            .ReturnsAsync(new List<Condutor>());
+            .ReturnsAsync(new List<Condutor>() { condutor});
 
         // Act
         var resultado = await condutorAppService!.Excluir(condutor.Id);
@@ -237,6 +264,9 @@ public sealed class CondutorAppServiceTests
 
         repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Aluguel> { aluguel });
+
+        repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
+    .ReturnsAsync(new List<Condutor>() { condutor });
 
         // Act
         var resultado = await condutorAppService!.Excluir(condutor.Id);

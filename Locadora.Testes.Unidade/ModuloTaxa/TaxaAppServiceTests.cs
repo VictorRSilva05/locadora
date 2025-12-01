@@ -1,4 +1,5 @@
-﻿using Locadora.Aplicacao.ModuloTaxa;
+﻿using FluentValidation;
+using Locadora.Aplicacao.ModuloTaxa;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloAluguel;
@@ -22,6 +23,7 @@ public sealed class TaxaAppServiceTests
     private Mock<IRepositorioAluguel>? repositorioAluguelMock;
     private Mock<IUnitOfWork>? unitOfWorkMock;
     private Mock<ILogger<TaxaAppService>>? loggerMock;
+    private Mock<IValidator<Taxa>>? validatorMock;
 
     private TaxaAppService? taxaAppService;
 
@@ -33,13 +35,15 @@ public sealed class TaxaAppServiceTests
         repositorioAluguelMock = new Mock<IRepositorioAluguel>();
         unitOfWorkMock = new Mock<IUnitOfWork>();
         loggerMock = new Mock<ILogger<TaxaAppService>>();
+        validatorMock = new Mock<IValidator<Taxa>>();
 
         taxaAppService = new TaxaAppService(
             tenantProviderMock.Object,
             repositorioTaxaMock.Object,
             unitOfWorkMock.Object,
             loggerMock.Object,
-            repositorioAluguelMock.Object
+            repositorioAluguelMock.Object,
+            validatorMock.Object
             );
     }
 
@@ -51,6 +55,9 @@ public sealed class TaxaAppServiceTests
 
         repositorioTaxaMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Taxa>());
+
+        validatorMock?.Setup(v => v.ValidateAsync(taxa, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await taxaAppService!.Cadastrar(taxa);
@@ -70,6 +77,9 @@ public sealed class TaxaAppServiceTests
 
         repositorioTaxaMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Taxa>() { taxa});
+
+        validatorMock?.Setup(v => v.ValidateAsync(taxaEditada, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await taxaAppService!.Editar(taxa.Id, taxaEditada);
@@ -102,6 +112,9 @@ public sealed class TaxaAppServiceTests
 
         repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<Aluguel> { aluguel });
+
+        validatorMock?.Setup(v => v.ValidateAsync(taxaEditada, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await taxaAppService!.Editar(taxa.Id, taxaEditada);

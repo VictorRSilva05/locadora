@@ -1,8 +1,10 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloAluguel;
+using Locadora.Dominio.ModuloCombustivel;
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.Extensions.Logging;
@@ -13,6 +15,7 @@ public class VeiculoAppService
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioVeiculo repositorioVeiculo;
     private readonly IRepositorioAluguel repositorioAluguel;
+    private readonly IValidator<Veiculo> validator;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<VeiculoAppService> logger;
 
@@ -21,17 +24,25 @@ public class VeiculoAppService
         IRepositorioVeiculo repositorioVeiculo,
         IUnitOfWork unitOfWork,
         ILogger<VeiculoAppService> logger,
-        IRepositorioAluguel repositorioAluguel)
+        IRepositorioAluguel repositorioAluguel
+,
+        IValidator<Veiculo> validator)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioVeiculo = repositorioVeiculo;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
         this.repositorioAluguel = repositorioAluguel;
+        this.validator = validator;
     }
 
     public async Task<Result> Cadastrar(Veiculo veiculo)
     {
+        var resultado = await validator.ValidateAsync(veiculo);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         try
         {
             veiculo.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
@@ -55,6 +66,11 @@ public class VeiculoAppService
 
     public async Task<Result> Editar(Guid id, Veiculo veiculo)
     {
+        var resultado = await validator.ValidateAsync(veiculo);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var alugueis = (await repositorioAluguel.SelecionarRegistrosAsync()) ?? new List<Aluguel>();
 
         if (alugueis.Any(a => a.Status && a.Veiculo.Id == id))
@@ -159,3 +175,56 @@ public class VeiculoAppService
         }
     }
 }
+
+public class CadastrarVeiculoValidator : AbstractValidator<Veiculo>
+{
+    public CadastrarVeiculoValidator()
+    {
+        RuleFor(v => v.GrupoVeiculo)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Marca)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Modelo)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Cor)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Modelo)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Combustivel)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.CapacidadeCombustivel)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Kilometragem)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.TipoCambio)
+           .IsInEnum()
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Ano)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(v => v.Placa)
+           .NotEmpty()
+           .Matches("^[A-Z]{3}[0-9][A-Z][0-9]{2}$\r\n")
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+    }
+}
+

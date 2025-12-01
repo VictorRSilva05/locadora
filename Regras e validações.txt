@@ -14,13 +14,12 @@ concluído.
 - Não deve ser possível excluir uma taxa relacionada a um aluguel ainda não
 concluído.
 
-
 ✅Módulo de veículos
 - Não deve ser possível editar um automóvel em um aluguel ainda não concluído.
 - Não deve ser possível excluir um automóvel em um aluguel ainda não concluído.
 - Deve ser possível filtrar/agrupar a visualização de automóveis pelo grupo.
 
-Módulo de condutor
+✅Módulo de condutor
 - Não deve ser possível excluir um condutor relacionado a um aluguel ainda não
 concluído.
 

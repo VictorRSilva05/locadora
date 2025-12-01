@@ -1,9 +1,11 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCondutor;
+using Locadora.Dominio.ModuloTaxa;
 using Microsoft.Extensions.Logging;
 
 namespace Locadora.Aplicacao.ModuloCondutor;
@@ -13,6 +15,7 @@ public class CondutorAppService
     private readonly IRepositorioCondutor repositorioCondutor;
     private readonly IRepositorioAluguel repositorioAluguel;
     private readonly IUnitOfWork unitOfWork;
+    private readonly IValidator<Condutor> validator;
     private readonly ILogger<CondutorAppService> logger;
 
     public CondutorAppService(
@@ -20,17 +23,24 @@ public class CondutorAppService
         IRepositorioCondutor repositorioCondutor,
         IUnitOfWork unitOfWork,
         ILogger<CondutorAppService> logger,
-        IRepositorioAluguel repositorioAluguel)
+        IRepositorioAluguel repositorioAluguel,
+        IValidator<Condutor> validator)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioCondutor = repositorioCondutor;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
         this.repositorioAluguel = repositorioAluguel;
+        this.validator = validator;
     }
 
     public async Task<Result> Cadastrar(Condutor condutor)
     {
+        var resultado = await validator.ValidateAsync(condutor);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var registros = await repositorioCondutor.SelecionarRegistrosAsync();
 
         if(registros.Any(i => i.Cpf == condutor.Cpf))
@@ -73,6 +83,11 @@ public class CondutorAppService
 
     public async Task<Result> Editar(Guid id, Condutor condutor)
     {
+        var resultado = await validator.ValidateAsync(condutor);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var registros = await repositorioCondutor.SelecionarRegistrosAsync();
         if(registros.Any(i => i.Cpf == condutor.Cpf && i.Id != id))
             return Result.Fail(
@@ -171,5 +186,43 @@ public class CondutorAppService
             );
             return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
         }
+    }
+}
+
+public class CadastrarCondutorValidator : AbstractValidator<Condutor>
+{
+    public CadastrarCondutorValidator()
+    {
+        RuleFor(c => c.Nome)
+           .NotEmpty()
+           .WithMessage("O campo {PropertyName} não pode ser vazio.");
+
+        RuleFor(c => c.Email)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio.")
+            .DependentRules(() =>
+            {
+                RuleFor(c => c.Email)
+                .EmailAddress()
+                .WithMessage("O formato do {PropertyName} está incorreto");
+            });
+
+        RuleFor(c => c.Cpf)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio.")
+            .DependentRules(() =>
+            {
+                RuleFor(c => c.Cpf)
+                .Matches("^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$\r\n");
+            });
+
+        RuleFor(c => c.Cnh)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio.")
+            .DependentRules(() =>
+            {
+                RuleFor(c => c.Cnh)
+                .Matches("^\\d{11}$\r\n");
+            });
     }
 }

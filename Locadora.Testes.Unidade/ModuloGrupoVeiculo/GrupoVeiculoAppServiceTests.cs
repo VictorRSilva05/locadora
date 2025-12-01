@@ -1,9 +1,11 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.ModuloGrupoVeiculo;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloCobranca;
 using Locadora.Dominio.ModuloCombustivel;
+using Locadora.Dominio.ModuloCondutor;
 using Locadora.Dominio.ModuloGrupoVeiculo;
 using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.Extensions.Logging;
@@ -21,6 +23,7 @@ public sealed class GrupoVeiculoAppServiceTests
     private Mock<IRepositorioCobranca>? repositorioCobrancaMock;
     private Mock<IUnitOfWork>? unitOfWorkMock;
     private Mock<ILogger<GrupoVeiculoAppService>>? loggerMock;
+    private Mock<IValidator<GrupoVeiculo>>? validatorMock;
 
     private GrupoVeiculoAppService? grupoVeiculoAppService;
 
@@ -33,6 +36,7 @@ public sealed class GrupoVeiculoAppServiceTests
         repositorioCobrancaMock = new Mock<IRepositorioCobranca>();
         unitOfWorkMock = new Mock<IUnitOfWork>();
         loggerMock = new Mock<ILogger<GrupoVeiculoAppService>>();
+        validatorMock = new Mock<IValidator<GrupoVeiculo>>();
 
         grupoVeiculoAppService = new GrupoVeiculoAppService(
             tenantProviderMock.Object,
@@ -40,7 +44,8 @@ public sealed class GrupoVeiculoAppServiceTests
             unitOfWorkMock.Object,
             loggerMock.Object,
             repositorioVeiculoMock.Object,
-            repositorioCobrancaMock.Object
+            repositorioCobrancaMock.Object,
+            validatorMock.Object
             );
     }
 
@@ -52,6 +57,9 @@ public sealed class GrupoVeiculoAppServiceTests
 
         repositorioGrupoVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<GrupoVeiculo>());
+
+        validatorMock?.Setup(v => v.ValidateAsync(grupoVeiculo, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await grupoVeiculoAppService!.Cadastrar(grupoVeiculo);
@@ -72,6 +80,9 @@ public sealed class GrupoVeiculoAppServiceTests
         repositorioGrupoVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<GrupoVeiculo>() { grupoVeiculo });
 
+        validatorMock?.Setup(v => v.ValidateAsync(grupoVeiculo2, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
+
         // Act
         var resultado = await grupoVeiculoAppService!.Cadastrar(grupoVeiculo2);
 
@@ -90,6 +101,9 @@ public sealed class GrupoVeiculoAppServiceTests
 
         repositorioGrupoVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<GrupoVeiculo>() { grupoVeiculo });
+
+        validatorMock?.Setup(v => v.ValidateAsync(grupoVeiculoEditado, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await grupoVeiculoAppService!.Editar(grupoVeiculo.Id, grupoVeiculoEditado);
@@ -110,6 +124,9 @@ public sealed class GrupoVeiculoAppServiceTests
 
         repositorioGrupoVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
             .ReturnsAsync(new List<GrupoVeiculo>() { grupoVeiculo, grupoVeiculoOriginal });
+
+        validatorMock?.Setup(v => v.ValidateAsync(grupoVeiculoEditado, It.IsAny<CancellationToken>()))
+.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
         // Act
         var resultado = await grupoVeiculoAppService!.Editar(grupoVeiculo.Id, grupoVeiculoEditado);

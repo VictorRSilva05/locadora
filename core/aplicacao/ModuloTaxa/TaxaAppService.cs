@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
@@ -12,6 +13,7 @@ public class TaxaAppService
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioTaxa repositorioTaxa;
     private readonly IRepositorioAluguel repositorioAluguel;
+    private readonly IValidator<Taxa> validator;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<TaxaAppService> logger;
 
@@ -20,17 +22,24 @@ public class TaxaAppService
         IRepositorioTaxa repositorioTaxa,
         IUnitOfWork unitOfWork,
         ILogger<TaxaAppService> logger,
-        IRepositorioAluguel repositorioAluguel)
+        IRepositorioAluguel repositorioAluguel,
+        IValidator<Taxa> validator)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioTaxa = repositorioTaxa;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
         this.repositorioAluguel = repositorioAluguel;
+        this.validator = validator;
     }
 
     public async Task<Result> Cadastrar(Taxa taxa)
     {
+        var resultado = await validator.ValidateAsync(taxa);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         try
         {
             taxa.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
@@ -53,6 +62,11 @@ public class TaxaAppService
 
     public async Task<Result> Editar(Guid id, Taxa taxa)
     {
+        var resultado = await validator.ValidateAsync(taxa);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var alugueis = (await repositorioAluguel.SelecionarRegistrosAsync()) ?? new List<Aluguel>();
 
         if (alugueis.Any(a => a.Status && a.Taxas!.Any(t => t.Id == id)))
@@ -105,7 +119,7 @@ public class TaxaAppService
     {
         try
         {
-            var taxa =  await repositorioTaxa.SelecionarRegistroPorIdAsync(id);
+            var taxa = await repositorioTaxa.SelecionarRegistroPorIdAsync(id);
             return Result.Ok(taxa);
         }
         catch (Exception ex)
@@ -123,7 +137,7 @@ public class TaxaAppService
     {
         try
         {
-            var taxas =  await repositorioTaxa.SelecionarRegistrosAsync();
+            var taxas = await repositorioTaxa.SelecionarRegistrosAsync();
             return Result.Ok(taxas);
         }
         catch (Exception ex)
@@ -134,5 +148,20 @@ public class TaxaAppService
             );
             return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
         }
+    }
+}
+
+public class CadastrarTaxaValidator : AbstractValidator<Taxa>
+{
+    public CadastrarTaxaValidator()
+    {
+        RuleFor(t => t.Descricao)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode ser vazio");
+
+        RuleFor(t => t.PlanoCobranca)
+            .NotEmpty()
+            .IsInEnum()
+            .WithMessage("O campo plano de cobrança não pode ser vazio");
     }
 }

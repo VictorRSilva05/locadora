@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
@@ -13,6 +14,7 @@ public class GrupoVeiculoAppService
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioGrupoVeiculo repositorioGrupoVeiculo;
     private readonly IRepositorioVeiculo repositorioVeiculo;
+    private readonly IValidator<GrupoVeiculo> validator;
     private readonly IRepositorioCobranca repositorioCobranca;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<GrupoVeiculoAppService> logger;
@@ -23,7 +25,8 @@ public class GrupoVeiculoAppService
         IUnitOfWork unitOfWork,
         ILogger<GrupoVeiculoAppService> logger,
         IRepositorioVeiculo repositorioVeiculo,
-        IRepositorioCobranca repositorioCobranca)
+        IRepositorioCobranca repositorioCobranca,
+        IValidator<GrupoVeiculo> validator)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioGrupoVeiculo = repositorioGrupoVeiculo;
@@ -31,10 +34,16 @@ public class GrupoVeiculoAppService
         this.logger = logger;
         this.repositorioVeiculo = repositorioVeiculo;
         this.repositorioCobranca = repositorioCobranca;
+        this.validator = validator;
     }
 
     public async Task<Result> Cadastrar(GrupoVeiculo grupoVeiculo)
     {
+        var resultado = await validator.ValidateAsync(grupoVeiculo);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var registros = await repositorioGrupoVeiculo.SelecionarRegistrosAsync();
 
         if (registros.Any(i => i.Nome.Equals(grupoVeiculo.Nome)))
@@ -66,6 +75,11 @@ public class GrupoVeiculoAppService
 
     public async Task<Result> Editar(Guid id, GrupoVeiculo grupoVeiculo)
     {
+        var resultado = await validator.ValidateAsync(grupoVeiculo);
+
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
+
         var registros = await repositorioGrupoVeiculo.SelecionarRegistrosAsync();
 
         if (registros.Any(i => i.Nome.Equals(grupoVeiculo.Nome)))
@@ -157,5 +171,15 @@ public class GrupoVeiculoAppService
 
             return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
         }
+    }
+}
+
+public class CadastrarGrupoVeiculoValidator : AbstractValidator<GrupoVeiculo>
+{
+    public CadastrarGrupoVeiculoValidator()
+    {
+        RuleFor(g => g.Nome)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} não pode  ser vazio");
     }
 }
