@@ -2,6 +2,7 @@
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
+using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCondutor;
 using Microsoft.Extensions.Logging;
 
@@ -10,6 +11,7 @@ public class CondutorAppService
 {
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCondutor repositorioCondutor;
+    private readonly IRepositorioAluguel repositorioAluguel;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CondutorAppService> logger;
 
@@ -17,12 +19,14 @@ public class CondutorAppService
         ITenantProvider tenantProvider,
         IRepositorioCondutor repositorioCondutor,
         IUnitOfWork unitOfWork,
-        ILogger<CondutorAppService> logger)
+        ILogger<CondutorAppService> logger,
+        IRepositorioAluguel repositorioAluguel)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioCondutor = repositorioCondutor;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
+        this.repositorioAluguel = repositorioAluguel;
     }
 
     public async Task<Result> Cadastrar(Condutor condutor)
@@ -105,6 +109,11 @@ public class CondutorAppService
 
     public async Task<Result> Excluir(Guid id)
     {
+        var alugueis = (await repositorioAluguel.SelecionarRegistrosAsync()) ?? new List<Aluguel>();
+
+        if (alugueis.Any(a => a.Status && a.Condutor!.Id == id))
+            return Result.Fail(ResultadosErro.ExclusaoBloqueadaErro("Este condutor está presente em um aluguel."));
+
         try
         {
             await repositorioCondutor.ExcluirAsync(id);

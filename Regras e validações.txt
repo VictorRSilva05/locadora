@@ -15,7 +15,7 @@ concluído.
 concluído.
 
 
-Módulo de veículos
+✅Módulo de veículos
 - Não deve ser possível editar um automóvel em um aluguel ainda não concluído.
 - Não deve ser possível excluir um automóvel em um aluguel ainda não concluído.
 - Deve ser possível filtrar/agrupar a visualização de automóveis pelo grupo.
