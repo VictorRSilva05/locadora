@@ -13,6 +13,8 @@
 
 .card {
     border-radius: 12px;
+    transition: transform .15s ease;
+    cursor: pointer;
 }
 
 footer {
@@ -30,4 +32,16 @@ footer {
 
 input.form-control {
     height: 45px;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.table-hover tbody tr:hover {
+    background-color: #eef5ff;
+}
+
+.btn {
+    border-radius: 8px;
 }
