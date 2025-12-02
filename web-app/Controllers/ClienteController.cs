@@ -1,9 +1,11 @@
-﻿using Locadora.Aplicacao.ModuloCliente;
+﻿using FluentResults;
+using Locadora.Aplicacao.ModuloCliente;
 using Locadora.Dominio.ModuloCliente;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Locadora.WebApp.Controllers;
 
@@ -38,15 +40,24 @@ public class ClienteController : Controller
         var cadastrarVm = new CadastrarClienteViewModel();
         cadastrarVm.CarregarTiposCliente();
 
+        await PreencherEmpresasPJ(cadastrarVm);
+
         return View(cadastrarVm);
     }
 
-
-    /*
+    
     [HttpPost("cadastrar")]
     public async Task<IActionResult> Cadastrar(CadastrarClienteViewModel cadastrarVm)
     {
-        var entidade = FormularioClienteViewModel.ParaEntidade(cadastrarVm);
+        if (!ModelState.IsValid)
+        {
+            await PreencherEmpresasPJ(cadastrarVm);
+            return View(cadastrarVm);
+        }
+
+        var clientes = await clienteAppService.SelecionarTodos();
+
+        var entidade = FormularioClienteViewModel.ParaEntidade(cadastrarVm, clientes.Value);
 
         var resultado = await clienteAppService.Cadastrar(entidade);
 
@@ -55,7 +66,6 @@ public class ClienteController : Controller
 
         return RedirectToAction(nameof(Index));
     }
-    */
 
     [HttpGet("editar/{id:guid}")]
     public async Task<IActionResult> Editar(Guid id)
@@ -87,11 +97,13 @@ public class ClienteController : Controller
         return View(editarVm);
     }
 
-    /*
+    
     [HttpPost("editar/{id:guid}")]
     public async Task<IActionResult> Editar(Guid id, EditarClienteViewModel editarVm)
     {
-        var entidade = FormularioClienteViewModel.ParaEntidade(editarVm);
+        var clientes = await clienteAppService.SelecionarTodos();
+
+        var entidade = FormularioClienteViewModel.ParaEntidade(editarVm, clientes.Value);
 
         var resultado = await clienteAppService.Editar(id, entidade);
 
@@ -100,7 +112,6 @@ public class ClienteController : Controller
 
         return RedirectToAction(nameof(Index));
     }
-    */
 
     [HttpGet("excluir/{id:guid}")]
     public async Task<IActionResult> Excluir(Guid id)
@@ -142,5 +153,27 @@ public class ClienteController : Controller
         var detalhesVm = DetalhesClienteViewModel.ParaDetalhesVm(resultado.Value);
 
         return View(detalhesVm);
+    }
+
+    private async Task PreencherEmpresasPJ(CadastrarClienteViewModel vm)
+    {
+        var resultado = await clienteAppService.SelecionarTodos(); // Task<Result<List<Cliente>>>
+
+        if (resultado.IsFailed) // se sua lib expõe IsFailed; caso contrário adapte
+        {
+            vm.EmpresasPJDisponiveis = new List<SelectListItem>();
+            return;
+        }
+
+        var clientes = resultado.Value; // Lista<Cliente>
+
+        vm.EmpresasPJDisponiveis = clientes
+            .Where(c => c.TipoCliente == TipoClienteEnum.PessoaJuridica)
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.Nome
+            })
+            .ToList();
     }
 }

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class asjdkldfj : Migration
+    public partial class kskdsk : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -167,13 +167,16 @@ namespace Locadora.Infraestrutura.Migrations
                     Email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Telefone = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     TipoCliente = table.Column<int>(type: "integer", nullable: false),
-                    CPF = table.Column<string>(type: "character varying(14)", maxLength: 14, nullable: true),
-                    CNPJ = table.Column<string>(type: "character varying(18)", maxLength: 18, nullable: true),
                     Estado = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Cidade = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Bairro = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Rua = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Numero = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    CPF = table.Column<string>(type: "character varying(14)", maxLength: 14, nullable: true),
+                    RG = table.Column<string>(type: "text", nullable: true),
+                    CNH = table.Column<string>(type: "text", nullable: true),
+                    PJId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CNPJ = table.Column<string>(type: "character varying(18)", maxLength: 18, nullable: true),
                     EmpresaId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
@@ -184,6 +187,11 @@ namespace Locadora.Infraestrutura.Migrations
                         name: "FK_clientes_AspNetUsers_TenantId",
                         column: x => x.TenantId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_clientes_clientes_PJId",
+                        column: x => x.PJId,
+                        principalTable: "clientes",
                         principalColumn: "Id");
                 });
 
@@ -324,6 +332,9 @@ namespace Locadora.Infraestrutura.Migrations
                     CombustivelId = table.Column<Guid>(type: "uuid", nullable: false),
                     CapacidadeCombustivel = table.Column<int>(type: "integer", nullable: false),
                     Ano = table.Column<int>(type: "integer", nullable: false),
+                    Placa = table.Column<string>(type: "text", nullable: false),
+                    TipoCambio = table.Column<int>(type: "integer", nullable: false),
+                    Kilometragem = table.Column<float>(type: "real", nullable: false),
                     EmpresaId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
@@ -491,6 +502,11 @@ namespace Locadora.Infraestrutura.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_clientes_PJId",
+                table: "clientes",
+                column: "PJId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_clientes_TenantId",

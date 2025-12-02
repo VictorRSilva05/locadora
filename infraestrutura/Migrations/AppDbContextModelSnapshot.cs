@@ -197,7 +197,6 @@ namespace Locadora.Infraestrutura.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<string>("CNH")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("CNPJ")
@@ -240,7 +239,6 @@ namespace Locadora.Infraestrutura.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("RG")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Rua")

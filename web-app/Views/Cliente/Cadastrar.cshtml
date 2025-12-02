@@ -1,65 +1,155 @@
-﻿@model CadastrarClienteViewModel
+﻿@model FormularioClienteViewModel
 
 @{
     ViewBag.Titulo = "Cadastrar Cliente";
 }
 
+<h2>@ViewBag.Titulo</h2>
+
 <form asp-action="Cadastrar" method="post">
 
-    <label asp-for="Nome"></label>
-    <input asp-for="Nome" />
-    <span asp-validation-for="Nome"></span>
+    <!-- Nome -->
+    <div class="form-group">
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <!-- Telefone -->
+    <div class="form-group">
+        <label asp-for="Telefone"></label>
+        <input asp-for="Telefone" class="form-control" />
+        <span asp-validation-for="Telefone" class="text-danger"></span>
+    </div>
+
+    <!-- Tipo Cliente -->
+    <div class="form-group">
+        <label asp-for="TipoCliente">Tipo de Cliente</label>
+        <select asp-for="TipoCliente" class="form-control">
+            <option value="2">Pessoa Física</option>
+            <option value="1">Pessoa Jurídica</option>
+        </select>
+        <span asp-validation-for="TipoCliente" class="text-danger"></span>
+    </div>
+
+    <hr />
+
+    <!-- ========================= -->
+    <!--        PESSOA FÍSICA      -->
+    <!-- ========================= -->
+    <div id="pf">
+        <h4>Pessoa Física</h4>
+
+        <div class="form-group">
+            <label asp-for="CPF"></label>
+            <input asp-for="CPF" class="form-control" />
+            <span asp-validation-for="CPF" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RG"></label>
+            <input asp-for="RG" class="form-control" />
+            <span asp-validation-for="RG" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CNH"></label>
+            <input asp-for="CNH" class="form-control" />
+            <span asp-validation-for="CNH" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Pessoa Jurídica Vinculada (opcional)</label>
+            <select asp-for="PJ" asp-items="Model.EmpresasPJDisponiveis" class="form-control">
+                <option value="">-- Nenhuma --</option>
+            </select>
+            <span asp-validation-for="PJ" class="text-danger"></span>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- ========================= -->
+    <!--       PESSOA JURÍDICA     -->
+    <!-- ========================= -->
+    <div id="pj">
+        <h4>Pessoa Jurídica</h4>
+
+        <div class="form-group">
+            <label asp-for="CNPJ"></label>
+            <input asp-for="CNPJ" class="form-control" />
+            <span asp-validation-for="CNPJ" class="text-danger"></span>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- Endereço -->
+    <h4>Endereço</h4>
+
+    <div class="form-group">
+        <label asp-for="Estado"></label>
+        <input asp-for="Estado" class="form-control" />
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Cidade"></label>
+        <input asp-for="Cidade" class="form-control" />
+        <span asp-validation-for="Cidade" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Bairro"></label>
+        <input asp-for="Bairro" class="form-control" />
+        <span asp-validation-for="Bairro" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Rua"></label>
+        <input asp-for="Rua" class="form-control" />
+        <span asp-validation-for="Rua" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Numero"></label>
+        <input asp-for="Numero" class="form-control" />
+        <span asp-validation-for="Numero" class="text-danger"></span>
+    </div>
+
     <br />
 
-    <label asp-for="Email"></label>
-    <input asp-for="Email" />
-    <span asp-validation-for="Email"></span>
-    <br />
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    <a asp-controller="Cliente" asp-action="Index" class="btn btn-secondary">Voltar</a>
 
-    <label asp-for="Telefone"></label>
-    <input asp-for="Telefone" />
-    <span asp-validation-for="Telefone"></span>
-    <br />
-
-    <label asp-for="TipoCliente"></label>
-    <select asp-for="TipoCliente" asp-items="Model.TiposClienteDisponiveis"></select>
-    <span asp-validation-for="TipoCliente"></span>
-    <br />
-
-    <label asp-for="CPF"></label>
-    <input asp-for="CPF" />
-    <span asp-validation-for="CPF"></span>
-    <br />
-
-    <label asp-for="CNPJ"></label>
-    <input asp-for="CNPJ" />
-    <span asp-validation-for="CNPJ"></span>
-    <br />
-
-    <label asp-for="Estado"></label>
-    <input asp-for="Estado" />
-    <span asp-validation-for="Estado"></span>
-    <br />
-
-    <label asp-for="Cidade"></label>
-    <input asp-for="Cidade" />
-    <span asp-validation-for="Cidade"></span>
-    <br />
-
-    <label asp-for="Bairro"></label>
-    <input asp-for="Bairro" />
-    <span asp-validation-for="Bairro"></span>
-    <br />
-
-    <label asp-for="Rua"></label>
-    <input asp-for="Rua" />
-    <span asp-validation-for="Rua"></span>
-    <br />
-
-    <label asp-for="Numero"></label>
-    <input asp-for="Numero" />
-    <span asp-validation-for="Numero"></span>
-    <br />
-
-    <button type="submit">Salvar</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const tipo = document.querySelector("[name=TipoCliente]");
+        const pf = document.getElementById("pf");
+        const pj = document.getElementById("pj");
+
+        function atualizarCampos() {
+            if (tipo.value === "2") { // PF
+                pf.style.display = "block";
+                pj.style.display = "none";
+            } else if(tipo.value == "1") { // PJ
+                pf.style.display = "none";
+                pj.style.display = "block";
+            }
+        }
+
+        tipo.addEventListener("change", atualizarCampos);
+        atualizarCampos();
+    </script>
+}

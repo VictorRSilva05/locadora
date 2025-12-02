@@ -1,11 +1,15 @@
 ﻿using Locadora.Dominio.ModuloCliente;
+using Locadora.Dominio.ModuloCombustivel;
+using Locadora.Dominio.ModuloGrupoVeiculo;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
 
 namespace Locadora.WebApp.Models;
 
 public abstract class FormularioClienteViewModel
 {
+    // --- Dados básicos ---
     [Required(ErrorMessage = "O campo Nome é obrigatório.")]
     public string Nome { get; set; }
 
@@ -19,9 +23,7 @@ public abstract class FormularioClienteViewModel
     [Required(ErrorMessage = "O campo Tipo de Cliente é obrigatório.")]
     public TipoClienteEnum TipoCliente { get; set; }
 
-    public string? CPF { get; set; }
-    public string? CNPJ { get; set; }
-
+    // --- Endereço ---
     [Required(ErrorMessage = "O campo Estado é obrigatório.")]
     public string Estado { get; set; }
 
@@ -37,7 +39,23 @@ public abstract class FormularioClienteViewModel
     [Required(ErrorMessage = "O campo Número é obrigatório.")]
     public string Numero { get; set; }
 
+    // --- Pessoa Física ---
+    public string? CPF { get; set; }
+    public string? RG { get; set; }
+    public string? CNH { get; set; }
+
+    // PF pode ter uma PJ vinculada
+    public Guid? PJ { get; set; }
+
+    // --- Pessoa Jurídica ---
+    public string? CNPJ { get; set; }
+
+    // Lista de PF removida — PJ NÃO define PF no cadastro
+    // public List<Guid>? PF { get; set; }
+
+    // --- Selects ---
     public List<SelectListItem>? TiposClienteDisponiveis { get; set; }
+    public List<SelectListItem>? EmpresasPJDisponiveis { get; set; }
 
     public void CarregarTiposCliente()
     {
@@ -51,25 +69,32 @@ public abstract class FormularioClienteViewModel
             .ToList();
     }
 
-    /*
-    public static Cliente ParaEntidade(FormularioClienteViewModel viewModel)
+    public static Cliente ParaEntidade(
+        FormularioClienteViewModel viewModel,
+        List<Cliente> clientes)
     {
+        var pjSelecionado = clientes.Find(gv => gv.Id == viewModel.PJ)
+            ?? throw new ArgumentException("Pessoa jurídica inválida.");
+
         return new Cliente(
             viewModel.Nome,
             viewModel.Email,
             viewModel.Telefone,
             viewModel.TipoCliente,
-            viewModel.CPF,
-            viewModel.CNPJ,
             viewModel.Estado,
             viewModel.Cidade,
             viewModel.Bairro,
             viewModel.Rua,
-            viewModel.Numero
-        );
+            viewModel.Numero,
+            viewModel.CPF,
+            viewModel.RG,
+            viewModel.CNH,
+            pjSelecionado,
+            viewModel.CNPJ,
+            null);
     }
-    */
 }
+
 
 
 public class CadastrarClienteViewModel : FormularioClienteViewModel
@@ -84,7 +109,9 @@ public class CadastrarClienteViewModel : FormularioClienteViewModel
 public class EditarClienteViewModel : FormularioClienteViewModel
 {
     public Guid Id { get; set; }
+
     public EditarClienteViewModel() { }
+
     public EditarClienteViewModel(
         Guid id,
         string nome,
@@ -113,6 +140,7 @@ public class EditarClienteViewModel : FormularioClienteViewModel
         Numero = numero;
     }
 }
+
 
 public class ExcluirClienteViewModel
 {

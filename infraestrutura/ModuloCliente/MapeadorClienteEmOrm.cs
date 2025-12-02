@@ -32,11 +32,9 @@ public class MapeadorClienteEmOrm : IEntityTypeConfiguration<Cliente>
         builder.Property(x => x.CNPJ)
             .HasMaxLength(18);
 
-        builder.Property(x => x.RG)
-            .IsRequired();
+        builder.Property(x => x.RG);
 
-        builder.Property(x => x.CNH)
-            .IsRequired();
+        builder.Property(x => x.CNH);
 
         builder.Property(x => x.Estado)
             .IsRequired()

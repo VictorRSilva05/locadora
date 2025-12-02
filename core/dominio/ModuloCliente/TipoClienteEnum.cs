@@ -1,6 +1,7 @@
 ﻿namespace Locadora.Dominio.ModuloCliente;
 public enum TipoClienteEnum
 {
-    PessoaFisica = 1,
-    PessoaJuridica = 2
+    PessoaJuridica = 1,
+    PessoaFisica = 2
+
 }

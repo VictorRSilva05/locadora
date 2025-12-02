@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Infraestrutura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251127172208_asjdkldfj")]
-    partial class asjdkldfj
+    [Migration("20251202211336_kskdsk")]
+    partial class kskdsk
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -199,6 +199,9 @@ namespace Locadora.Infraestrutura.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("CNH")
+                        .HasColumnType("text");
+
                     b.Property<string>("CNPJ")
                         .HasMaxLength(18)
                         .HasColumnType("character varying(18)");
@@ -235,6 +238,12 @@ namespace Locadora.Infraestrutura.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("character varying(10)");
 
+                    b.Property<Guid?>("PJId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("RG")
+                        .HasColumnType("text");
+
                     b.Property<string>("Rua")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -252,6 +261,8 @@ namespace Locadora.Infraestrutura.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PJId");
 
                     b.HasIndex("TenantId");
 
@@ -488,6 +499,9 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Property<Guid>("GrupoVeiculoId")
                         .HasColumnType("uuid");
 
+                    b.Property<float>("Kilometragem")
+                        .HasColumnType("real");
+
                     b.Property<string>("Marca")
                         .IsRequired()
                         .HasColumnType("text");
@@ -496,8 +510,15 @@ namespace Locadora.Infraestrutura.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Placa")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Guid?>("TenantId")
                         .HasColumnType("uuid");
+
+                    b.Property<int>("TipoCambio")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -652,9 +673,15 @@ namespace Locadora.Infraestrutura.Migrations
 
             modelBuilder.Entity("Locadora.Dominio.ModuloCliente.Cliente", b =>
                 {
+                    b.HasOne("Locadora.Dominio.ModuloCliente.Cliente", "PJ")
+                        .WithMany("PF")
+                        .HasForeignKey("PJId");
+
                     b.HasOne("Locadora.Dominio.Autenticacao.User", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId");
+
+                    b.Navigation("PJ");
 
                     b.Navigation("Tenant");
                 });
@@ -814,6 +841,11 @@ namespace Locadora.Infraestrutura.Migrations
             modelBuilder.Entity("Locadora.Dominio.ModuloAluguel.Aluguel", b =>
                 {
                     b.Navigation("Taxas");
+                });
+
+            modelBuilder.Entity("Locadora.Dominio.ModuloCliente.Cliente", b =>
+                {
+                    b.Navigation("PF");
                 });
 #pragma warning restore 612, 618
         }
