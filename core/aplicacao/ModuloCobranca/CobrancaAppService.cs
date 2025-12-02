@@ -1,10 +1,13 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
 using Locadora.Dominio.ModuloAluguel;
 using Locadora.Dominio.ModuloCobranca;
+using Locadora.Dominio.ModuloCombustivel;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 
 namespace Locadora.Aplicacao.ModuloCobranca;
@@ -13,6 +16,7 @@ public class CobrancaAppService
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioCobranca repositorioCobranca;
     private readonly IRepositorioAluguel repositorioAluguel;
+    private readonly IValidator<Cobranca> validator;    
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<CobrancaAppService> logger;
 
@@ -21,31 +25,24 @@ public class CobrancaAppService
         IRepositorioCobranca repositorioCobranca,
         IUnitOfWork unitOfWork,
         ILogger<CobrancaAppService> logger,
-        IRepositorioAluguel repositorioAluguel)
+        IRepositorioAluguel repositorioAluguel,
+        IValidator<Cobranca> validator)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioCobranca = repositorioCobranca;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
         this.repositorioAluguel = repositorioAluguel;
+        this.validator = validator;
     }
 
     public async Task<Result> Cadastrar(Cobranca cobranca)
     {
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Diaria && (cobranca.PrecoDiaria == null || cobranca.PrecoKm == null))
-            return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("Os campos preço diária e preço por Km são necessários no plano diário.")
-                );
+        var resultado = await validator.ValidateAsync(cobranca);
 
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Controlado && (cobranca.KmDisponiveis == null || cobranca.PrecoDiaria == null || cobranca.PrecoPorKmExtrapolado == null))
-            return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("Os campos Km disponíveis, preço diária e preço por Km extrapolados são necessários no plano controlado.")
-                );
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
 
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Livre && (cobranca.Taxa == null))
-            return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("O campo taxa é necessário no plano livre.")
-                );
         try
         {
             cobranca.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
@@ -68,20 +65,11 @@ public class CobrancaAppService
 
     public async Task<Result> Editar(Guid id, Cobranca cobranca)
     {
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Diaria && cobranca.PrecoDiaria == null || cobranca.PrecoKm == null)
-            return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("Os campos preço diária e preço por Km são necessários no plano diário.")
-                );
+        var resultado = await validator.ValidateAsync(cobranca);
 
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Controlado && cobranca.KmDisponiveis == null || cobranca.PrecoDiaria == null || cobranca.PrecoPorKmExtrapolado == null)
-            return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("Os campos Km disponíveis, preço diária e preço por Km extrapolados são necessários no plano controlado.")
-                );
+        if (!resultado.IsValid)
+            return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
 
-        if (cobranca.PlanoCobranca == PlanoCobrancaEnum.Livre && cobranca.Taxa == null)
-            return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("O campo taxa é necessário no plano livre.")
-                );
         try
         {
             await repositorioCobranca.EditarAsync(id, cobranca);
@@ -100,7 +88,7 @@ public class CobrancaAppService
         }
     }
 
-    public async Task<Result> Excluir (Guid id)
+    public async Task<Result> Excluir(Guid id)
     {
         var alugueis = (await repositorioAluguel.SelecionarRegistrosAsync()) ?? new List<Aluguel>();
 
@@ -149,7 +137,7 @@ public class CobrancaAppService
     {
         try
         {
-            var cobrancas =  await repositorioCobranca.SelecionarRegistrosAsync();
+            var cobrancas = await repositorioCobranca.SelecionarRegistrosAsync();
             return Result.Ok(cobrancas);
         }
         catch (Exception ex)
@@ -160,5 +148,47 @@ public class CobrancaAppService
             );
             return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
         }
+    }
+}
+
+public class CadastrarCobrancaValidator : AbstractValidator<Cobranca>
+{
+    public CadastrarCobrancaValidator()
+    {
+        // ---- PLANO DIÁRIA ----
+        When(x => x.PlanoCobranca == PlanoCobrancaEnum.Diaria, () =>
+        {
+            RuleFor(x => x.PrecoDiaria)
+                .NotNull()
+                .WithMessage("O campo preço diária é necessário no plano diário.");
+
+            RuleFor(x => x.PrecoKm)
+                .NotNull()
+                .WithMessage("O campo preço por Km é necessário no plano diário.");
+        });
+
+        // ---- PLANO CONTROLADO ----
+        When(x => x.PlanoCobranca == PlanoCobrancaEnum.Controlado, () =>
+        {
+            RuleFor(x => x.KmDisponiveis)
+                .NotNull()
+                .WithMessage("O campo Km disponíveis é necessário no plano controlado.");
+
+            RuleFor(x => x.PrecoDiaria)
+                .NotNull()
+                .WithMessage("O campo preço diária é necessário no plano controlado.");
+
+            RuleFor(x => x.PrecoPorKmExtrapolado)
+                .NotNull()
+                .WithMessage("O campo preço por Km extrapolado é necessário no plano controlado.");
+        });
+
+        // ---- PLANO LIVRE ----
+        When(x => x.PlanoCobranca == PlanoCobrancaEnum.Livre, () =>
+        {
+            RuleFor(x => x.Taxa)
+                .NotNull()
+                .WithMessage("O campo taxa é necessário no plano livre.");
+        });
     }
 }
