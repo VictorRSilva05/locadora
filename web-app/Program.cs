@@ -1,3 +1,4 @@
+using FluentValidation;
 using Locadora.Aplicacao.ModuloAluguel;
 using Locadora.Aplicacao.ModuloAutenticacao;
 using Locadora.Aplicacao.ModuloCliente;
@@ -44,20 +45,28 @@ namespace Locadora.WebApp
 
             builder.Services.AddScoped<GrupoVeiculoAppService>();
             builder.Services.AddScoped<IRepositorioGrupoVeiculo, RepositorioGrupoVeiculoEmOrm>();
+            builder.Services.AddScoped<IValidator<GrupoVeiculo>, CadastrarGrupoVeiculoValidator>();
             builder.Services.AddScoped<CombustivelAppService>();
             builder.Services.AddScoped<IRepositorioCombustivel, RepositorioCombustivelEmOrm>();
+            builder.Services.AddScoped<IValidator<Combustivel>, CadastrarCombustivelValidator>();
             builder.Services.AddScoped<FuncionarioAppService>();
             builder.Services.AddScoped<IRepositorioFuncionario, RepositorioFuncionarioEmOrm>();
+            
             builder.Services.AddScoped<CondutorAppService>();
             builder.Services.AddScoped<IRepositorioCondutor, RepositorioCondutorEmOrm>();
+            builder.Services.AddScoped<IValidator<Condutor>, CadastrarCondutorValidator>();
             builder.Services.AddScoped<VeiculoAppService>();
             builder.Services.AddScoped<IRepositorioVeiculo, RepositorioVeiculoEmOrm>();
+            builder.Services.AddScoped<IValidator<Veiculo>, CadastrarVeiculoValidator>();
             builder.Services.AddScoped<ClienteAppService>();
             builder.Services.AddScoped<IRepositorioCliente, RepositorioClienteEmOrm>();
+            builder.Services.AddScoped<IValidator<Cliente>, CadastrarClienteValidator>();
             builder.Services.AddScoped<TaxaAppService>();
             builder.Services.AddScoped<IRepositorioTaxa, RepositorioTaxaEmOrm>();
+            builder.Services.AddScoped<IValidator<Taxa>, CadastrarTaxaValidator>();
             builder.Services.AddScoped<CobrancaAppService>();
             builder.Services.AddScoped<IRepositorioCobranca, RepositorioCobrancaEmOrm>();
+            builder.Services.AddScoped<IValidator<Cobranca>,  CadastrarCobrancaValidator>();
             builder.Services.AddScoped<AluguelAppService>();
             builder.Services.AddScoped<IRepositorioAluguel, RepositorioAluguelEmOrm>();
 

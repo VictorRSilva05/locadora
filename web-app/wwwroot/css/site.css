@@ -1,0 +1,33 @@
+﻿body {
+    background-color: #f5f6fa;
+}
+
+.navbar-custom {
+    background-color: #0d6efd;
+}
+
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link {
+        color: white !important;
+    }
+
+.card {
+    border-radius: 12px;
+}
+
+footer {
+    background: #0d6efd;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.card h3 i {
+    font-size: 1.5rem;
+    margin-right: 4px;
+}
+
+input.form-control {
+    height: 45px;
+}
