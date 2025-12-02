@@ -82,7 +82,7 @@ public class GrupoVeiculoAppService
 
         var registros = await repositorioGrupoVeiculo.SelecionarRegistrosAsync();
 
-        if (registros.Any(i => i.Nome.Equals(grupoVeiculo.Nome)))
+        if (registros.Any(i => i.Id != id && i.Nome.Equals(grupoVeiculo.Nome)))
             return Result.Fail(ResultadosErro.RegistroDuplicadoErro("Já existe um grupo de veículo com este nome."));
 
         try

@@ -81,15 +81,15 @@ public class ClienteAppService
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este E-mail.")
             );
-        if (registros.Any(i => i.CNH == cliente.CNH))
+        if (registros.Any(i => i.Id != id && i.CNH == cliente.CNH))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com esta CNH.")
             );
-        if (registros.Any(i => i.RG == cliente.RG))
+        if (registros.Any(i => i.Id != id && i.RG == cliente.RG))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este RG.")
             );
-        if (registros.Any(i => i.CNPJ == cliente.CNPJ))
+        if (registros.Any(i => i.Id != id && i.CNPJ == cliente.CNPJ))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este CNPJ.")
                 );

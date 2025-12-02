@@ -75,7 +75,7 @@ public class CombustivelAppService
 
         var registros = await repositorioCombustivel.SelecionarRegistrosAsync();
 
-        if (registros.Any(i => i.Nome.Equals(combustivel.Nome)))
+        if (registros.Any(i =>  i.Id != id && i.Nome.Equals(combustivel.Nome)))
             return Result.Fail(ResultadosErro.RegistroDuplicadoErro("Já existe um combustível com este nome."));
         try
         {
