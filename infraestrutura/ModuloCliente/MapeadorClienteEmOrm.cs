@@ -32,6 +32,12 @@ public class MapeadorClienteEmOrm : IEntityTypeConfiguration<Cliente>
         builder.Property(x => x.CNPJ)
             .HasMaxLength(18);
 
+        builder.Property(x => x.RG)
+            .IsRequired();
+
+        builder.Property(x => x.CNH)
+            .IsRequired();
+
         builder.Property(x => x.Estado)
             .IsRequired()
             .HasMaxLength(50);
@@ -51,5 +57,9 @@ public class MapeadorClienteEmOrm : IEntityTypeConfiguration<Cliente>
         builder.Property(x => x.Numero)
             .IsRequired()
             .HasMaxLength(10);
+
+        builder.HasOne(x => x.PJ);
+
+        builder.HasMany(x => x.PF);
     }
 }

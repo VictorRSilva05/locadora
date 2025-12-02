@@ -51,6 +51,7 @@ public abstract class FormularioClienteViewModel
             .ToList();
     }
 
+    /*
     public static Cliente ParaEntidade(FormularioClienteViewModel viewModel)
     {
         return new Cliente(
@@ -67,6 +68,7 @@ public abstract class FormularioClienteViewModel
             viewModel.Numero
         );
     }
+    */
 }
 
 

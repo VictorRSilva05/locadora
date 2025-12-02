@@ -41,6 +41,8 @@ public class ClienteController : Controller
         return View(cadastrarVm);
     }
 
+
+    /*
     [HttpPost("cadastrar")]
     public async Task<IActionResult> Cadastrar(CadastrarClienteViewModel cadastrarVm)
     {
@@ -53,6 +55,7 @@ public class ClienteController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+    */
 
     [HttpGet("editar/{id:guid}")]
     public async Task<IActionResult> Editar(Guid id)
@@ -84,6 +87,7 @@ public class ClienteController : Controller
         return View(editarVm);
     }
 
+    /*
     [HttpPost("editar/{id:guid}")]
     public async Task<IActionResult> Editar(Guid id, EditarClienteViewModel editarVm)
     {
@@ -96,6 +100,7 @@ public class ClienteController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+    */
 
     [HttpGet("excluir/{id:guid}")]
     public async Task<IActionResult> Excluir(Guid id)

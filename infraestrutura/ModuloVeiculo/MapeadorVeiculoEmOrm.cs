@@ -21,12 +21,21 @@ public class MapeadorVeiculoEmOrm : IEntityTypeConfiguration<Veiculo>
         builder.Property(x => x.Modelo)
             .IsRequired();
 
+        builder.Property(x => x.TipoCambio)
+            .IsRequired();
+
+        builder.Property(x => x.Placa)
+            .IsRequired();
+
         builder.HasOne(x => x.Combustivel);
 
         builder.Property(x => x.CapacidadeCombustivel)
             .IsRequired();
 
         builder.Property(x => x.Ano)
+            .IsRequired();
+
+        builder.Property(x => x.Kilometragem)
             .IsRequired();
     }
 }

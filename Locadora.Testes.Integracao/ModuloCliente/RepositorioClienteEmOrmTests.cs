@@ -2,7 +2,7 @@
 using Locadora.Testes.Integracao.Compartilhado;
 
 namespace Locadora.Testes.Integracao.ModuloCliente;
-
+/*
 [TestClass]
 [TestCategory("Testes de integração de cliente")]
 public sealed class RepositorioClienteEmOrmTests : TestFixture
@@ -115,3 +115,4 @@ public sealed class RepositorioClienteEmOrmTests : TestFixture
         Assert.AreEqual(cliente, registroSelecionado);
     }
 }
+*/

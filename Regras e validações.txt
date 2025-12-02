@@ -23,7 +23,7 @@ concluído.
 - Não deve ser possível excluir um condutor relacionado a um aluguel ainda não
 concluído.
 
-Módulo de cobrança
+✅Módulo de cobrança
 - Não deve ser possível excluir grupos sendo utilizados em automóveis.
 - Não deve ser possível excluir grupos sendo utilizados em aluguel.
 
