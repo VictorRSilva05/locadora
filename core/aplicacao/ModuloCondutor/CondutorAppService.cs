@@ -43,17 +43,17 @@ public class CondutorAppService
 
         var registros = await repositorioCondutor.SelecionarRegistrosAsync();
 
-        if(registros.Any(i => i.Cpf == condutor.Cpf))
+        if (registros.Any(i => i.Cpf == condutor.Cpf))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um condutor cadastrado com este CPF.")
             );
 
-        if(registros.Any(i => i.Cnh == condutor.Cnh))
+        if (registros.Any(i => i.Cnh == condutor.Cnh))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um condutor cadastrado com esta CNH.")
             );
 
-        if(registros.Any(i => i.Email == condutor.Email))
+        if (registros.Any(i => i.Email == condutor.Email))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um condutor cadastrado com este E-mail.")
             );
@@ -89,15 +89,15 @@ public class CondutorAppService
             return Result.Fail(ResultadosErro.RequisicaoInvalidaErro(resultado.Errors.Select(x => x.ErrorMessage)));
 
         var registros = await repositorioCondutor.SelecionarRegistrosAsync();
-        if(registros.Any(i => i.Cpf == condutor.Cpf && i.Id != id))
+        if (registros.Any(i => i.Cpf == condutor.Cpf && i.Id != id))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um condutor cadastrado com este CPF.")
             );
-        if(registros.Any(i => i.Cnh == condutor.Cnh && i.Id != id))
+        if (registros.Any(i => i.Cnh == condutor.Cnh && i.Id != id))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um condutor cadastrado com esta CNH.")
             );
-        if(registros.Any(i => i.Email == condutor.Email && i.Id != id))
+        if (registros.Any(i => i.Email == condutor.Email && i.Id != id))
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um condutor cadastrado com este E-mail.")
             );
@@ -198,31 +198,15 @@ public class CadastrarCondutorValidator : AbstractValidator<Condutor>
            .WithMessage("O campo {PropertyName} não pode ser vazio.");
 
         RuleFor(c => c.Email)
-            .NotEmpty()
-            .WithMessage("O campo {PropertyName} não pode ser vazio.")
-            .DependentRules(() =>
-            {
-                RuleFor(c => c.Email)
-                .EmailAddress()
-                .WithMessage("O formato do {PropertyName} está incorreto");
-            });
+             .EmailAddress()
+             .WithMessage("O formato do {PropertyName} está incorreto");
 
         RuleFor(c => c.Cpf)
-            .NotEmpty()
-            .WithMessage("O campo {PropertyName} não pode ser vazio.")
-            .DependentRules(() =>
-            {
-                RuleFor(c => c.Cpf)
-                .Matches("^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$\r\n");
-            });
+            .Matches(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$")
+            .WithMessage("O formato do {PropertyName} está incorreto");
 
         RuleFor(c => c.Cnh)
-            .NotEmpty()
-            .WithMessage("O campo {PropertyName} não pode ser vazio.")
-            .DependentRules(() =>
-            {
-                RuleFor(c => c.Cnh)
-                .Matches("^\\d{11}$\r\n");
-            });
+            .Matches(@"^\d{11}$")
+            .WithMessage("O formato do {PropertyName} está incorreto");
     }
 }
