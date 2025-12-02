@@ -1,21 +1,99 @@
-﻿﻿@{
+﻿@{
     ViewBag.Titulo = "Página Inicial";
 }
 
-<a asp-controller="GrupoVeiculo" asp-action="Index">Grupo de veículos</a>
-<br/>
-<a asp-controller="Combustivel" asp-action="Index">Combustíveis</a>
-<br />
-<a asp-controller="Funcionario" asp-action="Index">Funcionários</a>
-<br />
-<a asp-controller="Condutor" asp-action="Index">Condutores</a>
-<br />
-<a asp-controller="Veiculo" asp-action="Index">Veículos</a>
-<br />
-<a asp-controller="Cliente" asp-action="Index">Clientes</a>
-<br />
-<a asp-controller="Taxa" asp-action="Index">Taxas e serviços</a>
-<br />
-<a asp-controller="Cobranca" asp-action="Index">Cobranças</a>
-<br />
-<a asp-controller="Aluguel" asp-action="Index">Alugueis</a>
+<h2 class="mb-4 text-center">Painel do Sistema</h2>
+
+<div class="row g-4">
+
+    <!-- Grupo de Veículos -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="GrupoVeiculo" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-grid-3x3-gap-fill fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Grupo de Veículos</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Combustíveis -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Combustivel" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-fuel-pump-fill fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Combustíveis</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Funcionários -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Funcionario" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-people-fill fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Funcionários</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Condutores -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Condutor" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-person-vcard-fill fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Condutores</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Veículos -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Veiculo" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-car-front-fill fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Veículos</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Clientes -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Cliente" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-person-lines-fill fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Clientes</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Taxas -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Taxa" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-cash-coin fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Taxas e Serviços</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Cobranças -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Cobranca" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-receipt-cutoff fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Cobranças</h5>
+            </div>
+        </a>
+    </div>
+
+    <!-- Aluguéis -->
+    <div class="col-md-3 col-sm-6">
+        <a asp-controller="Aluguel" asp-action="Index" class="text-decoration-none">
+            <div class="card shadow-sm p-3 text-center h-100">
+                <i class="bi bi-calendar-check-fill fs-1 text-primary"></i>
+                <h5 class="mt-2 text-dark">Aluguéis</h5>
+            </div>
+        </a>
+    </div>
+
+</div>
