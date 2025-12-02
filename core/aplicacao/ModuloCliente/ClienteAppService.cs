@@ -1,4 +1,5 @@
 ﻿using FluentResults;
+using FluentValidation;
 using Locadora.Aplicacao.Compartilhado;
 using Locadora.Dominio.Autenticacao;
 using Locadora.Dominio.Compartilhado;
@@ -36,14 +37,17 @@ public class ClienteAppService
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este E-mail.")
             );
-
-        if(cliente.TipoCliente == TipoClienteEnum.PessoaFisica && cliente.CPF is null)
+        if (registros.Any(i => i.CNH == cliente.CNH))
             return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("CPF é obrigatório para clientes do tipo Pessoa Física.")
+                ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com esta CNH.")
             );
-        if(cliente.TipoCliente == TipoClienteEnum.PessoaJuridica && cliente.CNPJ is null)
+        if (registros.Any(i => i.RG == cliente.RG))
             return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("CNPJ é obrigatório para clientes do tipo Pessoa Jurídica.")
+                ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este RG.")
+            );
+        if (registros.Any(i => i.CNPJ == cliente.CNPJ))
+            return Result.Fail(
+                ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este CNPJ.")
             );
 
         try
@@ -77,14 +81,18 @@ public class ClienteAppService
             return Result.Fail(
                 ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este E-mail.")
             );
-        if (cliente.TipoCliente == TipoClienteEnum.PessoaFisica && cliente.CPF is null)
+        if (registros.Any(i => i.CNH == cliente.CNH))
             return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("CPF é obrigatório para clientes do tipo Pessoa Física.")
+                ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com esta CNH.")
             );
-        if (cliente.TipoCliente == TipoClienteEnum.PessoaJuridica && cliente.CNPJ is null)
+        if (registros.Any(i => i.RG == cliente.RG))
             return Result.Fail(
-                ResultadosErro.RequisicaoInvalidaErro("CNPJ é obrigatório para clientes do tipo Pessoa Jurídica.")
+                ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este RG.")
             );
+        if (registros.Any(i => i.CNPJ == cliente.CNPJ))
+            return Result.Fail(
+                ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este CNPJ.")
+                );
         try
         {
             await repositorioCliente.EditarAsync(id, cliente);
@@ -127,7 +135,7 @@ public class ClienteAppService
     {
         try
         {
-            var cliente =  await repositorioCliente.SelecionarRegistroPorIdAsync(id);
+            var cliente = await repositorioCliente.SelecionarRegistroPorIdAsync(id);
             return Result.Ok(cliente);
         }
         catch (Exception ex)
@@ -145,7 +153,7 @@ public class ClienteAppService
     {
         try
         {
-            var clientes =  await repositorioCliente.SelecionarRegistrosAsync();
+            var clientes = await repositorioCliente.SelecionarRegistrosAsync();
             return Result.Ok(clientes);
         }
         catch (Exception ex)
@@ -156,5 +164,81 @@ public class ClienteAppService
             );
             return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
         }
+    }
+}
+
+public class CadastrarClienteValidator : AbstractValidator<Cliente>
+{
+    public CadastrarClienteValidator()
+    {
+        RuleFor(x => x.Nome)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} é obrigatório.");
+
+        RuleFor(x => x.Email)
+            .NotEmpty()
+            .EmailAddress()
+            .WithMessage("O campo e-mail é obrigatório.");
+
+        RuleFor(x => x.Telefone)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} é obrigatório.");
+
+        RuleFor(x => x.TipoCliente)
+            .IsInEnum()
+            .NotEmpty()
+            .WithMessage("O campo tipo cliente é obrigatório.");
+
+        RuleFor(x => x.Estado)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} é obrigatório.");
+
+        RuleFor(x => x.Cidade)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} é obrigatório.");
+
+        RuleFor(x => x.Bairro)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} é obrigatório.");
+
+        RuleFor(x => x.Rua)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} é obrigatório.");
+
+        RuleFor(x => x.Numero)
+            .NotEmpty()
+            .WithMessage("O campo {PropertyName} é obrigatório.");
+
+        When(x => x.TipoCliente == TipoClienteEnum.PessoaJuridica, () =>
+        {
+            RuleFor(x => x.CNPJ)
+                .NotEmpty()
+                .Matches("^\\d{2}\\.?\\d{3}\\.?\\d{3}/?\\d{4}-?\\d{2}$\r\n");
+        });
+
+        When(x => x.TipoCliente == TipoClienteEnum.PessoaFisica, () =>
+        {
+            RuleFor(c => c.CPF)
+                 .NotEmpty()
+                 .WithMessage("O campo {PropertyName} não pode ser vazio.")
+                 .DependentRules(() =>
+                 {
+                     RuleFor(c => c.CPF)
+                     .Matches("^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$\r\n");
+                 });
+
+            RuleFor(c => c.CNH)
+                .NotEmpty()
+                .WithMessage("O campo {PropertyName} não pode ser vazio.")
+                .DependentRules(() =>
+                {
+                    RuleFor(c => c.CNH)
+                    .Matches("^\\d{11}$\r\n");
+                });
+
+            RuleFor(x => x.RG)
+                .NotEmpty()
+                .WithMessage("O campo {PropertyName} não pode ser vazio.");
+        });
     }
 }

@@ -29,8 +29,9 @@ public class Cliente : EntidadeBase<Cliente>
     {
     }
 
-    public Cliente(string nome, string email, string telefone, TipoClienteEnum tipoCliente, string estado, string cidade, string bairro, string rua, string numero, string? cPF, string? rG, string? cNH, Cliente? pJ)
+    public Cliente(string nome, string email, string telefone, TipoClienteEnum tipoCliente, string estado, string cidade, string bairro, string rua, string numero, string? cPF, string? rG, string? cNH, Cliente? pJ, string? cNPJ, List<Cliente>? pF)
     {
+        Id = Guid.NewGuid();
         Nome = nome;
         Email = email;
         Telefone = telefone;
@@ -44,19 +45,6 @@ public class Cliente : EntidadeBase<Cliente>
         RG = rG;
         CNH = cNH;
         PJ = pJ;
-    }
-
-    public Cliente(string nome, string email, string telefone, TipoClienteEnum tipoCliente, string estado, string cidade, string bairro, string rua, string numero, string? cNPJ, List<Cliente>? pF)
-    {
-        Nome = nome;
-        Email = email;
-        Telefone = telefone;
-        TipoCliente = tipoCliente;
-        Estado = estado;
-        Cidade = cidade;
-        Bairro = bairro;
-        Rua = rua;
-        Numero = numero;
         CNPJ = cNPJ;
         PF = pF;
     }
