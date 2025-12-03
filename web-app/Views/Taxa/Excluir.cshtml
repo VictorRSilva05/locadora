@@ -1,16 +1,38 @@
 ﻿@model ExcluirTaxaViewModel
 
 @{
-    ViewBag.Titulo = "Excluir Taxa ou serviço";
+    ViewBag.Titulo = "Excluir Taxa";
 }
+<div class="container mt-4">
 
-<p>Tem certeza que deseja excluir o cliente abaixo?</p>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-danger">Excluir Taxa</h2>
 
-<p><strong>@Model.Descricao</strong></p>
+        <a asp-controller="Taxa" asp-action="Index" class="btn btn-outline-secondary">
+            Voltar
+        </a>
+    </div>
 
-<form asp-action="Excluir" method="post">
-    <input type="hidden" asp-for="Id" />
+    <div class="card border-danger shadow-sm rounded-3">
+        <div class="card-body">
 
-    <button type="submit">Excluir</button>
-    <a asp-action="Index">Cancelar</a>
-</form>
+            <div class="alert alert-danger">
+                Tem certeza que deseja excluir este combustível?
+            </div>
+
+            <form asp-controller="Taxa" asp-action="Excluir" method="post">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Descricao" class="form-label"></label>
+                    <input asp-for="Descricao" class="form-control" disabled />
+                </div>
+
+                <button type="submit" class="btn btn-danger">
+                    Excluir
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>

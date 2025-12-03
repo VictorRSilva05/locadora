@@ -1,11 +1,28 @@
 ﻿@model DetalhesTaxaViewModel
 
 @{
-    ViewBag.Titulo = "Detalhes Cliente";
+    ViewBag.Titulo = "Detalhes da Taxa / Serviço";
 }
 
-<p><strong>Descrição:</strong> @Model.Descricao</p>
-<p><strong>Valor:</strong> @Model.Valor</p>
-<p><strong>Plano de cobrança:</strong> @Model.PlanoCobranca</p>
+<h2>Detalhes do Cliente</h2>
 
-<a asp-action="Index">Voltar</a>
+<div class="card mt-3">
+    <div class="card-body">
+
+        <dl class="row">
+            <div>
+                <dt class="col-sm-3">Descricao</dt>
+                <dd class="col-sm-9">@Model.Descricao</dd>
+
+                <dt class="col-sm-3">Valor</dt>
+                <dd class="col-sm-9">@Model.Valor</dd>
+
+                <dt class="col-sm-3">Plano de Cobrança</dt>
+                <dd class="col-sm-9">@Model.PlanoCobranca</dd>
+            </div>
+        </dl>
+        <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+    </div>
+</div>
+

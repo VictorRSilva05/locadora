@@ -21,37 +21,41 @@
             <th class="text-end">Ações</th>
         </tr>
     </thead>
-                <tbody>
-                    @foreach (var registro in Model.Registros)
-                    {
-                        <tr>
-                            <td>@registro.Nome</td>
-                            <td>@registro.Preco.ToString("C2")</td>
-                            <td class="text-end">
-                                <a class="btn btn-sm btn-warning me-1"
-                                   asp-controller="Combustivel"
-                                   asp-action="Editar"
-                                   asp-route-id="@registro.Id">
-                                    Editar
-                                </a>
+    <tbody>
+        @foreach (var registro in Model.Registros)
+        {
+            <tr>
+                <td>@registro.Nome</td>
+                <td class="text-end">
 
-                                <a class="btn btn-sm btn-danger"
-                                   asp-controller="Combustivel"
-                                   asp-action="Excluir"
-                                   asp-route-id="@registro.Id">
-                                    Excluir
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                    <a asp-action="Editar"
+                       asp-route-id="@registro.Id"
+                       class="btn btn-sm btn-outline-primary me-1">
+                        <i class="bi bi-pencil-square"></i> Editar
+                    </a>
 
-    <div class="mt-3">
-        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left"></i>
-            Voltar
-        </a>
-    </div>
+                    <a asp-action="Excluir"
+                       asp-route-id="@registro.Id"
+                       class="btn btn-sm btn-outline-danger">
+                        <i class="bi bi-trash"></i> Excluir
+                    </a>
+
+                    <a asp-action="Detalhes"
+                       asp-route-id="@registro.Id"
+                       class="btn btn-sm btn-outline-primary me-1">
+                        <i class="bi bi-search"></i> Detalhes
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="mt-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i>
+        Voltar
+    </a>
+</div>
 
 </div>
