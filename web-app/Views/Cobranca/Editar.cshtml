@@ -4,39 +4,112 @@
     ViewBag.Titulo = "Editar Cobrança";
 }
 
-<a asp-controller="Cobranca" asp-action="Index">Voltar</a>
-<form asp-controller="Cobranca" asp-action="Editar" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <select asp-for="GrupoVeiculo" asp-items="Model.GrupoVeiculosDisponiveis" class="form-control">
-            <option value="">Selecione...</option>
-        </select>
-        <span asp-validation-for="GrupoVeiculo"></span>
+<a asp-controller="Condutor" asp-action="Index" class="btn btn-secondary mb-3">
+    <i class="bi bi-arrow-left-circle"></i> Voltar
+</a>
 
-        <select asp-for="PlanoCobranca" asp-items="Model.PlanosCobrancaDisponiveis" class="form-control">
-            <option value="">Selecione...</option>
-        </select>
-        <span asp-validation-for="PlanoCobranca"></span>
-
-        <label asp-for="PrecoDiaria"></label>
-        <input asp-for="PrecoDiaria" />
-        <span asp-validation-for="PrecoDiaria"></span>
-
-        <label asp-for="PrecoKm"></label>
-        <input asp-for="PrecoKm" />
-        <span asp-validation-for="PrecoKm"></span>
-
-        <label asp-for="KmDisponiveis"></label>
-        <input asp-for="KmDisponiveis" />
-        <span asp-validation-for="KmDisponiveis"></span>
-
-        <label asp-for="PrecoPorKmExtrapolado"></label>
-        <input asp-for="PrecoPorKmExtrapolado" />
-        <span asp-validation-for="PrecoPorKmExtrapolado"></span>
-
-        <label asp-for="Taxa"></label>
-        <input asp-for="Taxa" />
-        <span asp-validation-for="Taxa"></span>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Edição de Condutor</h5>
     </div>
-    <button type="submit">Salvar</button>
-</form>
+
+    <div class="card-body">
+        <form asp-controller="Cobranca" asp-action="Editar" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="row g-3">
+                <div class="mb-3">
+                    <label asp-for="GrupoVeiculo" class="form-label">Grupo de veículo</label>
+                    <select asp-for="GrupoVeiculo" asp-items="Model.GrupoVeiculosDisponiveis" class="form-control">
+                        <option value="">Selecione...</option>
+                    </select>
+                    <span asp-validation-for="GrupoVeiculo"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PlanoCobranca" class="form-label">Plano de cobrança</label>
+                    <select asp-for="PlanoCobranca" asp-items="Model.PlanosCobrancaDisponiveis" class="form-control">
+                        <option value="">Selecione...</option>
+                    </select>
+                    <span asp-validation-for="PlanoCobranca"></span>
+                </div>
+
+
+                <div id="pd">
+                    <div class="mb-3">
+                        <label asp-for="PrecoDiaria" class="form-label"></label>
+                        <input asp-for="PrecoDiaria" class="form-control" />
+                        <span asp-validation-for="PrecoDiaria"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PrecoKm" class="form-label"></label>
+                        <input asp-for="PrecoKm" class="form-control" />
+                        <span asp-validation-for="PrecoKm"></span>
+                    </div>
+                </div>
+
+                <div id="pc">
+                    <div class="mb-3">
+                        <label asp-for="PrecoDiaria" class="form-label"></label>
+                        <input asp-for="PrecoDiaria" class="form-control" />
+                        <span asp-validation-for="PrecoDiaria"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="KmDisponiveis" class="form-label"></label>
+                        <input asp-for="KmDisponiveis" class="form-control" />
+                        <span asp-validation-for="KmDisponiveis"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="PrecoPorKmExtrapolado" class="form-label">Preço por Km extrapolado</label>
+                        <input asp-for="PrecoPorKmExtrapolado" class="form-control" />
+                        <span asp-validation-for="PrecoPorKmExtrapolado"></span>
+                    </div>
+                </div>
+
+                <div id="pl">
+                    <div class="mb-3">
+                        <label asp-for="Taxa" class="form-label"></label>
+                        <input asp-for="Taxa" class="form-control" />
+                        <span asp-validation-for="Taxa"></span>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-success mt-4">
+                <i class="bi bi-check-circle"></i> Salvar
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const tipo = document.querySelector("[name=PlanoCobranca]");
+        const pd = document.getElementById("pd");
+        const pc = document.getElementById("pc");
+        const pl = document.getElementById("pl");
+
+        function atualizarCampos() {
+            if (tipo.value === "1") { // PF
+                pd.style.display = "block";
+                pc.style.display = "none";
+                pl.style.display = "none";
+            } else if(tipo.value == "2") { // PJ
+                pd.style.display = "none";
+                pc.style.display = "block";
+                pl.style.display = "none";
+            }
+            else if(tipo.value == "3"){
+                pd.style.display = "none";
+                pc.style.display = "none";
+                pl.style.display = "block";
+            }
+        }
+
+        tipo.addEventListener("change", atualizarCampos);
+        atualizarCampos();
+    </script>
+}

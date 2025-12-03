@@ -19,13 +19,13 @@
         <tr>
             <th>Grupo</th>
             <th>Plano</th>
-            <th class="text-end">Ações</th>    
+            <th class="text-end">Ações</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var registro in Model.Cobrancas)
-{
+        @foreach (var registro in Model.Cobrancas)
+        {
             <tr>
                 <td>@registro.GrupoVeiculo</td>
                 <td>@registro.PlanoCobranca</td>
@@ -49,7 +49,7 @@
                     </a>
                 </td>
             </tr>
-}
+        }
     </tbody>
 </table>
 

@@ -4,12 +4,24 @@
     ViewBag.Titulo = "Excluir Cobranca";
 }
 
-<a asp-controller="Cobranca" asp-action="Index">Voltar</a>
-<form asp-controller="Cobranca" asp-action="Excluir" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <label asp-for="PlanoCobranca"></label>
-        <input asp-for="PlanoCobranca" disabled />
+<div class="card">
+    <div class="card-header">
+        <h2>@ViewBag.Titulo</h2>
     </div>
-    <button type="submit">Excluir</button>
-</form>
+
+    <div class="card-body">
+
+        <form asp-controller="Cobranca" asp-action="Excluir" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <p class="text-danger">
+                Tem certeza que deseja excluir a cobrança <strong>@Model.GrupoVeiculo / @Model.PlanoCobranca</strong>?
+            </p>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-danger">Excluir</button>
+                <a asp-controller="Cobranca" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>

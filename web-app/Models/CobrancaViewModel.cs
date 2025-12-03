@@ -109,8 +109,10 @@ public class ExcluirCobrancaViewModel
     public Guid Id { get; set; }
     public string GrupoVeiculo { get; set; }
     public PlanoCobrancaEnum PlanoCobranca { get; set; }
+
+    public ExcluirCobrancaViewModel() { }
     public ExcluirCobrancaViewModel(
-        Cobranca cobranca)
+        Cobranca cobranca) : this ()
     {
         Id = cobranca.Id;
         GrupoVeiculo = cobranca.GrupoVeiculo.Nome;

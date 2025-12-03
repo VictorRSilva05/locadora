@@ -4,23 +4,47 @@
     ViewBag.Titulo = "Detalhes Cobrança";
 }
 
-    <div>
-        <label asp-for="GrupoVeiculo"></label>
-
-        <label asp-for="PlanoCobranca"></label>
-
-        <label asp-for="PrecoDiaria"></label>
-        <input asp-for="PrecoDiaria" />
-
-        <label asp-for="PrecoKm"></label>
-        <input asp-for="PrecoKm" />
-
-        <label asp-for="KmDisponiveis"></label>
-        <input asp-for="KmDisponiveis" />
-
-        <label asp-for="PrecoPorKmExtrapolado"></label>
-        <input asp-for="PrecoPorKmExtrapolado" />
-
-        <label asp-for="Taxa"></label>
-        <input asp-for="Taxa" />
+<div class="card">
+    <div class="card-header">
+        <h2>@ViewBag.Titulo</h2>
     </div>
+
+    <div class="card-body">
+        <div class="form-group">
+            <label asp-for="GrupoVeiculo"></label>
+            <input asp-for="GrupoVeiculo" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PlanoCobranca"></label>
+            <input asp-for="PlanoCobranca" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PrecoDiaria"></label>
+            <input asp-for="PrecoDiaria" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PrecoKm"></label>
+            <input asp-for="PrecoKm" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="KmDisponiveis"></label>
+            <input asp-for="KmDisponiveis" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PrecoPorKmExtrapolado"></label>
+            <input asp-for="PrecoPorKmExtrapolado"  readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Taxa"></label>
+            <input asp-for="Taxa"  readonly disabled class="form-control" />
+        </div>
+
+        <a asp-controller="Cobranca" asp-action="Index" class="btn btn-secondary mt-3">Voltar</a>
+    </div>
+</div>

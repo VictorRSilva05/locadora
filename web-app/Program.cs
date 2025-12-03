@@ -137,13 +137,3 @@ namespace Locadora.WebApp
     }
 }
 
-//public class FakeTenantProvider : ITenantProvider
-//{
-//    public Guid? TenantId => GetTenantId();
-
-//    public Guid GetTenantId()
-//    {
-//        // GUID fixo só para desenvolvimento
-//        return Guid.Parse("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
-//    }
-//}
