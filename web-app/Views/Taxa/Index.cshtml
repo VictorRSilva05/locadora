@@ -17,7 +17,8 @@
 <table class="table table-striped table-hover shadow-sm">
     <thead class="table-primary">
         <tr>
-            <th>Nome</th>
+            <th>Descrição</th>
+            <th>Valor</th>
             <th class="text-end">Ações</th>
             <th></th>
         </tr>
@@ -28,7 +29,7 @@
         {
             <tr>
                 <td>@registro.Descricao</td>
-                <td>@registro.Valor</td>
+                <td>@registro.Valor.ToString("C2")</td>
 
                 <td class="text-end">
 
