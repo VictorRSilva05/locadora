@@ -50,9 +50,6 @@ public class ClienteAppService
                 ResultadosErro.RegistroDuplicadoErro("Já existe um cliente cadastrado com este CNPJ.")
             );
 
-        if (cliente.TipoCliente is TipoClienteEnum.PessoaFisica && cliente.PJ is not null)
-            cliente.PJ.PF.Add(cliente);
-
         try
         {
             cliente.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();

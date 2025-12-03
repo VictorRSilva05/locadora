@@ -73,8 +73,7 @@ public abstract class FormularioClienteViewModel
         FormularioClienteViewModel viewModel,
         List<Cliente> clientes)
     {
-        var pjSelecionado = clientes.Find(gv => gv.Id == viewModel.PJ)
-            ?? throw new ArgumentException("Pessoa jurídica inválida.");
+        var pjSelecionado = clientes.Find(gv => gv.Id == viewModel.PJ);
 
         return new Cliente(
             viewModel.Nome,
@@ -110,34 +109,32 @@ public class EditarClienteViewModel : FormularioClienteViewModel
 {
     public Guid Id { get; set; }
 
-    public EditarClienteViewModel() { }
-
-    public EditarClienteViewModel(
-        Guid id,
-        string nome,
-        string email,
-        string telefone,
-        TipoClienteEnum tipoCliente,
-        string? cpf,
-        string? cnpj,
-        string estado,
-        string cidade,
-        string bairro,
-        string rua,
-        string numero)
+    public EditarClienteViewModel()
     {
-        Id = id;
-        Nome = nome;
-        Email = email;
-        Telefone = telefone;
-        TipoCliente = tipoCliente;
-        CPF = cpf;
-        CNPJ = cnpj;
-        Estado = estado;
-        Cidade = cidade;
-        Bairro = bairro;
-        Rua = rua;
-        Numero = numero;
+        CarregarTiposCliente();
+    }
+
+    public EditarClienteViewModel(Cliente cliente, List<Cliente> clientes) : this()
+    {
+        Id = cliente.Id;
+        Nome = cliente.Nome;
+        Email = cliente.Email;
+        Telefone = cliente.Telefone;
+        TipoCliente = cliente.TipoCliente;
+        Estado = cliente.Estado;
+        Cidade = cliente.Cidade;
+        Bairro = cliente.Bairro;
+        Rua = cliente.Rua;
+        Numero = cliente.Numero;
+        CPF = cliente.CPF;
+        RG = cliente.RG;
+        CNH = cliente.CNH;
+        PJ = cliente.PJ?.Id;
+        CNPJ = cliente.CNPJ;
+
+        EmpresasPJDisponiveis = clientes
+            .Select(c => new SelectListItem(c.Nome, c.Id.ToString()))
+            .ToList();
     }
 }
 
@@ -172,13 +169,18 @@ public class DetalhesClienteViewModel
     public string Email { get; set; }
     public string Telefone { get; set; }
     public TipoClienteEnum TipoCliente { get; set; }
-    public string? CPF { get; set; }
-    public string? CNPJ { get; set; }
     public string Estado { get; set; }
     public string Cidade { get; set; }
     public string Bairro { get; set; }
     public string Rua { get; set; }
     public string Numero { get; set; }
+    public string? CPF { get; set; }
+    public string? RG { get; set; }
+    public string? CNH { get; set; }
+    public string? PJ { get; set; }
+    public string? CNPJ { get; set; }
+
+
     public static DetalhesClienteViewModel ParaDetalhesVm(Cliente cliente)
     {
         return new DetalhesClienteViewModel
@@ -188,13 +190,16 @@ public class DetalhesClienteViewModel
             Email = cliente.Email,
             Telefone = cliente.Telefone,
             TipoCliente = cliente.TipoCliente,
-            CPF = cliente.CPF,
-            CNPJ = cliente.CNPJ,
             Estado = cliente.Estado,
             Cidade = cliente.Cidade,
             Bairro = cliente.Bairro,
             Rua = cliente.Rua,
-            Numero = cliente.Numero
+            Numero = cliente.Numero,
+            CPF = cliente.CPF,
+            RG = cliente.RG,
+            CNH = cliente.CNH,
+            PJ = cliente.PJ?.Nome,
+            CNPJ = cliente.CNPJ,
         };
     }
 }

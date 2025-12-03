@@ -1,57 +1,158 @@
-﻿@model EditarClienteViewModel
+﻿@model Locadora.WebApp.Models.EditarClienteViewModel
 
 @{
-    ViewBag.Titulo = "Editar Cliente";
+    ViewData["Title"] = "Editar Cliente";
 }
 
+<h2>Editar Cliente</h2>
 
-<form asp-action="Editar" method="post">
+<form asp-action="Editar" asp-controller="Cliente" method="post">
 
     <input type="hidden" asp-for="Id" />
 
-    <label asp-for="Nome"></label>
-    <input asp-for="Nome" />
+    <div class="form-group">
+        <label asp-for="TipoCliente"></label>
+        <select asp-for="TipoCliente" class="form-control" asp-items="Model.TiposClienteDisponiveis"
+                id="tipoClienteSelect">
+            <option value="">Selecione...</option>
+        </select>
+        <span asp-validation-for="TipoCliente" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Telefone"></label>
+        <input asp-for="Telefone" class="form-control" />
+        <span asp-validation-for="Telefone" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Estado"></label>
+        <input asp-for="Estado" class="form-control" />
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Cidade"></label>
+        <input asp-for="Cidade" class="form-control" />
+        <span asp-validation-for="Cidade" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Bairro"></label>
+        <input asp-for="Bairro" class="form-control" />
+        <span asp-validation-for="Bairro" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Rua"></label>
+        <input asp-for="Rua" class="form-control" />
+        <span asp-validation-for="Rua" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Numero"></label>
+        <input asp-for="Numero" class="form-control" />
+        <span asp-validation-for="Numero" class="text-danger"></span>
+    </div>
+
+    <!-- CAMPOS DE PESSOA FÍSICA -->
+    <div id="camposPF">
+
+        <div class="form-group">
+            <label asp-for="CPF"></label>
+            <input asp-for="CPF" class="form-control" />
+            <span asp-validation-for="CPF" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RG"></label>
+            <input asp-for="RG" class="form-control" />
+            <span asp-validation-for="RG" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CNH"></label>
+            <input asp-for="CNH" class="form-control" />
+            <span asp-validation-for="CNH" class="text-danger"></span>
+        </div>
+
+    </div>
+
+    <!-- CAMPOS DE PESSOA JURÍDICA -->
+    <div id="camposPJ">
+
+        <div class="form-group">
+            <label asp-for="CNPJ"></label>
+            <input asp-for="CNPJ" class="form-control" />
+            <span asp-validation-for="CNPJ" class="text-danger"></span>
+        </div>
+
+    </div>
+
+    <!-- EMPRESA PJ VINCULADA (APENAS PARA PF) -->
+    <div id="empresaVinculadaContainer">
+
+        <div class="form-group">
+            <label asp-for="PJ">Pessoa Jurídica Vinculada (opcional)</label>
+            <select asp-for="PJ" class="form-control" asp-items="Model.EmpresasPJDisponiveis">
+                <option value="">Nenhuma</option>
+            </select>
+            <span asp-validation-for="PJ" class="text-danger"></span>
+        </div>
+
+    </div>
+
     <br />
 
-    <label asp-for="Email"></label>
-    <input asp-for="Email" />
-    <br />
+    <button type="submit" class="btn btn-primary">Salvar alterações</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
 
-    <label asp-for="Telefone"></label>
-    <input asp-for="Telefone" />
-    <br />
-
-    <label asp-for="TipoCliente"></label>
-    <select asp-for="TipoCliente" asp-items="Model.TiposClienteDisponiveis"></select>
-    <br />
-
-    <label asp-for="CPF"></label>
-    <input asp-for="CPF" />
-    <br />
-
-    <label asp-for="CNPJ"></label>
-    <input asp-for="CNPJ" />
-    <br />
-
-    <label asp-for="Estado"></label>
-    <input asp-for="Estado" />
-    <br />
-
-    <label asp-for="Cidade"></label>
-    <input asp-for="Cidade" />
-    <br />
-
-    <label asp-for="Bairro"></label>
-    <input asp-for="Bairro" />
-    <br />
-
-    <label asp-for="Rua"></label>
-    <input asp-for="Rua" />
-    <br />
-
-    <label asp-for="Numero"></label>
-    <input asp-for="Numero" />
-    <br />
-
-    <button type="submit">Salvar Alterações</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function atualizarCampos() {
+            var tipo = document.getElementById("tipoClienteSelect").value;
+
+            var camposPF = document.getElementById("camposPF");
+            var camposPJ = document.getElementById("camposPJ");
+            var empresaVinculada = document.getElementById("empresaVinculadaContainer");
+
+            if (tipo === "2") { // Pessoa Física
+                camposPF.style.display = "block";
+                camposPJ.style.display = "none";
+                empresaVinculada.style.display = "block";
+            }
+            else if (tipo === "1") { // Pessoa Jurídica
+                camposPF.style.display = "none";
+                camposPJ.style.display = "block";
+                empresaVinculada.style.display = "none";
+            }
+            else {
+                camposPF.style.display = "none";
+                camposPJ.style.display = "none";
+                empresaVinculada.style.display = "none";
+            }
+        }
+
+        document.getElementById("tipoClienteSelect")
+            .addEventListener("change", atualizarCampos);
+
+        // Ao carregar a página com dados preenchidos
+        atualizarCampos();
+    </script>
+}

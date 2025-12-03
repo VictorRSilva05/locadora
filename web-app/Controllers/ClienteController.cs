@@ -71,26 +71,14 @@ public class ClienteController : Controller
     public async Task<IActionResult> Editar(Guid id)
     {
         var resultado = await clienteAppService.SelecionarPorId(id);
+        var clientes = await clienteAppService.SelecionarTodos();
 
         if (resultado.IsFailed)
             return this.RedirecionarParaNotificacaoHome(resultado.ToResult());
 
         var cliente = resultado.Value;
 
-        var editarVm = new EditarClienteViewModel(
-            cliente.Id,
-            cliente.Nome,
-            cliente.Email,
-            cliente.Telefone,
-            cliente.TipoCliente,
-            cliente.CPF,
-            cliente.CNPJ,
-            cliente.Estado,
-            cliente.Cidade,
-            cliente.Bairro,
-            cliente.Rua,
-            cliente.Numero
-            );
+        var editarVm = new EditarClienteViewModel(cliente, clientes.Value);
 
         editarVm.CarregarTiposCliente();
 
@@ -150,7 +138,7 @@ public class ClienteController : Controller
 
         var cliente = resultado.Value;
         
-        var detalhesVm = DetalhesClienteViewModel.ParaDetalhesVm(resultado.Value);
+        var detalhesVm = DetalhesClienteViewModel.ParaDetalhesVm(cliente);
 
         return View(detalhesVm);
     }

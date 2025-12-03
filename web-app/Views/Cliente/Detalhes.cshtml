@@ -1,28 +1,91 @@
-﻿@model DetalhesClienteViewModel
+﻿@using Locadora.Dominio.ModuloCliente
+@model Locadora.WebApp.Models.DetalhesClienteViewModel
 
 @{
-    ViewBag.Titulo = "Detalhes Cliente";
+    ViewData["Title"] = "Detalhes do Cliente";
 }
 
-<p><strong>Nome:</strong> @Model.Nome</p>
-<p><strong>Email:</strong> @Model.Email</p>
-<p><strong>Telefone:</strong> @Model.Telefone</p>
-<p><strong>Tipo de Cliente:</strong> @Model.TipoCliente</p>
+<h2>Detalhes do Cliente</h2>
 
-@if (Model.CPF != null)
-{
-    <p><strong>CPF:</strong> @Model.CPF</p>
-}
+<div class="card mt-3">
+    <div class="card-body">
 
-@if (Model.CNPJ != null)
-{
-    <p><strong>CNPJ:</strong> @Model.CNPJ</p>
-}
+        <h4 class="mb-3">
+            @(Model.TipoCliente == TipoClienteEnum.PessoaFisica ? "Pessoa Física" : "Pessoa Jurídica")
+        </h4>
 
-<p><strong>Estado:</strong> @Model.Estado</p>
-<p><strong>Cidade:</strong> @Model.Cidade</p>
-<p><strong>Bairro:</strong> @Model.Bairro</p>
-<p><strong>Rua:</strong> @Model.Rua</p>
-<p><strong>Número:</strong> @Model.Numero</p>
+        <dl class="row">
 
-<a asp-action="Index">Voltar</a>
+            <!-- TIPO -->
+            <dt class="col-sm-3">Tipo de Cliente</dt>
+            <dd class="col-sm-9">
+                @(Model.TipoCliente == TipoClienteEnum.PessoaFisica ? "Pessoa Física" : "Pessoa Jurídica")
+            </dd>
+
+            <dt class="col-sm-3">Nome</dt>
+            <dd class="col-sm-9">@Model.Nome</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Telefone</dt>
+            <dd class="col-sm-9">@Model.Telefone</dd>
+
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9">@Model.Estado</dd>
+
+            <dt class="col-sm-3">Cidade</dt>
+            <dd class="col-sm-9">@Model.Cidade</dd>
+
+            <dt class="col-sm-3">Bairro</dt>
+            <dd class="col-sm-9">@Model.Bairro</dd>
+
+            <dt class="col-sm-3">Rua</dt>
+            <dd class="col-sm-9">@Model.Rua</dd>
+
+            <dt class="col-sm-3">Numero</dt>
+            <dd class="col-sm-9">@Model.Numero</dd>
+
+            <!-- CAMPOS PF -->
+            @if (Model.TipoCliente == TipoClienteEnum.PessoaFisica)
+            {
+                <dt class="col-sm-3">CPF</dt>
+                <dd class="col-sm-9">@Model.CPF</dd>
+
+                <dt class="col-sm-3">RG</dt>
+                <dd class="col-sm-9">@Model.RG</dd>
+
+                <dt class="col-sm-3">CNH</dt>
+                <dd class="col-sm-9">@Model.CNH</dd>
+            }
+
+            <!-- CAMPOS PJ -->
+            @if (Model.TipoCliente == TipoClienteEnum.PessoaJuridica)
+            {
+                <dt class="col-sm-3">CNPJ</dt>
+                <dd class="col-sm-9">@Model.CNPJ</dd>
+            }
+
+            <!-- EMPRESA VINCULADA (SOMENTE PF) -->
+            @if (Model.TipoCliente == TipoClienteEnum.PessoaFisica)
+            {
+                <dt class="col-sm-3">Empresa Vinculada</dt>
+                <dd class="col-sm-9">
+                    @if (Model.PJ != null)
+                    {
+                        @Model.PJ
+                    }
+                    else
+                    {
+                        <span class="text-muted">Nenhuma</span>
+                    }
+                </dd>
+            }
+
+        </dl>
+
+        <a asp-action="Editar" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a>
+        <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+
+    </div>
+</div>
