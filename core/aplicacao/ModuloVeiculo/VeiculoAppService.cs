@@ -209,12 +209,11 @@ public class CadastrarVeiculoValidator : AbstractValidator<Veiculo>
            .WithMessage("O campo {PropertyName} não pode ser vazio.");
 
         RuleFor(v => v.Kilometragem)
-           .NotEmpty()
+           .NotNull()
            .WithMessage("O campo {PropertyName} não pode ser vazio.");
 
         RuleFor(v => v.TipoCambio)
-           .IsInEnum()
-           .NotEmpty()
+           .IsInEnum<Veiculo, TipoCambioEnum>()
            .WithMessage("O campo {PropertyName} não pode ser vazio.");
 
         RuleFor(v => v.Ano)
@@ -223,7 +222,6 @@ public class CadastrarVeiculoValidator : AbstractValidator<Veiculo>
 
         RuleFor(v => v.Placa)
            .NotEmpty()
-           .Matches("^[A-Z]{3}[0-9][A-Z][0-9]{2}$\r\n")
            .WithMessage("O campo {PropertyName} não pode ser vazio.");
     }
 }

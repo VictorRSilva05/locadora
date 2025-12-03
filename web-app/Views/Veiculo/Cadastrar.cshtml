@@ -4,43 +4,90 @@
     ViewBag.Titulo = "Cadastrar Veículo";
 }
 
-<a asp-controller="Veiculo" asp-action="Index">Voltar</a>
-<form asp-controller="Veiculo" asp-action="Cadastrar" method="post" enctype="multipart/form-data">
-    <div>
-        <label asp-for="FotoUpload"></label>
-        <input asp-for="FotoUpload" type="file" accept="image/*" />
-        <span asp-validation-for="FotoUpload"></span>
+<div class="container mt-4">
 
-        <select asp-for="GrupoVeiculo" asp-items="Model.GrupoVeiculosDisponiveis" class="form-control">
-            <option value="">Selecione...</option>
-        </select>
-        <span asp-validation-for="GrupoVeiculo"></span>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Cadastrar Veículo</h2>
 
-        <label asp-for="Marca"></label>
-        <input asp-for="Marca" />
-        <span asp-validation-for="Marca"></span>
-
-        <label asp-for="Modelo"></label>
-        <input asp-for="Modelo" />
-        <span asp-validation-for="Modelo"></span>
-         <br />
-        <label asp-for="Cor"></label>
-        <input asp-for="Cor" />
-        <span asp-validation-for="Cor"></span>
-
-        <select asp-for="Combustivel" asp-items="Model.CombustiveisDisponiveis" class="form-control">
-            <option value="">Selecione...</option>
-        </select>
-        <span asp-validation-for="Combustivel"></span>
-
-        <label asp-for="CapacidadeCombustivel"></label>
-        <input asp-for="CapacidadeCombustivel" type="number" />
-        <span asp-validation-for="CapacidadeCombustivel"></span>
-
-        <label asp-for="Ano"></label>
-        <input asp-for="Ano" type="number" />
-        <span asp-validation-for="Ano"></span>
-
+        <a asp-controller="Veiculo" asp-action="Index" class="btn btn-outline-secondary">
+            Voltar
+        </a>
     </div>
-    <button type="submit">Cadastrar</button>
-</form>
+
+    <div class="card shadow-sm rounded-3">
+        <div class="card-body">
+
+            <form asp-controller="Veiculo" asp-action="Cadastrar" method="post" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label asp-for="FotoUpload" class="form-label"></label>
+                    <input asp-for="FotoUpload" type="file" accept="image/*" class="form-control" />
+                    <span asp-validation-for="FotoUpload"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GrupoVeiculo" class="form-label"></label>
+                    <select asp-for="GrupoVeiculo" asp-items="Model.GrupoVeiculosDisponiveis" class="form-control">
+                        <option value="">Selecione...</option>
+                    </select>
+                    <span asp-validation-for="GrupoVeiculo"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Marca" class="form-label"></label>
+                    <input asp-for="Marca" class="form-control" />
+                    <span asp-validation-for="Marca"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Modelo" class="form-label"></label>
+                    <input asp-for="Modelo" class="form-control" />
+                    <span asp-validation-for="Modelo"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Cor" class="form-label"></label>
+                    <input asp-for="Cor" class="form-control" />
+                    <span asp-validation-for="Cor"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Combustivel" class="form-label"></label>
+                    <select asp-for="Combustivel" asp-items="Model.CombustiveisDisponiveis" class="form-control">
+                        <option value="">Selecione...</option>
+                    </select>
+                    <span asp-validation-for="Combustivel"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="TipoCambio" class="form-label"></label>
+                    <select asp-for="TipoCambio" asp-items="Model.TiposCambiosDisponiveis" class="form-control">
+                        <option value="">Selecione...</option>
+                    </select>
+                    <span asp-validation-for="TipoCambio"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CapacidadeCombustivel" class="form-label"></label>
+                    <input asp-for="CapacidadeCombustivel" type="number" class="form-control" />
+                    <span asp-validation-for="CapacidadeCombustivel"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Ano" class="form-label"></label>
+                    <input asp-for="Ano" type="number" class="form-control" />
+                    <span asp-validation-for="Ano"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Kilometragem" class="form-label"></label>
+                    <input asp-for="Kilometragem" type="number" class="form-control" />
+                    <span asp-validation-for="Kilometragem"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Placa" class="form-label"></label>
+                    <input asp-for="Placa" class="form-control" />
+                    <span asp-validation-for="Placa"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    Cadastrar
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>

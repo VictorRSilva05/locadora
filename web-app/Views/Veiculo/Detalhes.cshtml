@@ -1,31 +1,71 @@
 ﻿@model DetalhesVeiculoViewModel;
 
 @{
-        ViewBag.Titulo = "Detalhes do Veículo";
+    ViewBag.Titulo = "Detalhes do Veículo";
 
 }
 
-<div>
-    @if (Model.FotoBase64 != null)
-    {
-        <img src="data:image/png;base64,@Model.FotoBase64"
-             style="max-width:200px;" />
-    }
-    else
-    {
-        <p>Sem imagem</p>
-    }
+<div class="card">
+    <div class="card-header">
+        <h2>@ViewBag.Titulo</h2>
+    </div>
 
-    <label asp-for="Marca"></label>
-    <input asp-for="Marca" readonly disabled />
-    <label asp-for="Modelo"></label>
-    <input asp-for="Modelo" readonly disabled />
-    <label asp-for="Cor"></label>
-    <input asp-for="Cor" readonly disabled />
-    <label asp-for="Combustivel"></label>
-    <input asp-for="Combustivel" readonly disabled />
-    <label asp-for="CapacidadeCombustivel"></label>
-    <input asp-for="CapacidadeCombustivel" readonly disabled />
-    <label asp-for="Ano"></label>
-    <input asp-for="Ano" readonly disabled />
+    <div class="card-body">
+        @if (Model.FotoBase64 != null)
+        {
+            <img src="data:image/png;base64,@Model.FotoBase64"
+                 style="max-width:200px;" />
+        }
+        else
+        {
+            <p>Sem imagem</p>
+        }
+
+        <div class="form-group">
+            <label asp-for="Marca"></label>
+            <input asp-for="Marca" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Modelo"></label>
+            <input asp-for="Modelo" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Cor"></label>
+            <input asp-for="Cor" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Combustivel"></label>
+            <input asp-for="Combustivel" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CapacidadeCombustivel"></label>
+            <input asp-for="CapacidadeCombustivel" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TipoCambio"></label>
+            <input asp-for="TipoCambio" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Ano"></label>
+            <input asp-for="Ano" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Kilometragem"></label>
+            <input asp-for="Kilometragem" readonly disabled class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Placa"></label>
+            <input asp-for="Placa" readonly disabled class="form-control" />
+        </div>
+
+        <a asp-controller="Veiculo" asp-action="Index" class="btn btn-secondary mt-3">Voltar</a>
+    </div>
 </div>

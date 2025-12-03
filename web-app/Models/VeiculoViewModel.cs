@@ -47,8 +47,8 @@ public abstract class FormularioVeiculoViewModel
 
     public void CarregarTiposCambios()
     {
-        TiposCambiosDisponiveis = Enum.GetValues(typeof(TipoClienteEnum))
-            .Cast<TipoClienteEnum>()
+        TiposCambiosDisponiveis = Enum.GetValues(typeof(TipoCambioEnum))
+            .Cast<TipoCambioEnum>()
             .Select(tipo => new SelectListItem
             {
                 Value = ((int)tipo).ToString(),
@@ -82,8 +82,8 @@ public abstract class FormularioVeiculoViewModel
             fotoBytes,
             grupoVeiculosSelecionado,
             viewModel.Marca,
-            viewModel.Modelo,
             viewModel.Cor,
+            viewModel.Modelo,
             combustivelSelecionado,
             viewModel.CapacidadeCombustivel,
             viewModel.Ano,
@@ -102,7 +102,7 @@ public class CadastrarVeiculoViewModel : FormularioVeiculoViewModel
         CarregarTiposCambios();
     }
 
-    public CadastrarVeiculoViewModel(List<GrupoVeiculo> grupoVeiculos, List<Combustivel> combustiveis)
+    public CadastrarVeiculoViewModel(List<GrupoVeiculo> grupoVeiculos, List<Combustivel> combustiveis) : this()
     {
         GrupoVeiculosDisponiveis = grupoVeiculos
             .Select(gv => new SelectListItem(gv.Nome, gv.Id.ToString()))
@@ -129,13 +129,16 @@ public class EditarVeiculoViewModel : FormularioVeiculoViewModel
     public EditarVeiculoViewModel(
         Veiculo veiculo,
         List<GrupoVeiculo> grupos,
-        List<Combustivel> combustiveis)
+        List<Combustivel> combustiveis) : this()
     {
         Id = veiculo.Id;
         Marca = veiculo.Marca;
         Modelo = veiculo.Modelo;
         Cor = veiculo.Cor;
         Ano = veiculo.Ano;
+        Placa = veiculo.Placa;
+        TipoCambio = veiculo.TipoCambio;
+        Kilometragem = veiculo.Kilometragem;
         GrupoVeiculo = veiculo.GrupoVeiculo.Id;
         Combustivel = veiculo.Combustivel.Id;
         CapacidadeCombustivel = veiculo.CapacidadeCombustivel;
@@ -193,7 +196,10 @@ public class DetalhesVeiculoViewModel
     public string Cor { get; set; }
     public string Combustivel { get; set; }
     public int CapacidadeCombustivel { get; set; }
+    public string TipoCambio { get; set; }
     public int Ano { get; set; }
+    public string Kilometragem { get; set; }
+    public string Placa { get; set; }
 
     public static DetalhesVeiculoViewModel ParaDetalhesVm(Veiculo veiculo)
     {
@@ -211,7 +217,10 @@ public class DetalhesVeiculoViewModel
             Cor = veiculo.Cor,
             Combustivel = veiculo.Combustivel.Nome,
             CapacidadeCombustivel = veiculo.CapacidadeCombustivel,
-            Ano = veiculo.Ano
+            TipoCambio = veiculo.TipoCambio.ToString(),
+            Ano = veiculo.Ano,
+            Kilometragem = veiculo.Kilometragem.ToString(),
+            Placa  = veiculo.Placa,
         };
     }
 }
