@@ -4,19 +4,49 @@
     ViewBag.Titulo = "Edição de Funcionário";
 }
 
-<a asp-controller="Funcionario" asp-action="Index">Voltar</a>
-<form asp-controller="Funcionario" asp-action="Editar" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <label asp-for="Nome"></label>
-        <input asp-for="Nome" />
-        <span asp-validation-for="Nome"></span>
-        <label asp-for="DataAdmissao"></label>
-        <input asp-for="DataAdmissao" type="date" />
-        <span asp-validation-for="DataAdmissao"></span>
-        <label asp-for="Salario"></label>
-        <input asp-for="Salario" />
-        <span asp-validation-for="Salario"></span>
+<a asp-controller="Funcionario" asp-action="Index" class="btn btn-secondary mb-3">
+    <i class="bi bi-arrow-left-circle"></i> Voltar
+</a>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Edição de Funcionário</h5>
     </div>
-    <button type="submit">Salvar</button>
-</form>
+
+    <div class="card-body">
+        <form asp-controller="Funcionario" asp-action="Editar" method="post">
+            
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Nome" class="form-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DataAdmissao" class="form-label"></label>
+                <input asp-for="DataAdmissao" type="date" class="form-control" />
+                <span asp-validation-for="DataAdmissao"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Salario" class="form-label"></label>
+                <input asp-for="Salario" class="form-control" />
+                <span asp-validation-for="Salario"></span>
+            </div>
+            <button type="submit" class="btn btn-success mt-4">
+                <i class="bi bi-check-circle"></i> Salvar
+            </button>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

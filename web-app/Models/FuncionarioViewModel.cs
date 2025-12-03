@@ -41,11 +41,13 @@ public class EditarFuncionarioViewModel : FormularioFuncionarioViewModel
     public EditarFuncionarioViewModel(
         Guid id,
         string nome,
+        string email,
         DateTime dataAdmissao,
         decimal salario) : this()
     {
         Id = id;
         Nome = nome;
+        Email = email;
         DataAdmissao = dataAdmissao;
         Salario = salario;
     }
@@ -78,22 +80,25 @@ public class DetalhesFuncionarioViewModel
 {
     public Guid Id { get; set; }
     public string Nome { get; set; }
+    public string Email { get; set; }
     public DateTime DataAdmissao { get; set; }
     public decimal Salario { get; set; }
 
     public DetalhesFuncionarioViewModel(
         Guid id,
         string nome,
+        string email,
         DateTime dataAdmissao,
         decimal salario)
     {
         Id = id;
         Nome = nome;
+        Email = email;
         DataAdmissao = dataAdmissao;
         Salario = salario;
     }
     public static DetalhesFuncionarioViewModel ParaDetalhesVm(Funcionario funcionario)
     {
-        return new DetalhesFuncionarioViewModel(funcionario.Id, funcionario.Nome, funcionario.DataAdmissao, funcionario.Salario);
+        return new DetalhesFuncionarioViewModel(funcionario.Id, funcionario.Nome, funcionario.Email, funcionario.DataAdmissao, funcionario.Salario);
     }
 }

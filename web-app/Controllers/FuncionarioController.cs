@@ -95,6 +95,7 @@ public class FuncionarioController : Controller
         var editarVm = new EditarFuncionarioViewModel(
             funcionario.Id,
             funcionario.Nome,
+            funcionario.Email,
             funcionario.DataAdmissao,
             funcionario.Salario
         );

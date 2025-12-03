@@ -29,17 +29,40 @@
                 <ul class="navbar-nav ms-auto">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/Clientes"><i class="bi bi-people"></i> Clientes</a>
+                        <a asp-controller="Cliente" asp-action="Index" class="nav-link"><i class="bi bi-person-lines-fill"></i> Clientes</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/Veiculos"><i class="bi bi-car-front"></i> Veículos</a>
+                        <a asp-controller="Veiculo" asp-action="Index" class="nav-link"><i class="bi bi-car-front-fill"></i> Veículos</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/Alugueis"><i class="bi bi-receipt-cutoff"></i> Aluguéis</a>
+                        <a asp-controller="Aluguel" asp-action="Index" class="nav-link"><i class="bi bi-calendar-check-fill"></i> Aluguéis</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a asp-controller="GrupoVeiculo" asp-action="Index" class="nav-link"><i class="bi bi-grid-3x3-gap-fill"></i> G.Veículos</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Combustivel" asp-action="Index" class="nav-link"><i class="bi bi-fuel-pump-fill"></i> Combustíveis</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Funcionario" asp-action="Index" class="nav-link"><i class="bi bi-people-fill"></i> Funcionários</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Condutor" asp-action="Index" class="nav-link"><i class="bi bi-person-vcard-fill"></i> Condutores</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Taxa" asp-action="Index" class="nav-link"><i class="bi bi-cash-coin"></i> Taxas</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a asp-controller="Cobranca" asp-action="Index" class="nav-link"><i class="bi bi-receipt-cutoff"></i> Cobrança</a>
+                    </li>
                 </ul>
             </div>
         </div>
