@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Infraestrutura.Migrations
 {
     /// <inheritdoc />
-    public partial class kskdsk : Migration
+    public partial class jasjda : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -335,6 +335,7 @@ namespace Locadora.Infraestrutura.Migrations
                     Placa = table.Column<string>(type: "text", nullable: false),
                     TipoCambio = table.Column<int>(type: "integer", nullable: false),
                     Kilometragem = table.Column<float>(type: "real", nullable: false),
+                    EstaOcupado = table.Column<bool>(type: "boolean", nullable: false),
                     EmpresaId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
@@ -368,17 +369,19 @@ namespace Locadora.Infraestrutura.Migrations
                     CondutorId = table.Column<Guid>(type: "uuid", nullable: true),
                     ClienteId = table.Column<Guid>(type: "uuid", nullable: true),
                     CobrancaId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Caucao = table.Column<decimal>(type: "numeric", nullable: false),
+                    FuncionarioId = table.Column<Guid>(type: "uuid", nullable: false),
                     VeiculoId = table.Column<Guid>(type: "uuid", nullable: false),
                     DataSaida = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DataRetornoPrevista = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DataDevolucao = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     KmInicial = table.Column<float>(type: "real", nullable: false),
                     KmDevolucao = table.Column<float>(type: "real", nullable: true),
-                    TanqueCheio = table.Column<bool>(type: "boolean", nullable: true),
+                    TanqueCheio = table.Column<bool>(type: "boolean", nullable: false),
+                    LitrosNaChegada = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<bool>(type: "boolean", nullable: false),
                     SeguroAcionado = table.Column<bool>(type: "boolean", nullable: false),
                     Total = table.Column<decimal>(type: "numeric", nullable: false),
+                    Caucao = table.Column<decimal>(type: "numeric", nullable: false),
                     EmpresaId = table.Column<Guid>(type: "uuid", nullable: false),
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
@@ -406,6 +409,12 @@ namespace Locadora.Infraestrutura.Migrations
                         column: x => x.CondutorId,
                         principalTable: "condutores",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_aluguel_funcionarios_FuncionarioId",
+                        column: x => x.FuncionarioId,
+                        principalTable: "funcionarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_aluguel_veiculos_VeiculoId",
                         column: x => x.VeiculoId,
@@ -455,6 +464,11 @@ namespace Locadora.Infraestrutura.Migrations
                 name: "IX_aluguel_CondutorId",
                 table: "aluguel",
                 column: "CondutorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_aluguel_FuncionarioId",
+                table: "aluguel",
+                column: "FuncionarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_aluguel_TenantId",
@@ -599,9 +613,6 @@ namespace Locadora.Infraestrutura.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "funcionarios");
-
-            migrationBuilder.DropTable(
                 name: "taxas");
 
             migrationBuilder.DropTable(
@@ -618,6 +629,9 @@ namespace Locadora.Infraestrutura.Migrations
 
             migrationBuilder.DropTable(
                 name: "condutores");
+
+            migrationBuilder.DropTable(
+                name: "funcionarios");
 
             migrationBuilder.DropTable(
                 name: "veiculos");

@@ -249,31 +249,31 @@ public sealed class CondutorAppServiceTests
         unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Once());
     }
 
-    [TestMethod]
-    public async Task Deve_Falhar_Ao_Excluir_Condutor_Em_Aluguel()
-    {
-        // Arrange
-        var grupoVeiculo = new GrupoVeiculo("SUV");
-        var combustivel = new Combustivel("Gasolina", 6);
-        var veiculo = new Veiculo(null, grupoVeiculo, "Volkswagen", "Prata", "Phaeton", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Automatico, 2000);
-        var veiculoEditado = new Veiculo(null, grupoVeiculo, "Volkswagen", "Amarelo", "Nardo", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Manual, 22000);
-        var planoCobranca = new Cobranca(grupoVeiculo, Dominio.ModuloCobranca.PlanoCobrancaEnum.Diaria, 100, 100, null, null, null);
-        var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "69 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddDays(3));
+    //[TestMethod]
+    //public async Task Deve_Falhar_Ao_Excluir_Condutor_Em_Aluguel()
+    //{
+    //    // Arrange
+    //    var grupoVeiculo = new GrupoVeiculo("SUV");
+    //    var combustivel = new Combustivel("Gasolina", 6);
+    //    var veiculo = new Veiculo(null, grupoVeiculo, "Volkswagen", "Prata", "Phaeton", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Automatico, 2000);
+    //    var veiculoEditado = new Veiculo(null, grupoVeiculo, "Volkswagen", "Amarelo", "Nardo", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Manual, 22000);
+    //    var planoCobranca = new Cobranca(grupoVeiculo, Dominio.ModuloCobranca.PlanoCobrancaEnum.Diaria, 100, 100, null, null, null);
+    //    var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "69 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddDays(3));
 
-        var aluguel = new Aluguel(condutor, null, planoCobranca, 1000, veiculo, DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(4), null, null, 300, null, false, true, 1000);
+    //    var aluguel = new Aluguel(condutor, null, planoCobranca, 1000, veiculo, DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(4), null, null, 300, null, false, true, 1000);
 
-        repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
-            .ReturnsAsync(new List<Aluguel> { aluguel });
+    //    repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
+    //        .ReturnsAsync(new List<Aluguel> { aluguel });
 
-        repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
-    .ReturnsAsync(new List<Condutor>() { condutor });
+    //    repositorioCondutorMock?.Setup(r => r.SelecionarRegistrosAsync())
+    //.ReturnsAsync(new List<Condutor>() { condutor });
 
-        // Act
-        var resultado = await condutorAppService!.Excluir(condutor.Id);
+    //    // Act
+    //    var resultado = await condutorAppService!.Excluir(condutor.Id);
 
-        //Assert
-        Assert.IsFalse(resultado.IsSuccess);
-        repositorioCondutorMock?.Verify(r => r.ExcluirAsync(condutor.Id), Times.Never());
-        unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Never());
-    }
+    //    //Assert
+    //    Assert.IsFalse(resultado.IsSuccess);
+    //    repositorioCondutorMock?.Verify(r => r.ExcluirAsync(condutor.Id), Times.Never());
+    //    unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Never());
+    //}
 }

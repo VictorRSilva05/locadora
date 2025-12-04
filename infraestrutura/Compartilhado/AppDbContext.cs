@@ -25,6 +25,7 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IUnitOfWork
     public DbSet<Taxa> taxas { get; set; }
     public DbSet<Cobranca> cobrancas { get; set; }
     public DbSet<Aluguel> aluguel { get; set; }
+    public DbSet<Devolucao> devolucoes { get; set; }
 
     private readonly ITenantProvider? tenantProvider;
 
@@ -57,6 +58,8 @@ public class AppDbContext : IdentityDbContext<User, Role, Guid>, IUnitOfWork
             modelBuilder.Entity<Cobranca>()
                 .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
             modelBuilder.Entity<Aluguel>()
+                .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
+            modelBuilder.Entity<Devolucao>()
                 .HasQueryFilter(x => x.EmpresaId.Equals(tenantProvider.GetTenantId()));
         }
 

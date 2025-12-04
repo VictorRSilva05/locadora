@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Locadora.Infraestrutura.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251202211336_kskdsk")]
-    partial class kskdsk
+    [Migration("20251204165224_jasjda")]
+    partial class jasjda
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -150,11 +150,17 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Property<Guid>("EmpresaId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("FuncionarioId")
+                        .HasColumnType("uuid");
+
                     b.Property<float?>("KmDevolucao")
                         .HasColumnType("real");
 
                     b.Property<float>("KmInicial")
                         .HasColumnType("real");
+
+                    b.Property<int>("LitrosNaChegada")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("SeguroAcionado")
                         .HasColumnType("boolean");
@@ -162,7 +168,7 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("boolean");
 
-                    b.Property<bool?>("TanqueCheio")
+                    b.Property<bool>("TanqueCheio")
                         .HasColumnType("boolean");
 
                     b.Property<Guid?>("TenantId")
@@ -181,6 +187,8 @@ namespace Locadora.Infraestrutura.Migrations
                     b.HasIndex("CobrancaId");
 
                     b.HasIndex("CondutorId");
+
+                    b.HasIndex("FuncionarioId");
 
                     b.HasIndex("TenantId");
 
@@ -493,6 +501,9 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Property<Guid>("EmpresaId")
                         .HasColumnType("uuid");
 
+                    b.Property<bool>("EstaOcupado")
+                        .HasColumnType("boolean");
+
                     b.Property<byte[]>("Foto")
                         .HasColumnType("bytea");
 
@@ -650,6 +661,12 @@ namespace Locadora.Infraestrutura.Migrations
                         .WithMany()
                         .HasForeignKey("CondutorId");
 
+                    b.HasOne("Locadora.Dominio.ModuloFuncionario.Funcionario", "Funcionario")
+                        .WithMany()
+                        .HasForeignKey("FuncionarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Locadora.Dominio.Autenticacao.User", "Tenant")
                         .WithMany()
                         .HasForeignKey("TenantId");
@@ -665,6 +682,8 @@ namespace Locadora.Infraestrutura.Migrations
                     b.Navigation("Cobranca");
 
                     b.Navigation("Condutor");
+
+                    b.Navigation("Funcionario");
 
                     b.Navigation("Tenant");
 

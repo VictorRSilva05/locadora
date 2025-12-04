@@ -57,21 +57,6 @@ public class FormularioAluguelViewModel
             .ToList();
 
         return new Aluguel(
-            condutorSelecionado,
-            clienteSelecionado,
-            cobrancaSelecionada,
-            viewModel.Caucao,
-            veiculoSelecionado,
-            viewModel.DataSaida,
-            viewModel.DataRetornoPrevista,
-            viewModel.DataDevolucao,
-            taxasSelecionadas,
-            viewModel.KmInicial,
-            viewModel.KmDevolucao,
-            viewModel.TanqueCheio,
-            viewModel.Status,
-            viewModel.SeguroAcionado,
-            viewModel.Total
             );
     }
 }
@@ -146,14 +131,9 @@ public class EditarAluguelViewModel : FormularioAluguelViewModel
         Veiculo = aluguel.Veiculo?.Id ?? Guid.Empty;
         DataSaida = aluguel.DataSaida;
         DataRetornoPrevista = aluguel.DataRetornoPrevista;
-        DataDevolucao = aluguel.DataDevolucao ?? default;
         Taxas = aluguel.Taxas?.Select(t => t.Id).ToList() ?? new List<Guid>();
         KmInicial = aluguel.KmInicial;
-        KmDevolucao = aluguel.KmDevolucao ?? default;
-        TanqueCheio = aluguel.TanqueCheio ?? default;
         Status = aluguel.Status;
-        SeguroAcionado = aluguel.SeguroAcionado;
-        Total = aluguel.Total;
 
         CondutoresDisponiveis = condutores
            .Select(c => new SelectListItem
@@ -272,14 +252,9 @@ public class DetalhesAluguelViewModel
             Veiculo = aluguel.Veiculo,
             DataSaida = aluguel.DataSaida,
             DataRetornoPrevista = aluguel.DataRetornoPrevista,
-            DataDevolucao = aluguel.DataDevolucao,
             Taxas = aluguel.Taxas,
             KmInicial = aluguel.KmInicial,
-            KmDevolucao = aluguel.KmDevolucao,
-            TanqueCheio = aluguel.TanqueCheio,
-            Status = aluguel.Status,
-            Total = aluguel.Total,
-
+            Status = aluguel.Status
         };
     }
 }

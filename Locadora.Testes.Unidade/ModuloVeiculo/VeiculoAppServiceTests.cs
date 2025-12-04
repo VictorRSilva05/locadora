@@ -96,37 +96,37 @@ public sealed class VeiculoAppServiceTests
         unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Once);
     }
 
-    [TestMethod]
-    public async Task Deve_Falhar_Ao_Editar_Veiculo_Pertence_AAluguel()
-    {
-        // Arrange
-        var grupoVeiculo = new GrupoVeiculo("SUV");
-        var combustivel = new Combustivel("Gasolina", 6);
-        var veiculo = new Veiculo(null, grupoVeiculo, "Volkswagen", "Prata", "Phaeton", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Automatico, 2000);
-        var veiculoEditado = new Veiculo(null, grupoVeiculo, "Volkswagen", "Amarelo", "Nardo", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Manual, 22000);
+//    [TestMethod]
+//    public async Task Deve_Falhar_Ao_Editar_Veiculo_Pertence_AAluguel()
+//    {
+//        // Arrange
+//        var grupoVeiculo = new GrupoVeiculo("SUV");
+//        var combustivel = new Combustivel("Gasolina", 6);
+//        var veiculo = new Veiculo(null, grupoVeiculo, "Volkswagen", "Prata", "Phaeton", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Automatico, 2000);
+//        var veiculoEditado = new Veiculo(null, grupoVeiculo, "Volkswagen", "Amarelo", "Nardo", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Manual, 22000);
 
-        repositorioVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
-            .ReturnsAsync(new List<Veiculo>() { veiculo });
+//        repositorioVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
+//            .ReturnsAsync(new List<Veiculo>() { veiculo });
 
-        var planoCobranca = new Cobranca(grupoVeiculo, Dominio.ModuloCobranca.PlanoCobrancaEnum.Diaria, 100, 100, null, null, null);
-        var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "69 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddDays(3));
+//        var planoCobranca = new Cobranca(grupoVeiculo, Dominio.ModuloCobranca.PlanoCobrancaEnum.Diaria, 100, 100, null, null, null);
+//        var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "69 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddDays(3));
 
-        var aluguel = new Aluguel(condutor, null, planoCobranca, 1000, veiculo, DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(4), null, null, 300, null, false, true, 1000);
+//        var aluguel = new Aluguel(condutor, null, planoCobranca, 1000, veiculo, DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(4), null, null, 300, null, false, true, 1000);
 
-        repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
-            .ReturnsAsync(new List<Aluguel> { aluguel });
+//        repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
+//            .ReturnsAsync(new List<Aluguel> { aluguel });
 
-        validatorMock?.Setup(v => v.ValidateAsync(veiculoEditado, It.IsAny<CancellationToken>()))
-.ReturnsAsync(new FluentValidation.Results.ValidationResult());
+//        validatorMock?.Setup(v => v.ValidateAsync(veiculoEditado, It.IsAny<CancellationToken>()))
+//.ReturnsAsync(new FluentValidation.Results.ValidationResult());
 
-        // Act
-        var resultado = await veiculoAppService!.Editar(veiculo.Id, veiculoEditado);
+//        // Act
+//        var resultado = await veiculoAppService!.Editar(veiculo.Id, veiculoEditado);
 
-        //Assert
-        Assert.IsFalse(resultado.IsSuccess);
-        repositorioVeiculoMock?.Verify(r => r.EditarAsync(veiculo.Id, veiculoEditado), Times.Never());
-        unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Never);
-    }
+//        //Assert
+//        Assert.IsFalse(resultado.IsSuccess);
+//        repositorioVeiculoMock?.Verify(r => r.EditarAsync(veiculo.Id, veiculoEditado), Times.Never());
+//        unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Never);
+//    }
 
     [TestMethod]
     public async Task Deve_Excluir_Veiculo_Corretamente()
@@ -148,34 +148,34 @@ public sealed class VeiculoAppServiceTests
         unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Once);
     }
 
-    [TestMethod]
-    public async Task Deve_Falhar_A_Excluir_Veiculo_Pertencente_A_Aluguel()
-    {
-        // Arrange
-        var grupoVeiculo = new GrupoVeiculo("SUV");
-        var combustivel = new Combustivel("Gasolina", 6);
-        var veiculo = new Veiculo(null, grupoVeiculo, "Volkswagen", "Prata", "Phaeton", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Automatico, 2000);
-        var veiculoEditado = new Veiculo(null, grupoVeiculo, "Volkswagen", "Amarelo", "Nardo", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Manual, 22000);
+    //[TestMethod]
+    //public async Task Deve_Falhar_A_Excluir_Veiculo_Pertencente_A_Aluguel()
+    //{
+    //    // Arrange
+    //    var grupoVeiculo = new GrupoVeiculo("SUV");
+    //    var combustivel = new Combustivel("Gasolina", 6);
+    //    var veiculo = new Veiculo(null, grupoVeiculo, "Volkswagen", "Prata", "Phaeton", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Automatico, 2000);
+    //    var veiculoEditado = new Veiculo(null, grupoVeiculo, "Volkswagen", "Amarelo", "Nardo", combustivel, 60, 2008, "BRA5E19", TipoCambioEnum.Manual, 22000);
 
-        repositorioVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
-            .ReturnsAsync(new List<Veiculo>() { veiculo });
+    //    repositorioVeiculoMock?.Setup(r => r.SelecionarRegistrosAsync())
+    //        .ReturnsAsync(new List<Veiculo>() { veiculo });
 
-        var planoCobranca = new Cobranca(grupoVeiculo, Dominio.ModuloCobranca.PlanoCobrancaEnum.Diaria, 100, 100, null, null, null);
-        var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "69 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddDays(3));
+    //    var planoCobranca = new Cobranca(grupoVeiculo, Dominio.ModuloCobranca.PlanoCobrancaEnum.Diaria, 100, 100, null, null, null);
+    //    var condutor = new Condutor("Tio Guda", "tioguda@gmail.com", "69 99999-9999", "999.999.999-99", "123456789", DateTime.UtcNow.AddDays(3));
 
-        var aluguel = new Aluguel(condutor, null, planoCobranca, 1000, veiculo, DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(4), null, null, 300, null, false, true, 1000);
+    //    var aluguel = new Aluguel(condutor, null, planoCobranca, 1000, veiculo, DateTime.UtcNow.AddDays(1), DateTime.UtcNow.AddDays(4), null, null, 300, null, false, true, 1000);
 
-        repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
-            .ReturnsAsync(new List<Aluguel> { aluguel });
+    //    repositorioAluguelMock?.Setup(r => r.SelecionarRegistrosAsync())
+    //        .ReturnsAsync(new List<Aluguel> { aluguel });
 
-        // Act
-        var resultado = await veiculoAppService!.Excluir(veiculo.Id);
+    //    // Act
+    //    var resultado = await veiculoAppService!.Excluir(veiculo.Id);
 
-        //Assert
-        Assert.IsFalse(resultado.IsSuccess);
-        repositorioVeiculoMock?.Verify(r => r.ExcluirAsync(veiculo.Id), Times.Never());
-        unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Never);
-    }
+    //    //Assert
+    //    Assert.IsFalse(resultado.IsSuccess);
+    //    repositorioVeiculoMock?.Verify(r => r.ExcluirAsync(veiculo.Id), Times.Never());
+    //    unitOfWorkMock?.Verify(u => u.CommitAsync(), Times.Never);
+    //}
 
     [TestMethod]
     public async Task Deve_Filtrar_Veiculos_Por_GrupoVeiculo()

@@ -15,6 +15,7 @@ public class Veiculo : EntidadeBase<Veiculo>
     public string Placa { get; set; }
     public TipoCambioEnum TipoCambio { get; set; }
     public float Kilometragem { get; set; }
+    public bool EstaOcupado { get; set; }
 
     public Veiculo() { }
 

@@ -15,6 +15,8 @@ public class MapeadorAluguelEmOrm : IEntityTypeConfiguration<Aluguel>
 
         builder.HasOne(x => x.Cliente);
 
+        builder.HasOne(x => x.Funcionario);
+
         builder.HasOne(x => x.Cobranca);
 
         builder.Property(x => x.Caucao)
@@ -28,16 +30,10 @@ public class MapeadorAluguelEmOrm : IEntityTypeConfiguration<Aluguel>
         builder.Property(x => x.DataRetornoPrevista)
             .IsRequired();
 
-        builder.Property(x => x.DataDevolucao);
-
         builder.HasMany(x => x.Taxas);
 
         builder.Property(x => x.KmInicial)
             .IsRequired();
-
-        builder.Property(x => x.KmDevolucao);
-
-        builder.Property(x => x.TanqueCheio);
 
         builder.Property(x => x.Status)
             .IsRequired();

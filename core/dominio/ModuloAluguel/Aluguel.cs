@@ -1,88 +1,43 @@
 ﻿using Locadora.Dominio.ModuloCliente;
 using Locadora.Dominio.ModuloCobranca;
 using Locadora.Dominio.ModuloCondutor;
+using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloTaxa;
 using Locadora.Dominio.ModuloVeiculo;
 
 namespace Locadora.Dominio.ModuloAluguel;
 public class Aluguel : EntidadeBase<Aluguel>
 {
-    private Condutor? condutorSelecionado;
-    private Cliente? clienteSelecionado;
-    private Cobranca? cobrancaSelecionada;
-    private Veiculo? veiculoSelecionado;
-    private List<Taxa> taxasSelecionadas;
-
     public Condutor? Condutor { get; set; }
     public Cliente? Cliente { get; set; }
     public Cobranca Cobranca { get; set; }
-    public decimal Caucao { get; set; } = 1000;
+    public Funcionario? Funcionario { get; set; }
+    public decimal Caucao = 1000;
     public Veiculo Veiculo { get; set; }
     public DateTime DataSaida { get; set; }
     public DateTime DataRetornoPrevista { get; set; }
-    public DateTime? DataDevolucao { get; set; }
     public List<Taxa>? Taxas { get; set; }
     public float KmInicial { get; set; }
-    public float? KmDevolucao { get; set; }
-    public bool? TanqueCheio { get; set; }
-    public bool Status {  get; set; }
-    public bool SeguroAcionado { get; set; }
-    public decimal Total { get; set; }
+    public bool Status { get; set; }
 
     public Aluguel()
     {
         Taxas = new List<Taxa>();
     }
 
-    public Aluguel(Condutor? condutor, Cliente? cliente, Cobranca cobranca, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, List<Taxa>? taxas, float kmInicial) : this()
+    public Aluguel(Condutor? condutor, Cliente? cliente, Cobranca cobranca, Funcionario? funcionario, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, List<Taxa>? taxas, float kmInicial)
     {
         Id = Guid.NewGuid();
         Condutor = condutor;
         Cliente = cliente;
         Cobranca = cobranca;
+        Funcionario = funcionario;
         Veiculo = veiculo;
         DataSaida = dataSaida;
         DataRetornoPrevista = dataRetornoPrevista;
         Taxas = taxas;
-        KmInicial = kmInicial;
-    }
-
-    public Aluguel(Condutor? condutor, Cliente? cliente, Cobranca cobranca, decimal caucao, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, DateTime? dataDevolucao, List<Taxa>? taxas, float kmInicial, float? kmDevolucao, bool? tanqueCheio, bool status, decimal total) : this()
-    {
-        Id = Guid.NewGuid();
-        Condutor = condutor;
-        Cliente = cliente;
-        Cobranca = cobranca;
-        Caucao = caucao;
-        Veiculo = veiculo;
-        DataSaida = dataSaida;
-        DataRetornoPrevista = dataRetornoPrevista;
-        DataDevolucao = dataDevolucao;
-        Taxas = taxas;
-        KmInicial = kmInicial;
-        KmDevolucao = kmDevolucao;
-        TanqueCheio = tanqueCheio;
-        Status = status;
-        Total = total;
-    }
-
-    public Aluguel(Condutor? condutor, Cliente? cliente, Cobranca cobranca, decimal caucao, Veiculo veiculo, DateTime dataSaida, DateTime dataRetornoPrevista, DateTime? dataDevolucao, List<Taxa>? taxas, float kmInicial, float? kmDevolucao, bool? tanqueCheio, bool status, bool seguroAcionado, decimal total)
-    {
-        Condutor = condutor;
-        Cliente = cliente;
-        Cobranca = cobranca;
-        Caucao = caucao;
-        Veiculo = veiculo;
-        DataSaida = dataSaida;
-        DataRetornoPrevista = dataRetornoPrevista;
-        DataDevolucao = dataDevolucao;
-        Taxas = taxas;
-        KmInicial = kmInicial;
-        KmDevolucao = kmDevolucao;
-        TanqueCheio = tanqueCheio;
-        Status = status;
-        SeguroAcionado = seguroAcionado;
-        Total = total;
+        KmInicial = veiculo.Kilometragem;
+        Status = true;
     }
 
     public override void AtualizarRegistro(Aluguel registroEditado)
@@ -94,30 +49,8 @@ public class Aluguel : EntidadeBase<Aluguel>
         Veiculo = registroEditado.Veiculo;
         DataSaida = registroEditado.DataSaida;
         DataRetornoPrevista = registroEditado.DataRetornoPrevista;
-        DataDevolucao = registroEditado.DataDevolucao;
         Taxas = registroEditado.Taxas;
         KmInicial = registroEditado.KmInicial;
-        KmDevolucao = registroEditado.KmDevolucao;
-        TanqueCheio = registroEditado.TanqueCheio;
-        Total = registroEditado.Total;
     }
 
-    public int CalcularDiarias()
-    {
-        if (DataDevolucao == null)
-            throw new InvalidOperationException("DataDevolucao must have a value to calculate diarias.");
-
-        TimeSpan duracao = DataSaida - DataDevolucao.Value;
-        int diarias = (int)Math.Ceiling(duracao.TotalDays);
-
-        return diarias;
-    }
-
-    public int CalcularKms()
-    {
-        var distanciaPercorrida = KmDevolucao - KmInicial;
-        Math.Ceiling((decimal)distanciaPercorrida!);
-
-        return (int)distanciaPercorrida;
-    }
 }

@@ -132,11 +132,11 @@ public class AluguelController : Controller
 
         var aluguel = resultadoSelecao.Value;
 
-        aluguel.DataDevolucao = devolverVM.DataDevolucao;
-        aluguel.KmDevolucao = devolverVM.KmDevolucao;
-        aluguel.TanqueCheio = devolverVM.TanqueCheio;
-        aluguel.SeguroAcionado = devolverVM.SeguroAcionado;
-        aluguel.Total = devolverVM.Total;
+        //aluguel.DataDevolucao = devolverVM.DataDevolucao;
+        //aluguel.KmDevolucao = devolverVM.KmDevolucao;
+        //aluguel.TanqueCheio = devolverVM.TanqueCheio;
+        //aluguel.SeguroAcionado = devolverVM.SeguroAcionado;
+        //aluguel.Total = devolverVM.Total;
 
         var resultado = await aluguelAppService.Editar(id, aluguel);
 

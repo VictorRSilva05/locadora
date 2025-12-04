@@ -44,10 +44,6 @@ public class AluguelAppService
                 DateTimeKind.Utc
                 );
 
-            aluguel.DataDevolucao = aluguel.DataDevolucao.HasValue
-                ? DateTime.SpecifyKind(aluguel.DataDevolucao.Value, DateTimeKind.Utc)
-                : null;
-
             await unitOfWork.CommitAsync();
             return Result.Ok();
         }
@@ -79,11 +75,11 @@ public class AluguelAppService
                 return Result.Fail(ResultadosErro.RegistroNaoEncontradoErro(id));
 
             // Aplica as alterações de devolução na entidade
-            aluguel.DataDevolucao = DateTime.SpecifyKind(dataDevolucao, DateTimeKind.Utc);
-            aluguel.KmDevolucao = kmDevolucao;
-            aluguel.TanqueCheio = tanqueCheio;
-            aluguel.SeguroAcionado = seguroAcionado;
-            aluguel.Total = total;
+            //aluguel.DataDevolucao = DateTime.SpecifyKind(dataDevolucao, DateTimeKind.Utc);
+            //aluguel.KmDevolucao = kmDevolucao;
+            //aluguel.TanqueCheio = tanqueCheio;
+            //aluguel.SeguroAcionado = seguroAcionado;
+            //aluguel.Total = total;
 
             // Atualiza o registro
             await repositorioAluguel.EditarAsync(id, aluguel);
@@ -123,10 +119,6 @@ public class AluguelAppService
                 aluguel.DataRetornoPrevista,
                 DateTimeKind.Utc
                 );
-
-            aluguel.DataDevolucao = aluguel.DataDevolucao is DateTime dt
-                 ? DateTime.SpecifyKind(dt, DateTimeKind.Utc)
-                 : null;
 
             await unitOfWork.CommitAsync();
             return Result.Ok();

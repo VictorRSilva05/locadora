@@ -69,7 +69,7 @@ namespace Locadora.WebApp
             builder.Services.AddScoped<IValidator<Cobranca>,  CadastrarCobrancaValidator>();
             builder.Services.AddScoped<AluguelAppService>();
             builder.Services.AddScoped<IRepositorioAluguel, RepositorioAluguelEmOrm>();
-
+            builder.Services.AddScoped<IRepositorioDevolucao, RepositorioDevolucaoEmOrm>();
 
             builder.Services
                  .AddIdentity<User, Role>(options =>
