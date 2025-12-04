@@ -2,12 +2,16 @@
 using Locadora.Aplicacao.ModuloCliente;
 using Locadora.Aplicacao.ModuloCobranca;
 using Locadora.Aplicacao.ModuloCondutor;
+using Locadora.Aplicacao.ModuloFuncionario;
 using Locadora.Aplicacao.ModuloTaxa;
 using Locadora.Aplicacao.ModuloVeiculo;
+using Locadora.Dominio.Autenticacao;
 using Locadora.WebApp.Extensions;
 using Locadora.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Locadora.WebApp.Controllers;
 
@@ -21,6 +25,8 @@ public class AluguelController : Controller
     private readonly CobrancaAppService cobrancaAppService;
     private readonly VeiculoAppService veiculoAppService;
     private readonly TaxaAppService taxaAppService;
+    private readonly UserManager<User> userManager;
+    private readonly FuncionarioAppService funcionarioAppService;
 
     public AluguelController(
         AluguelAppService aluguelAppService,
@@ -29,7 +35,9 @@ public class AluguelController : Controller
         CobrancaAppService cobrancaAppService,
         VeiculoAppService veiculoAppService,
         TaxaAppService taxaAppService
-        )
+,
+        UserManager<User> userManager,
+        FuncionarioAppService funcionarioAppService)
     {
         this.aluguelAppService = aluguelAppService;
         this.condutorAppService = condutorAppService;
@@ -37,6 +45,8 @@ public class AluguelController : Controller
         this.cobrancaAppService = cobrancaAppService;
         this.veiculoAppService = veiculoAppService;
         this.taxaAppService = taxaAppService;
+        this.userManager = userManager;
+        this.funcionarioAppService = funcionarioAppService;
     }
 
     [HttpGet("listar")]
@@ -82,9 +92,15 @@ public class AluguelController : Controller
         var veiculos = await veiculoAppService.SelecionarTodos();
         var cobranca = await cobrancaAppService.SelecionarTodos();
         var taxas = await taxaAppService.SelecionarTodos();
+        var funcionarios = await funcionarioAppService.SelecionarTodos();
+
+        var usuario = await userManager.FindByIdAsync(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        var funcionario = funcionarios.Value.Find(x => x.UserId == usuario.Id);
 
         var entidade = FormularioAluguelViewModel.ParaEntidade(
             cadastrarVM,
+            funcionario,
             condutores.ValueOrDefault,
             clientes.ValueOrDefault,
             veiculos.ValueOrDefault,
@@ -180,9 +196,15 @@ public class AluguelController : Controller
         var veiculos = await veiculoAppService.SelecionarTodos();
         var cobranca = await cobrancaAppService.SelecionarTodos();
         var taxas = await taxaAppService.SelecionarTodos();
+        var funcionarios = await funcionarioAppService.SelecionarTodos();
+
+        var usuario = await userManager.FindByIdAsync(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+        var funcionario = funcionarios.Value.Find(x => x.UserId == usuario.Id);
 
         var entidade = FormularioAluguelViewModel.ParaEntidade(
             editarVM,
+            funcionario,
             condutores.ValueOrDefault,
             clientes.ValueOrDefault,
             veiculos.ValueOrDefault,

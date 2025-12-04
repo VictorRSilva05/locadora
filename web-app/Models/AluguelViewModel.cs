@@ -2,6 +2,7 @@
 using Locadora.Dominio.ModuloCliente;
 using Locadora.Dominio.ModuloCobranca;
 using Locadora.Dominio.ModuloCondutor;
+using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloTaxa;
 using Locadora.Dominio.ModuloVeiculo;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,7 +13,6 @@ namespace Locadora.WebApp.Models;
 public class FormularioAluguelViewModel
 {
     public Guid? Condutor { get; set; }
-    [Required(ErrorMessage = "O campo cliente é obrigatório.")]
     public Guid Cliente { get; set; }
     [Required(ErrorMessage = "O campo cobrança é obrigatório")]
     public Guid Cobranca { get; set; }
@@ -41,6 +41,7 @@ public class FormularioAluguelViewModel
 
     public static Aluguel ParaEntidade(
         FormularioAluguelViewModel viewModel,
+        Funcionario funcionario,
         List<Condutor> condutores,
         List<Cliente> clientes,
         List<Veiculo> veiculos,
@@ -57,7 +58,16 @@ public class FormularioAluguelViewModel
             .ToList();
 
         return new Aluguel(
-            );
+            condutorSelecionado,
+            clienteSelecionado,
+            cobrancaSelecionada,
+            funcionario,
+            veiculoSelecionado,
+            viewModel.DataSaida,
+            viewModel.DataRetornoPrevista,
+            taxas,
+            viewModel.KmInicial
+                   );
     }
 }
 

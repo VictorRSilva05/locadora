@@ -49,4 +49,9 @@ public class Veiculo : EntidadeBase<Veiculo>
         TipoCambio = registroEditado.TipoCambio;
         Kilometragem = registroEditado.Kilometragem;
     }
+
+    public override string ToString()
+    {
+        return Marca + " - " + Modelo;
+    }
 }
