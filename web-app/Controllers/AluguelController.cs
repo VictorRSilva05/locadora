@@ -127,7 +127,6 @@ public class AluguelController : Controller
 
         var devolverVM = new DevolucaoAluguelViewModel
         {
-            Id = aluguel.Id,
             DataDevolucao = DateTime.Now,
             KmDevolucao = aluguel.KmInicial,
             TanqueCheio = false,
@@ -148,13 +147,10 @@ public class AluguelController : Controller
 
         var aluguel = resultadoSelecao.Value;
 
-        //aluguel.DataDevolucao = devolverVM.DataDevolucao;
-        //aluguel.KmDevolucao = devolverVM.KmDevolucao;
-        //aluguel.TanqueCheio = devolverVM.TanqueCheio;
-        //aluguel.SeguroAcionado = devolverVM.SeguroAcionado;
-        //aluguel.Total = devolverVM.Total;
+        var entidade = DevolucaoAluguelViewModel.ParaDevolucao(devolverVM);
 
-        var resultado = await aluguelAppService.Editar(id, aluguel);
+        entidade.Aluguel = aluguel;
+        var resultado = await aluguelAppService.RegistrarDevolucao(entidade, aluguel);
 
         if (resultado.IsFailed)
             return this.PreencherErrosModelState(resultado, devolverVM);

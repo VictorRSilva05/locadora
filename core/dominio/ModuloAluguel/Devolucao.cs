@@ -1,5 +1,7 @@
 ﻿
 using Locadora.Dominio.ModuloFuncionario;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Locadora.Dominio.ModuloAluguel;
 public class Devolucao : EntidadeBase<Devolucao>
@@ -29,4 +31,5 @@ public class Devolucao : EntidadeBase<Devolucao>
     {
         throw new NotImplementedException();
     }
+
 }

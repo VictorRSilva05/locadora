@@ -12,6 +12,7 @@ public abstract class FormularioCobrancaViewModel
     [Required(ErrorMessage = "O campo Plano de Cobrança é obrigatório.")]
     public PlanoCobrancaEnum PlanoCobranca { get; set; }
     public decimal? PrecoDiaria { get; set; }
+    public decimal? PrecoDiariaControlado { get; set; }
     public decimal? PrecoKm { get; set; }
     public int? KmDisponiveis { get; set; }
     public decimal? PrecoPorKmExtrapolado { get; set; }

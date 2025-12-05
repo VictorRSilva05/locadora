@@ -4,6 +4,7 @@ using Locadora.Dominio.ModuloCondutor;
 using Locadora.Dominio.ModuloFuncionario;
 using Locadora.Dominio.ModuloTaxa;
 using Locadora.Dominio.ModuloVeiculo;
+using System.Diagnostics;
 
 namespace Locadora.Dominio.ModuloAluguel;
 public class Aluguel : EntidadeBase<Aluguel>
@@ -53,4 +54,51 @@ public class Aluguel : EntidadeBase<Aluguel>
         KmInicial = registroEditado.KmInicial;
     }
 
+    public int CalcularDiarias()
+    {
+        if (DataRetornoPrevista == null)
+            throw new InvalidOperationException("DataDevolucao must have a value to calculate diarias.");
+
+        TimeSpan duracao =DataRetornoPrevista - DataSaida;
+        int diarias = (int)Math.Ceiling(duracao.TotalDays);
+
+        return diarias;
+    }
+    public int CalcularKms(float KmDevolucao)
+    {
+        var distanciaPercorrida = KmDevolucao - KmInicial;
+        Math.Ceiling((decimal)distanciaPercorrida!);
+
+        return (int)distanciaPercorrida;
+    }
+
+    public decimal CalculcarTotal(Devolucao devolucao)
+    {
+        decimal total = 0;
+
+        if (Cobranca.PlanoCobranca == ModuloCobranca.PlanoCobrancaEnum.Diaria)
+        {
+            total = (decimal)Cobranca.PrecoDiaria! * CalcularDiarias();
+            total += (decimal)Cobranca.PrecoKm! * CalcularKms(devolucao.KmDevolucao);
+        }
+        else if (Cobranca.PlanoCobranca == ModuloCobranca.PlanoCobrancaEnum.Controlado)
+        {
+            total = (decimal)Cobranca.PrecoDiaria! * CalcularDiarias();
+
+            var kmsRodados = CalcularKms(devolucao.KmDevolucao);
+
+            if(kmsRodados > Cobranca.KmDisponiveis)
+            {
+                var kmsExtrapolados = kmsRodados - Cobranca.KmDisponiveis;
+
+                total += (decimal)(kmsExtrapolados * Cobranca.PrecoPorKmExtrapolado)!;
+            }
+        }
+        else
+        {
+            total = (decimal)Cobranca.Taxa!;
+        }
+
+        return total;
+    }
 }

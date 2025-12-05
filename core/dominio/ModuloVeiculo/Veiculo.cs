@@ -54,4 +54,14 @@ public class Veiculo : EntidadeBase<Veiculo>
     {
         return Marca + " - " + Modelo;
     }
+
+    public void Ocupar()
+    {
+        EstaOcupado = true;
+    }
+
+    public void Desocupar()
+    {
+        EstaOcupado = false;
+    }
 }

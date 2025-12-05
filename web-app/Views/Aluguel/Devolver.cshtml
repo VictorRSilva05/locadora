@@ -4,27 +4,77 @@
     ViewBag.Titulo = "Devolução Aluguel";
 }
 
-<a asp-controller="Aluguel" asp-action="Index">Voltar</a>
-<form asp-controller="Aluguel" asp-action="Devolver" method="post" enctype="multipart/form-data">
-    <div>
-        <label asp-for="DataDevolucao"></label>
-        <input asp-for="DataDevolucao" type="date" />
-        <span asp-validation-for="DataDevolucao"></span>
+<div class="container mt-4">
 
-        <label asp-for="KmDevolucao"></label>
-        <input asp-for="KmDevolucao" />
-        <span asp-validation-for="KmDevolucao"></span>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Devolver aluguel</h2>
 
-        <label asp-for="TanqueCheio"></label>
-        <input asp-for="TanqueCheio" type="checkbox" class="form-check-input" />
-
-        <label asp-for="SeguroAcionado"></label>
-        <input asp-for="SeguroAcionado" type="checkbox" class="form-check-input" />
-
-        <label asp-for="Total"></label>
-        <input asp-for="Total" />
-        <span asp-validation-for="Total"></span>
-
+        <a asp-controller="Aluguel" asp-action="Index" class="btn btn-outline-secondary">
+            Voltar
+        </a>
     </div>
-    <button type="submit">Cadastrar</button>
-</form>
+
+    <div class="card shadow-sm rounded-3">
+        <div class="card-body">
+
+            <form asp-controller="Aluguel" asp-action="Devolver" method="post" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label asp-for="DataDevolucao" class="form-label">Data de devolução</label>
+                    <input asp-for="DataDevolucao" class="form-control" type="date" />
+                    <span asp-validation-for="DataDevolucao" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="KmDevolucao" class="form-label">Km de devolução</label>
+                    <input asp-for="KmDevolucao" class="form-control" />
+                    <span asp-validation-for="KmDevolucao" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TanqueCheio" class="form-label">Tanque cheio?</label>
+                    <input asp-for="TanqueCheio" type="checkbox" class="form-check-input" id="TanqueCheioCheckbox" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="LitrosNaChegada" class="form-label">Litros na chegada</label>
+                    <input asp-for="LitrosNaChegada" class="form-control" id="LitrosInput" />
+                    <span asp-validation-for="LitrosNaChegada" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SeguroAcionado" class="form-label">Seguro acionado?</label>
+                    <input asp-for="SeguroAcionado" type="checkbox" class="form-check-input" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Total" class="form-label"></label>
+                    <input asp-for="Total" class="form-control" />
+                    <span asp-validation-for="Total" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Devolver
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const chk = document.getElementById("TanqueCheioCheckbox");
+    const litros = document.getElementById("LitrosInput");
+
+    function atualizarCampo() {
+        litros.disabled = chk.checked;
+        if (chk.checked) {
+            litros.value = ""; // limpa se estiver marcado
+        }
+    }
+
+    chk.addEventListener("change", atualizarCampo);
+
+    // Rodar ao carregar a página, caso venha preenchido do backend
+    atualizarCampo();
+</script>

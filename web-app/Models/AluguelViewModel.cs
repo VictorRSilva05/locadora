@@ -29,6 +29,7 @@ public class FormularioAluguelViewModel
     public float KmInicial { get; set; }
     public float KmDevolucao { get; set; }
     public bool TanqueCheio { get; set; }
+    public int LitrosNaChegada { get; set; }
     public bool Status { get; set; }
     public bool SeguroAcionado { get; set; }
     public decimal Total { get; set; }
@@ -182,12 +183,12 @@ public class EditarAluguelViewModel : FormularioAluguelViewModel
     }
 }
 
-public class DevolucaoAluguelViewModel
+public class    DevolucaoAluguelViewModel
 {
-    public Guid Id { get; set; }
-
+    public Aluguel Aluguel {  get; set; }
     public DateTime DataDevolucao { get; set; }
     public float KmDevolucao { get; set; }
+    public int LitrosNaChegada { get; set; }
     public bool TanqueCheio { get; set; }
     public bool SeguroAcionado { get; set; }
     public decimal Total { get; set; }
@@ -195,14 +196,15 @@ public class DevolucaoAluguelViewModel
     public DevolucaoAluguelViewModel() { }
 
 
-    public DevolucaoAluguelViewModel(Guid id, DateTime dataDevolucao, float kmDevolucao, bool tanqueCheio, bool seguroAcionado, decimal total)
+   public static Devolucao ParaDevolucao(DevolucaoAluguelViewModel devolucao)
     {
-        Id = id;
-        DataDevolucao = dataDevolucao;
-        KmDevolucao = kmDevolucao;
-        TanqueCheio = tanqueCheio;
-        SeguroAcionado = seguroAcionado;
-        Total = total;
+        return new Devolucao(devolucao.DataDevolucao,
+            devolucao.KmDevolucao,
+            devolucao.LitrosNaChegada,
+            devolucao.SeguroAcionado,
+            devolucao.Total,
+            devolucao.TanqueCheio,
+            devolucao.Aluguel);
     }
 }
 

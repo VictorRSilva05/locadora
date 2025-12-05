@@ -10,7 +10,7 @@
     <h2 class="m-0">@ViewBag.Titulo</h2>
 
     <a asp-action="Cadastrar" class="btn btn-primary">
-        <i class="bi bi-plus-circle"></i> Cadastrar Condutor
+        <i class="bi bi-plus-circle"></i> Cadastrar Aluguel
     </a>
 </div>
 
@@ -48,11 +48,14 @@
                         <i class="bi bi-search"></i> Detalhes
                     </a>
 
-                    <a asp-action="Devolver"
-                       asp-route-id="@registro.Id"
-                       class="btn btn-sm btn-outline-primary me-1">
-                        <i class="bi bi-arrow-return-right"></i> Devolver
-                    </a>
+                    @if (registro.Status)
+                    {
+                        <a asp-action="Devolver"
+                        asp-route-id="@registro.Id"
+                        class="btn btn-sm btn-outline-primary me-1">
+                            <i class="bi bi-arrow-return-right"></i> Devolver
+                        </a>
+                    }
                 </td>
             </tr>
         }

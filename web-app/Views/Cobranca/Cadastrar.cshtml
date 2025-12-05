@@ -85,7 +85,7 @@
     </div>
 </div>
 
-@section Scripts {
+@* @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
@@ -95,7 +95,7 @@
         const pl = document.getElementById("pl");
 
         function atualizarCampos() {
-            if (tipo.value === "1") { // PF
+            if (tipo.value === "1") {
                 pd.style.display = "block";
                 pc.style.display = "none";
                 pl.style.display = "none";
@@ -114,4 +114,4 @@
         tipo.addEventListener("change", atualizarCampos);
         atualizarCampos();
     </script>
-}
+} *@

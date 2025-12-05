@@ -11,6 +11,7 @@ public class AluguelAppService
 {
     private readonly ITenantProvider tenantProvider;
     private readonly IRepositorioAluguel repositorioAluguel;
+    private readonly IRepositorioDevolucao repositorioDevolucao;
     private readonly IUnitOfWork unitOfWork;
     private readonly ILogger<AluguelAppService> logger;
 
@@ -18,12 +19,14 @@ public class AluguelAppService
         ITenantProvider tenantProvider,
         IRepositorioAluguel repositorioAluguel,
         IUnitOfWork unitOfWork,
-        ILogger<AluguelAppService> logger)
+        ILogger<AluguelAppService> logger,
+        IRepositorioDevolucao repositorioDevolucao)
     {
         this.tenantProvider = tenantProvider;
         this.repositorioAluguel = repositorioAluguel;
         this.unitOfWork = unitOfWork;
         this.logger = logger;
+        this.repositorioDevolucao = repositorioDevolucao;
     }
 
     public async Task<Result> Cadastrar(Aluguel aluguel)
@@ -31,6 +34,8 @@ public class AluguelAppService
         try
         {
             aluguel.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
+
+            aluguel.Veiculo.Ocupar();
 
             await repositorioAluguel.CadastrarAsync(aluguel);
 
@@ -59,30 +64,25 @@ public class AluguelAppService
         }
     }
 
-    public async Task<Result> RegistrarDevolucao(
-           Guid id,
-           DateTime dataDevolucao,
-           float kmDevolucao,
-           bool tanqueCheio,
-           bool seguroAcionado,
-           decimal total)
+    public async Task<Result> RegistrarDevolucao(Devolucao devolucao, Aluguel aluguel)
     {
         try
         {
-            var aluguel = await repositorioAluguel.SelecionarRegistroPorIdAsync(id);
+            devolucao.EmpresaId = tenantProvider.TenantId.GetValueOrDefault();
 
-            if (aluguel is null)
-                return Result.Fail(ResultadosErro.RegistroNaoEncontradoErro(id));
+            aluguel.Veiculo.Desocupar();
+            aluguel.Status = false;
+            aluguel.Veiculo.Kilometragem = devolucao.KmDevolucao;
 
-            // Aplica as alterações de devolução na entidade
-            //aluguel.DataDevolucao = DateTime.SpecifyKind(dataDevolucao, DateTimeKind.Utc);
-            //aluguel.KmDevolucao = kmDevolucao;
-            //aluguel.TanqueCheio = tanqueCheio;
-            //aluguel.SeguroAcionado = seguroAcionado;
-            //aluguel.Total = total;
+            devolucao.DataDevolucao = DateTime.SpecifyKind(
+                 devolucao.DataDevolucao,
+                 DateTimeKind.Utc
+                 );
+
+            devolucao.Total= aluguel.CalculcarTotal(devolucao);
 
             // Atualiza o registro
-            await repositorioAluguel.EditarAsync(id, aluguel);
+            await repositorioDevolucao.CadastrarAsync(devolucao);
 
             await unitOfWork.CommitAsync();
             return Result.Ok();
@@ -94,7 +94,7 @@ public class AluguelAppService
             logger.LogError(
                 ex,
                 "Erro ao registrar devolução para o aluguel {@Id}.",
-                id
+                devolucao.Id
             );
 
             return Result.Fail(ResultadosErro.ExcecaoInternaErro(ex));
