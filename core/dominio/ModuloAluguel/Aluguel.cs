@@ -99,6 +99,16 @@ public class Aluguel : EntidadeBase<Aluguel>
             total = (decimal)Cobranca.Taxa!;
         }
 
+        if (!devolucao.TanqueCheio)
+            total += CalcularCombustivel(devolucao.LitrosNaChegada);
+
         return total;
+    }
+
+    public decimal CalcularCombustivel(int LitrosNaChegada)
+    {
+        var combustivelRestante = Veiculo.CapacidadeCombustivel - LitrosNaChegada;
+        
+        return Veiculo.Combustivel.CalcularCombustivel(combustivelRestante);
     }
 }

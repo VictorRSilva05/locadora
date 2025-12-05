@@ -16,6 +16,7 @@ public class RepositorioAluguelEmOrm : RepositorioBaseEmOrm<Aluguel>, IRepositor
             .Include(c => c.Cliente)
             .Include(c => c.Cobranca)
             .Include(c => c.Veiculo)
+            .Include(c => c.Veiculo.Combustivel)
             .Include(c => c.Taxas)
             .FirstOrDefaultAsync(c => c.Id == idRegistro);
     }
@@ -27,6 +28,7 @@ public class RepositorioAluguelEmOrm : RepositorioBaseEmOrm<Aluguel>, IRepositor
            .Include(c => c.Cliente)
            .Include(c => c.Cobranca)
            .Include(c => c.Veiculo)
+           .Include(c => c.Veiculo.Combustivel)
            .Include(c => c.Taxas)
            .ToListAsync();
     }

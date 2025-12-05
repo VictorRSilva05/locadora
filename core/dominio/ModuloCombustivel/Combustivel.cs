@@ -17,4 +17,10 @@ public class Combustivel : EntidadeBase<Combustivel>
         Nome = registroEditado.Nome;
         Preco = registroEditado.Preco;
     }
+
+    public decimal CalcularCombustivel(int litrosGastos)
+    {
+        var aPagar = Preco * litrosGastos;
+        return aPagar;
+    }
 }

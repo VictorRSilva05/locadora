@@ -81,7 +81,6 @@ public class AluguelAppService
 
             devolucao.Total= aluguel.CalculcarTotal(devolucao);
 
-            // Atualiza o registro
             await repositorioDevolucao.CadastrarAsync(devolucao);
 
             await unitOfWork.CommitAsync();
