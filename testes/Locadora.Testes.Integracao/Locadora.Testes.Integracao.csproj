@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\infraestrutura\Locadora.Infraestrutura.csproj" />
+    <ProjectReference Include="..\..\infraestrutura\Locadora.Infraestrutura.csproj" />
   </ItemGroup>
 
 </Project>

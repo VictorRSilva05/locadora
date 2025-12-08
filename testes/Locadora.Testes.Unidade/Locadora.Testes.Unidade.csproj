@@ -13,8 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\core\aplicacao\Locadora.Aplicacao.csproj" />
-    <ProjectReference Include="..\core\dominio\Locadora.Dominio.csproj" />
+    <ProjectReference Include="..\..\core\aplicacao\Locadora.Aplicacao.csproj" />
+    <ProjectReference Include="..\..\core\dominio\Locadora.Dominio.csproj" />
   </ItemGroup>
 
 </Project>
