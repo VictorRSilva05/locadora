@@ -51,7 +51,7 @@ jobs:
           dotnet-version: '9.x'
 
       - name: Install EF Core CLI
-        run: dotnet tool install --global dotnet-ef
+        run: dotnet tool install --global dotnet-ef --version 9.*
 
       - name: Apply EF Core migrations
         run: dotnet ef database update --project ./infraestrutura/Locadora.Infraestrutura.csproj --startup-project ./web-app/Locadora.WebApp.csproj
