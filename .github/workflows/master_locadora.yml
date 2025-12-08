@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - locadora
+name: Build - Migrate - Deploy
 
 on:
   push:
@@ -34,6 +34,31 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+
+  migrate:
+    runs-on: windows-latest
+    needs: [build]
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Install EF Core CLI
+        run: dotnet tool install --global dotnet-ef
+
+      - name: Apply EF Core migrations
+        run: dotnet ef database update --project ./infraestrutura/Locadora.Infraestrutura.csproj --startup-project ./web-app/Locadora.WebApp.csproj
+        env:
+          ASPNET_ENVIRONMENT: "GITHUB_ACTIONS"
+          SQL_CONNECTION_STRING: ${{ secrets.SQL_CONNECTION_STRING }}
+          NEWRELIC_LICENSE_KEY: ${{ secrets.NEWRELIC_LICENSE_KEY }}
 
   deploy:
     runs-on: windows-latest
